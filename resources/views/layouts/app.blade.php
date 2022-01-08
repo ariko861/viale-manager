@@ -23,7 +23,6 @@
 
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')
-
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
@@ -42,5 +41,20 @@
         @stack('modals')
 
         @livewireScripts
+
+        <div id="alert-popup" class="fixed top-0 left-0 right-0 invisible text-center mt-10">
+            <span class="bg-green-500 rounded-sm"></span>
+        </div>
+        <script>
+        Livewire.on('showAlert', message => {
+
+            var alertPopup = document.getElementById("alert-popup");
+            alertPopup.getElementsByTagName('span')[0].innerHTML = message;
+            alertPopup.style.visibility = "visible";
+            setTimeout(() => alertPopup.style.visibility = "hidden", 3000 );
+
+
+        });
+        </script>
     </body>
 </html>

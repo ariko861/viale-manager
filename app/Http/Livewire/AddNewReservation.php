@@ -16,6 +16,9 @@ class AddNewReservation extends Component
     public $visitorsArray = [];
     public $displayAddVisitorButton = false;
     public $showUserForm = false;
+    public $fullname = "";
+
+    protected $listeners = ['hideVisitorForm' => 'hideUserForm'];
 
     public function render()
     {
@@ -27,6 +30,13 @@ class AddNewReservation extends Component
     public function setMinDate($value)
     {
         $this->mindeparturedate = $value;
+    }
+
+    public function hideUserForm()
+    {
+        $this->showUserForm = false;
+        $this->fullname = "";
+        $this->displayAddVisitorButton = false;
     }
 
     public function searchVisitor($value)
@@ -44,11 +54,15 @@ class AddNewReservation extends Component
                 $this->displayAddVisitorButton = true;
             });
 
-            error_log($this->visitorsArray);
         }
         else {
             $this->displayAddVisitorButton = false;
         }
+    }
+    public function setContactPerson($visitor)
+    {
+        $this->fullname = $visitor['full_name'];
+        $this->visitorsArray = [];
     }
 
 }

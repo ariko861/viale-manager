@@ -18,10 +18,10 @@
         <label class="col-span-1">{{ __("Date de départ") }}</label>
         <input class="col-span-2" type="date" name="departuredate" required min="{{ $mindeparturedate }}">
         <label class="col-span-1">{{ __("Personne de contact") }}</label>
-        <div class="col-span-2"><input class="w-full static" type="text" name="contactperson" required wire:keyup="searchVisitor($event.target.value)">
+        <div class="col-span-2"><input class="w-full static" type="text" name="contactperson" required wire:model="fullname" wire:keyup="searchVisitor($event.target.value)">
             <ul class="col-span-2 relative bg-white left-0 right-0">
             @foreach ($visitorsArray as $visitor)
-                <li>{{ $visitor['surname'] }} {{ $visitor['name']}}</li>
+                <li class="p-2 border-2 cursor-pointer" wire:click="setContactPerson({{$visitor}})">{{ $visitor['full_name'] }}</li>
             @endforeach
             @if ( $displayAddVisitorButton )
                 <li>Pas de resultat !</li>
@@ -39,3 +39,4 @@
  @endif
 </div>
 @endif
+

@@ -10,6 +10,18 @@ class Visitor extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'surname', 'email', 'phone', 'birthyear', 'remarks',
+        'name', 'surname', 'email', 'phone', 'birthyear',
     ];
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->surname} {$this->name}";
+    }
+
+    protected $casts = [
+        'name' => 'string',
+    ];
+
+    protected $appends = ['full_name'];
+
 }
