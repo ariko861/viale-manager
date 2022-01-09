@@ -26,5 +26,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/reservations', function (
     return view('reservations');
 })->name('reservations');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/visitors', function () {
+    return view('visitors');
+})->name('visitors');
 
-Route::resource('visitors', VisitorController::class);
+//Route::resource('visitors', VisitorController::class)->name('visitors');
