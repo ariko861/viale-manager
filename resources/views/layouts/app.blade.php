@@ -43,13 +43,15 @@
         @livewireScripts
 
         <div id="alert-popup" class="fixed top-0 left-0 right-0 invisible text-center mt-10">
-            <span class="bg-green-500 rounded-sm"></span>
+            <span></span>
         </div>
         <script>
         Livewire.on('showAlert', message => {
 
+            console.log(message);
             var alertPopup = document.getElementById("alert-popup");
-            alertPopup.getElementsByTagName('span')[0].innerHTML = message;
+            alertPopup.getElementsByTagName('span')[0].innerHTML = message[0];
+            alertPopup.getElementsByTagName('span')[0].className = message[1] + " p-2 rounded-sm";
             alertPopup.style.visibility = "visible";
             setTimeout(() => alertPopup.style.visibility = "hidden", 3000 );
 

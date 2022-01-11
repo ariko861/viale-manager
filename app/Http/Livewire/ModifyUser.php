@@ -8,15 +8,9 @@ use Livewire\Component;
 class NewUserForm extends Component
 {
 //     public Visitor $newvisitor;
+    public $visitor_id;
 
-    public $modify = false;
-
-    public function mount()
-    {
-        $this->newvisitor = new Visitor();
-    }
-
-    protected $listeners = ['visitorChange'];
+    $newvisitor = Visitor::find($visitor_id);
 
     protected $rules = [
         'newvisitor.name' => 'required|string',
@@ -26,19 +20,6 @@ class NewUserForm extends Component
         'newvisitor.birthyear' => 'required',
         'newvisitor.remarks' => '',
     ];
-
-    public function visitorChange($id)
-    {
-        $this->newvisitor = Visitor::find($id);
-        $this->modify = true;
-    }
-
-    public function cancelVisitorForm()
-    {
-        $this->emit('hideVisitorForm');
-        $this->newvisitor = new Visitor();
-    }
-
     public function render()
     {
         return view('livewire.new-user-form');
@@ -48,12 +29,7 @@ class NewUserForm extends Component
         $this->validate();
         $this->newvisitor->save();
         $this->emit('hideVisitorForm');
-        if ( $this->modify )
-        {
-            $this->emit('visitorModified', $this->newvisitor->id );
-        } else {
-            $this->emit('newVisitorSaved', $this->newvisitor->id );
-        }
+        $this->emit('newVisitorSaved', $this->newvisitor->id );
         $this->emit('showAlert', [ __("L'utilisateur a bien été enregistré"), "bg-green-500" ] );
     }
 }

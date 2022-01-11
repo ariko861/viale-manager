@@ -24,12 +24,15 @@ class AddNewReservation extends Component
 
     public function mount()
     {
-        $this->newReservation = new Reservation();
+        $this->reservation = new Reservation();
     }
 
     protected $rules = [
-        'newReservation.arrivaldate' => 'required|date',
-        'newReservation.departuredate' => 'required|date',
+        'reservation.arrivaldate' => 'required|date',
+        'reservation.departuredate' => 'required|date',
+        'reservation.nodeparturedate' => 'boolean',
+        'reservation.contactperson' => '',
+
     ];
 
     public function render()
@@ -86,6 +89,7 @@ class AddNewReservation extends Component
         $this->fullname = $visitor['full_name'];
         $this->visitorsArray = [];
         $this->displayAddVisitorButton = false;
+        $this->reservation->contactperson = $visitor['id'];
     }
 
 }
