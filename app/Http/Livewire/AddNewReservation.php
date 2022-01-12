@@ -14,13 +14,10 @@ class AddNewReservation extends Component
     public $message;
     public $showReservationForm = false;
     public $mindeparturedate;
-    public $visitorsArray = [];
-    public $noResult = false;
-    public $displayAddVisitorButton = false;
     public $showUserForm = false;
-    public $fullname = "";
+    public $otherVisitorsArray = [];
 
-    protected $listeners = ['hideVisitorForm' => 'hideUserForm'];
+    protected $listeners = ['hideVisitorForm' => 'hideUserForm', 'visitorAdded'];
 
     public function mount()
     {
@@ -31,7 +28,9 @@ class AddNewReservation extends Component
         'reservation.arrivaldate' => 'required|date',
         'reservation.departuredate' => 'required|date',
         'reservation.nodeparturedate' => 'boolean',
-        'reservation.contactperson' => '',
+        'reservation.contactPerson' => '',
+        'reservation.otherVisitorsAuthorized' => 'boolean',
+        'reservation.otherVisitors' => 'required|array',
 
     ];
 
@@ -54,42 +53,17 @@ class AddNewReservation extends Component
         $this->noResult = false;
     }
 
-    public function searchVisitor($value)
+    public function visitorAdded($visitor)
     {
-        //error_log($value);
-        if ( Str::length($value) >= 3 )
-        {
 
-            $this->visitorsArray = Visitor::where('name', 'like', '%'.$value.'%')
-                ->orWhere('surname', 'like', '%'.$value.'%')
-                ->orWhere('full_name', 'like', '%'.$value.'%')
-                ->orderBy('updated_at', 'desc')
-                ->get();
-
-
-
-            $this->visitorsArray->whenEmpty(function() {
-                $this->noResult = true;
-            });
-            $this->visitorsArray->whenNotEmpty(function() {
-                $this->noResult = false;
-            });
-
-            $this->displayAddVisitorButton = true;
-
-        }
-        else {
-            $this->visitorsArray = [];
-            $this->displayAddVisitorButton = false;
-            $this->noResult = false;
-        }
     }
-    public function setContactPerson($visitor)
+
+    public function addNewOtherVisitor()
     {
-        $this->fullname = $visitor['full_name'];
-        $this->visitorsArray = [];
-        $this->displayAddVisitorButton = false;
-        $this->reservation->contactperson = $visitor['id'];
+        $newVisitor = new Visitor();
+//         dd($this->reservation->otherVisitors);
+//         dd($newVisitor);
+        array_push($this->otherVisitorsArray, $newVisitor);
     }
 
 }

@@ -1,3 +1,20 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer components {
+  .btn {
+    /* ... */
+    background-color: theme('colors.white');
+    @apply p-2;
+    @apply border-2;
+    @apply rounded-xl;
+    @apply bg-gray-200 hover:bg-gray-500;
+  }
+  .card {
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.6');
+    box-shadow: theme('boxShadow.xl');
+  }
+}

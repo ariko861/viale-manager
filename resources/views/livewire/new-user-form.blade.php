@@ -10,7 +10,7 @@
         @else
             <h3 class="text-center uppercase text-lg m-4">{{ __("Ajouter un nouveau visiteur") }}</h3>
         @endif
-        <form wire:submit.prevent="save">
+        <form wire:submit.prevent="save" autocomplete="off">
             @csrf
             <div class="w-full px-8 grid grid-cols-3 gap-4">
                 <label class="col-span-1">{{ __("Nom de famille") }}</label>

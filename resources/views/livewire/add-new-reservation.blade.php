@@ -10,7 +10,7 @@
 @if ($showReservationForm )
 <div>
  <h3 class="text-center uppercase text-lg m-4">{{ __("Ajouter une nouvelle réservation") }}</h3>
- <form method="POST" action="/reservations">
+ <form method="POST" action="/reservations" autocomplete="off">
     @csrf
     <div class="w-full px-8 grid grid-cols-3 gap-4">
         <label class="col-span-1">{{ __("Date d'arrivée") }}</label>
@@ -20,26 +20,28 @@
         <label class="col-span-1">{{ __("Ne connais pas sa date de départ") }}</label>
         <input class="col-span-2" type="checkbox" wire:model="reservation.nodeparturedate">
         <label class="col-span-1">{{ __("Personne de contact") }}</label>
-        <div class="col-span-2"><input class="w-full static disabled:opacity-50" type="text" name="contactperson" required wire:model="fullname" wire:keyup="searchVisitor($event.target.value)" @if ( $reservation['contactperson'] ) disabled @endif>
-            <ul class="col-span-2 relative bg-white left-0 right-0">
-            @foreach ($visitorsArray as $visitor)
-                <li class="p-2 border-2 cursor-pointer" wire:click="setContactPerson({{$visitor}})">{{ $visitor['full_name'] }}</li>
-            @endforeach
-            @if ( $noResult )
-                <li class="p-2 border-2">Pas de resultat !</li>
-            @endif
-            @if ( $displayAddVisitorButton )
-                <li class="p-2 border-2 cursor-pointer"><a href="#" wire:click.prevent="$toggle('showUserForm')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 float-left" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{{ __("Ajouter un nouveau visiteur") }}</span>
-                </a></li>
-            @endif
-
-            </ul>
+        <div class="col-span-2">
+            <livewire:visitor-search >
         </div>
-        <input wire:model="reservation.contactperson" hidden>
+        <!-- Bouton pour ajouter des visiteurs -->
+        <div class="col-span-full">
+            <button class="btn w-full" wire:click="addNewOtherVisitor">{{ __("Ajouter un autre visiteur") }}</button>
+        </div>
+<!--    Pour chaque visiteur ajouté à la réservation -->
+        @foreach ( $otherVisitorsArray as $visitor )
+            <div class="card col-span-full">
+                <label class="col-span-1">{{ __("Visiteur") }}</label>
+                <div class="col-span-2">
+
+                </div>
+            </div>
+        @endforeach
+<!--         Checkbox pour autoriser l'ajout de visiteurs par la personne de contact -->
+        <label class="col-span-1">{{ __("Autoriser la personne de contact à ajouter d'autres visiteurs") }}</label>
+        <input class="col-span-2" type="checkbox" wire:model="reservation.otherVisitorsAuthorized">
+<!--         Champ caché pour stocker l'ID de la personne de contact -->
+        <input wire:model="reservation.contactPerson" hidden>
+<!--         Bouton de validation -->
         <div class="col-span-full text-center">
             <button class="rounded-full p-2 border-4" type="submit">{{ __('Valider') }}</button>
         </div>

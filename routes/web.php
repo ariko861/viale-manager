@@ -30,4 +30,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/visitors', function () {
     return view('visitors');
 })->name('visitors');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/configuration', function () {
+    return view('configuration');
+})->name('configuration');
+
 //Route::resource('visitors', VisitorController::class)->name('visitors');

@@ -9,8 +9,14 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    public function Visitors()
+    public function otherVisitors()
     {
         return $this->hasMany(Visitor::class);
     }
+
+    public function contactPerson()
+    {
+        return $this->hasOne(Visitor::class);
+    }
+
 }
