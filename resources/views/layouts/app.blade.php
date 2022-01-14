@@ -41,6 +41,7 @@
         @stack('modals')
 
         @livewireScripts
+        @livewireCalendarScripts
 
         <div id="alert-popup" class="fixed top-0 left-0 right-0 invisible text-center mt-10">
             <span></span>

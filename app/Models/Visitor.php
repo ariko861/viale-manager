@@ -25,6 +25,11 @@ class Visitor extends Model
         return $current_year - $this->birthyear;
     }
 
+    public function reservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'visitor_reservation');
+    }
+
     protected $casts = [
         'name' => 'string',
     ];

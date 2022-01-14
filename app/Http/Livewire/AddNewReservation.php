@@ -3,10 +3,12 @@
 namespace App\Http\Livewire;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\Visitor;
 use App\Models\Reservation;
+use App\Models\Profile;
 
 class AddNewReservation extends Component
 {
@@ -15,24 +17,36 @@ class AddNewReservation extends Component
     public $showReservationForm = false;
     public $mindeparturedate;
     public $showUserForm = false;
-    public $otherVisitorsArray = [];
+    public $otherVisitorsArray;
+    public $contactPerson;
 
-    protected $listeners = ['hideVisitorForm' => 'hideUserForm', 'visitorAdded'];
+
+    protected $listeners = ['hideVisitorForm' => 'hideUserForm', 'visitorAdded', 'contactPersonAdded', 'contactPersonRemoved'];
 
     public function mount()
     {
         $this->reservation = new Reservation();
+        $this->otherVisitorsArray = collect([]);
     }
 
-    protected $rules = [
-        'reservation.arrivaldate' => 'required|date',
-        'reservation.departuredate' => 'required|date',
-        'reservation.nodeparturedate' => 'boolean',
-        'reservation.contactPerson' => '',
-        'reservation.otherVisitorsAuthorized' => 'boolean',
-        'reservation.otherVisitors' => 'required|array',
+    protected function rules()
+    {
+        if ($this->reservation->nodeparturedate){
+            $departuredaterequirements = '';
+        } else {
+            $departuredaterequirements = 'required|date';
+        }
+        $result = [
+            'reservation.arrivaldate' => 'required|date',
+            'reservation.departuredate' => $departuredaterequirements,
+            'reservation.nodeparturedate' => '',
+            'reservation.otherVisitorsAuthorized' => '',
+            'contactPerson' => 'required',
 
-    ];
+        ];
+
+        return $result;
+    }
 
     public function render()
     {
@@ -53,17 +67,44 @@ class AddNewReservation extends Component
         $this->noResult = false;
     }
 
-    public function visitorAdded($visitor)
+    public function contactPersonAdded($visitor)
     {
+        $this->contactPerson = $visitor["id"];
+    }
 
+    public function contactPersonRemoved()
+    {
+        $this->contactPerson = "";
+    }
+
+    public function visitorAdded($result)
+    {
+        $this->otherVisitorsArray->put($result[1], $result[0]["id"]);
     }
 
     public function addNewOtherVisitor()
     {
-        $newVisitor = new Visitor();
-//         dd($this->reservation->otherVisitors);
-//         dd($newVisitor);
-        array_push($this->otherVisitorsArray, $newVisitor);
+        $this->otherVisitorsArray->push("");
+
+    }
+    public function removeOtherVisitor($key)
+    {
+        $this->otherVisitorsArray->pull($key);
+    }
+
+    public function save()
+    {
+        $this->validate();
+        $this->reservation->save();
+        $this->reservation->visitors()->attach($this->contactPerson, ['contact' => true ]);
+        $this->reservation->visitors()->attach($this->otherVisitorsArray, ['contact' => false ]);
+        $this->emit('showAlert', [ __("La réservation a bien été enregistré"), "bg-green-500" ] );
+
+        $this->showReservationForm = false;
+        $this->reservation = new Reservation();
+        $this->otherVisitorsArray = collect([]);
+        $this->contactPerson = "";
+
     }
 
 }

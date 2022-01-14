@@ -13,26 +13,46 @@ class VisitorSearch extends Component
     public $visitorsArray = [];
     public $noResult = false;
     public $displayAddVisitorButton = false;
+    public $visitorType;
+    public $visitorKey;
 
     public function render()
     {
         return view('livewire.visitor-search');
+
     }
 
     public function cancelVisitorSelection()
     {
         $this->searchQuery = "";
         $this->visitorSet = false;
+        $this->emitUp('contactPersonRemoved');
     }
 
     public function setContactPerson($visitor)
     {
-        $this->searchQuery = $visitor['full_name'];
-        $this->visitorSet = true;
-        $this->visitorsArray = [];
-        $this->displayAddVisitorButton = false;
-        //$this->reservation->contactPerson = $visitor['id']; SET HERE AN EVENT TO SEND VISITOR ID TO PARENT COMPONENT
-        $this->emitUp('visitorAdded', $visitor);
+        if ($visitor["email"]){
+            $this->searchQuery = $visitor['full_name'];
+            $this->visitorSet = true;
+            $this->visitorsArray = [];
+            $this->displayAddVisitorButton = false;
+            switch($this->visitorType) {
+                case('contactPerson'):
+                    $this->emitUp('contactPersonAdded', $visitor);
+                    break;
+                case('otherVisitor'):
+                    $result = [$visitor, $this->visitorKey];
+                    $this->emitUp('visitorAdded', $result);
+                    break;
+            }
+        } else {
+            $this->emit('showAlert', [ __("La personne de contact doit avoir un email enregistré"), "bg-red-500" ] );
+            $this->searchQuery="";
+            $this->visitorSet = false;
+            $this->visitorsArray = [];
+            $this->displayAddVisitorButton = false;
+
+        }
     }
 
     public function searchVisitor()
