@@ -14,6 +14,10 @@ class Visitor extends Model
         'name', 'surname', 'email', 'phone', 'birthyear',
     ];
 
+    protected $attributes = [
+        'confirmed' => true,
+    ];
+
     public function getFullNameAttribute()
     {
         return "{$this->surname} {$this->name}";

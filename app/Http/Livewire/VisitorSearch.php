@@ -16,10 +16,19 @@ class VisitorSearch extends Component
     public $visitorType;
     public $visitorKey;
 
+    protected $listeners = ['hideVisitorForm'];
+
     public function render()
     {
         return view('livewire.visitor-search');
 
+    }
+
+    public function hideVisitorForm()
+    {
+        $this->noResult = false;
+        $this->searchQuery = "";
+        $this->displayAddVisitorButton = false;
     }
 
     public function cancelVisitorSelection()

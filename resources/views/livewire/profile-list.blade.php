@@ -1,4 +1,5 @@
 <div>
+    <h2 class="text-xl text-center">{{ __("Profiles") }}</h2>
     <table class="mt-8 w-full table-auto border-collapse border border-gray-400">
     @php
         $thead_class="border-2 border-gray-400 bg-gray-100";

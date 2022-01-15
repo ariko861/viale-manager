@@ -12,7 +12,7 @@ class VisitorsList extends Component
     public $confirming;
     public function mount()
     {
-        $this->visitors = Visitor::all()->sortBy('name');
+        $this->visitors = Visitor::where('confirmed', true)->get()->sortBy('name');
     }
 
     protected $listeners = ['newVisitorSaved', 'visitorModified'];
