@@ -14,16 +14,23 @@
                     <tbody>
                         @foreach ( $houses as $house )
                             <tr>
-                                <td class="{{ $thead_class }} text-center" colspan="2"><strong>{{ $house->name }}</strong></td>
+                                <td class="{{ $thead_class }} text-center" colspan="3"><strong>{{ $house->name }}</strong></td>
                             </tr>
                             <tr>
-                                <td class="{{ $thead_class }}" wire:click="test"><i>{{ __("Chambres") }}</i></td>
+                                <td class="{{ $thead_class }}"><i>{{ __("Chambres") }}</i></td>
                                 <td class="{{ $thead_class }}"><i>{{ __("Nombre de lits") }}</i></td>
+                                <td class="{{ $thead_class }}"><i>{{ __("Occupants") }}</i></td>
+
                             </tr>
                             @foreach ( $house->rooms as $room )
                                 <tr>
                                     <td class="{{ $tbody_class }} hover:bg-slate-400 cursor-pointer" wire:click="selectRoom({{ $room }})">{{ $room->name }}</td>
-                                    <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
+                                    <td class="{{ $tbody_class }}" wire:click="test({{ $room }})">{{ $room->beds }}</td>
+                                    <td class="{{ $tbody_class }}">
+                                        @foreach ( $this->test($room) as $visitor )
+                                            <p>{{ $visitor->full_name }}</p>
+                                        @endforeach
+                                    </td>
                                 </tr>
                             @endforeach
 

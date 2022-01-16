@@ -23,13 +23,13 @@
 
                         </span>
                     </p>
-                    <p><button class="btn" wire:click="selectRoom({{ $visitor }})">{{ __("Choisir la chambre") }}</button></p>
+                    <p><button class="btn" wire:click="selectRoom({{ $visitor }}, {{ $reservation }})">{{ __("Choisir la chambre") }}</button></p>
 
                 </div>
             @endforeach
         </div>
     @endforeach
     @if ( $showRoomSelection )
-        <livewire:room-selection-form :visitor="$visitorSelectedForRoom">
+        <livewire:room-selection-form :visitor="$visitorSelectedForRoom" :reservation="$reservationSelectedForRoom">
     @endif
 </div>

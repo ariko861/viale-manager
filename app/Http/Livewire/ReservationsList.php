@@ -11,6 +11,7 @@ class ReservationsList extends Component
 
     public $showRoomSelection = false;
     public $visitorSelectedForRoom;
+    public $reservationSelectedForRoom;
 
     protected $listeners = ["hideRoomSelection"];
 
@@ -19,9 +20,10 @@ class ReservationsList extends Component
         $this->reservations = Reservation::all()->sortBy('arrivaldate');
     }
 
-    public function selectRoom($visitor)
+    public function selectRoom( $visitor, $reservation )
     {
         $this->showRoomSelection = true;
+        $this->reservationSelectedForRoom = $reservation;
         $this->visitorSelectedForRoom = $visitor;
     }
 

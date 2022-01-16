@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use App\Models\VisitorReservation;
 
 class Room extends Model
@@ -20,19 +22,25 @@ class Room extends Model
         return $this->hasMany(VisitorReservation::class);
     }
 
-    public function getIsAvailableAttribute(/*$beginDate, $endDate*/)
+    public function usersInRoom($beginDate, $endDate)
     {
-//         foreach ($this->reserationVisitors as $reservationVisitor) {
-//             if ( $reserationVisitors->pivot->contact )
-//             {
-//                 return $visitor;
-//             }
-        $visitorReservation = $this->reservationVisitors();
 
-//         $visitorReservations = VisitorReservation::query()
-//             ->whereDate('arrivaldate', '<=', $endDate)
-//             ->whereDate('departuredate', '>=', $beginDate)
-//             ->get();
+        $beginDate = new Carbon($beginDate);
+        $endDate = new Carbon($endDate);
+        $result = collect([]);
+
+        foreach ($this->reservationVisitors as $resaVisitor)
+        {
+            $reservation = Reservation::find($resaVisitor->reservation_id);
+            if ( $reservation->isBetweenDates($beginDate, $endDate) )
+            {
+//                 dd($reservation);
+                $visitor = Visitor::find($resaVisitor->visitor_id);
+                $result->push($visitor);
+            }
+        }
+        return $result;
+
 
     }
 }

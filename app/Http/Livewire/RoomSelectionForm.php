@@ -11,15 +11,18 @@ class RoomSelectionForm extends Component
 {
 
     public $visitor;
+    public $reservation;
 
     public function mount()
     {
         $this->houses = House::all();
     }
 
-    public function test()
+    public function test($room)
     {
-        dd($this->visitor);
+        $room = Room::find($room["id"]);
+//         dd($room->reservationVisitors);
+        return $room->usersInRoom($this->reservation["arrivaldate"], $this->reservation["departuredate"]);
     }
     public function cancelRoomSelection()
     {
@@ -28,13 +31,11 @@ class RoomSelectionForm extends Component
     public function selectRoom($room)
     {
         $room = Room::find($room["id"]);
-//         dd($this->visitor);
         $resa = $this->visitor["pivot"];
         $visitorReservation = VisitorReservation::find($resa["id"]);
-//         dd($room["id"]);
         $visitorReservation->room()->associate($room);
-//         dd($visitorReservation);
         $visitorReservation->save();
+        $this->emitUp("hideRoomSelection");
     }
 
     public function render()

@@ -51,6 +51,13 @@ class Reservation extends Model
 
     }
 
+    public function isBetweenDates($beginDate, $endDate)
+    {
+        $departureDate = new Carbon($this->departuredate);
+        $arrivalDate = new Carbon($this->arrivaldate);
+        return ( $arrivalDate <= $endDate ) && ( $departureDate >= $beginDate);
+    }
+
 
 
 
