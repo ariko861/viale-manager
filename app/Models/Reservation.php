@@ -48,26 +48,15 @@ class Reservation extends Model
                 return $visitor;
             }
         }
-//         $this->visitors->each(function($item, $key) {
-//         return "yes";
-//             if ( $item->pivot->contact )
-//             {
-//             }
-//         });
 
-//         return $this->belongsToMany(Visitor::class)->wherePivot('contact', true );
     }
 
 
 
-//     public function otherVisitors()
-//     {
-//         return $this->belongsToMany(Visitor::class, 'visitor_reservation')->withPivot('contact');;
-//     }
 
     public function visitors()
     {
-        return $this->belongsToMany(Visitor::class, 'visitor_reservation')->withPivot('contact');
+        return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id');
     }
 
 }

@@ -31,7 +31,7 @@ class Visitor extends Model
 
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'visitor_reservation');
+        return $this->belongsToMany(Reservation::class, 'visitor_reservations');
     }
 
     protected $casts = [
