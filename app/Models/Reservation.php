@@ -55,7 +55,7 @@ class Reservation extends Model
     {
         $departureDate = new Carbon($this->departuredate);
         $arrivalDate = new Carbon($this->arrivaldate);
-        return ( $arrivalDate <= $endDate ) && ( $departureDate >= $beginDate);
+        return ( $arrivalDate <= $endDate ) && ( $departureDate >= $beginDate || $this->nodeparturedate );
     }
 
 

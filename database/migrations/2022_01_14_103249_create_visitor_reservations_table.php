@@ -16,8 +16,8 @@ class CreateVisitorReservationsTable extends Migration
         Schema::create('visitor_reservation', function (Blueprint $table) {
             $table->integer('visitor_id')->unsigned();
             $table->integer('reservation_id')->unsigned();
-            $table->foreign('visitor_id')->references('id')->on('visitors')->onDelete('cascade');
-            $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('cascade');
+            $table->foreign('visitor_id')->references('id')->on('visitors');
+            $table->foreign('reservation_id')->references('id')->on('reservations');
             $table->boolean('contact');
         });
     }

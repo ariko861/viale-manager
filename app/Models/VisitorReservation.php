@@ -14,10 +14,15 @@ class VisitorReservation extends Pivot
         return $this->belongsTo(Room::class);
     }
 
-//     public function reservations()
-//     {
-//         return $this->hasMany(Reservation::class);
-//     }
+     public function reservation()
+     {
+         return $this->belongsTo(Reservation::class);
+     }
+
+     public function visitor()
+     {
+         return $this->belongsTo(Visitor::class);
+     }
 
     protected $table = 'visitor_reservation';
 

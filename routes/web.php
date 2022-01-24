@@ -30,6 +30,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/visitors', function () {
     return view('visitors');
 })->name('visitors');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/rooms', function () {
+    return view('rooms');
+})->name('rooms');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/configuration', function () {
     return view('configuration');
 })->name('configuration');

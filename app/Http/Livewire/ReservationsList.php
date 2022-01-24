@@ -12,6 +12,7 @@ class ReservationsList extends Component
     public $showRoomSelection = false;
     public $visitorSelectedForRoom;
     public $reservationSelectedForRoom;
+    public $confirmingDeletion;
 
     protected $listeners = ["hideRoomSelection"];
 
@@ -30,6 +31,22 @@ class ReservationsList extends Component
     public function hideRoomSelection()
     {
         $this->showRoomSelection = false;
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->confirmingDeletion = $id;
+    }
+
+    public function deleteReservation($profile_id)
+    {
+        Reservation::destroy($profile_id);
+
+        $this->reservations = $this->reservations->filter(function($item) use ($profile_id) {
+            return $item->id != $profile_id;
+        });
+
+        $this->emit('showAlert', [ __("La réservation a bien été supprimé"), "bg-red-600"] );
     }
 
     public function render()

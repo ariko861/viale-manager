@@ -81,18 +81,20 @@ class ReservationsCalendar extends LivewireCalendar
             ->get();
 
         $arrivalEvents = $reservations->map(function (Reservation $model) {
+            $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
             return [
                 'id' => "a{$model->id}",
-                'title' => __("Arrivée").' '.$model->contact_person->full_name,
+                'title' => __("Arrivée").' '.$contact_person_name,
                 //'description' => $model->remarks,
                 'date' => $model->arrivaldate,
             ];
         });
 
         $departureEvents = $reservations->map(function (Reservation $model) {
+            $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
             return [
                 'id' => "d{$model->id}",
-                'title' => __("Départ").' '.$model->contact_person->full_name,
+                'title' => __("Départ").' '.$contact_person_name,
                 'description' => $model->remarks,
                 'date' => $model->departuredate,
             ];

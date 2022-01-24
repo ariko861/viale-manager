@@ -18,7 +18,7 @@ class RoomSelectionForm extends Component
         $this->houses = House::all();
     }
 
-    public function test($room)
+    public function getRoomAvailability($room)
     {
         $room = Room::find($room["id"]);
 //         dd($room->reservationVisitors);

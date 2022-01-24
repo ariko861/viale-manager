@@ -17,4 +17,8 @@
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.xl');
   }
+  .draggable {
+      touch-action: none;
+      user-select: none;
+  }
 }

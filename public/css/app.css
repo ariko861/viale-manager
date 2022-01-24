@@ -931,6 +931,13 @@ select {
     padding: 1.5rem;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   }
+.draggable {
+      touch-action: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+  }
 .visible {
   visibility: visible;
 }
@@ -987,6 +994,9 @@ select {
 }
 .col-span-full {
   grid-column: 1 / -1;
+}
+.col-span-3 {
+  grid-column: span 3 / span 3;
 }
 .float-right {
   float: right;
@@ -1257,6 +1267,9 @@ select {
 .cursor-pointer {
   cursor: pointer;
 }
+.cursor-move {
+  cursor: move;
+}
 .list-inside {
   list-style-position: inside;
 }
@@ -1274,6 +1287,9 @@ select {
 }
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .flex-row {
   flex-direction: row;
@@ -1520,6 +1536,9 @@ select {
 .p-1 {
   padding: 0.25rem;
 }
+.p-4 {
+  padding: 1rem;
+}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1658,8 +1677,14 @@ select {
 .font-semibold {
   font-weight: 600;
 }
+.font-bold {
+  font-weight: 700;
+}
 .uppercase {
   text-transform: uppercase;
+}
+.italic {
+  font-style: italic;
 }
 .leading-5 {
   line-height: 1.25rem;
