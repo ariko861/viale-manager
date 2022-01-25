@@ -38,4 +38,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/configuration', function 
     return view('configuration');
 })->name('configuration');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/users-management', function () {
+    return view('users-management');
+})->name('users-management');
+
+
+
 //Route::resource('visitors', VisitorController::class)->name('visitors');

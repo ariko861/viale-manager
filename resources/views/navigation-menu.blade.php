@@ -67,6 +67,7 @@
                                         </x-jet-dropdown-link>
                                     @endcan
 
+
                                     <div class="border-t border-gray-100"></div>
 
                                     <!-- Team Switcher -->
@@ -113,6 +114,11 @@
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
+
+
+                                <x-jet-dropdown-link href="{{ route('users-management') }}">
+                                    {{ __('Manage users') }}
+                                </x-jet-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
