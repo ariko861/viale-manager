@@ -7,9 +7,12 @@ use Livewire\Component;
 use Asantibanez\LivewireCalendar\LivewireCalendar;
 use App\Models\Reservation;
 use Illuminate\Support\Collection;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReservationsCalendar extends LivewireCalendar
 {
+
+    use AuthorizesRequests;
 
     public $gridStartsAt;
     public $gridEndsAt;
@@ -31,6 +34,7 @@ class ReservationsCalendar extends LivewireCalendar
     {
         // This event will fire when an event is dragged and dropped into another calendar day
         // You will get the event id, year, month and day where it was dragged to
+        $this->authorize('reservation-edit');
         $date = new Carbon("{$year}-{$month}-${day}");
         $newdate = new Carbon("{$year}-{$month}-${day}");
         $reservationId = substr($eventId, 1);

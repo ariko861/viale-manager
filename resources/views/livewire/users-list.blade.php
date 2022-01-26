@@ -23,12 +23,19 @@
                 <td class="{{ $tbody_class }}">{{ $user->email }}</td>
                 <td class="{{ $tbody_class }}">
                 @if(!empty($user->getRoleNames()))
-                    @foreach($user->getRoleNames() as $v)
-                    <label class="badge badge-success">{{ $v }}</label>
+                    @foreach($user->getRoleNames() as $role)
+                    <label class="badge badge-success">{{ $role }}</label>
                     @endforeach
                 @endif
                 </td>
-                <td class="{{ $tbody_class }}">{{ $user["email"] }}</td>
+                <td class="{{ $tbody_class }}">
+                @if($confirmingDelete===$user->id)
+                    <button wire:click="delete({{ $user->id }})" class="btn-warning">{{ __("Confirmer la suppression ?") }}</button>
+                @else
+                    <button wire:click="openForm({{ $user->id }})">{{ __("Modifier") }}</button>
+                    <button class="btn-warning" wire:click="confirmDelete({{ $user->id }})">{{ __("Supprimer") }}</button>
+                @endif
+                </td>
 
 
             </tr>
@@ -36,5 +43,8 @@
 
    </tbody>
    </table>
+    @if ( $showForm )
+     <livewire:user-form>
+   @endif
 
 </div>

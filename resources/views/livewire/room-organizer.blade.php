@@ -1,7 +1,8 @@
 <div class="grid grid-cols-4 gap-4 w-full">
+    @can('room-choose')
     <div class="col-span-1">
         <ul>
-            <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants")}}</h2>
+            <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             @foreach ( $resas as $resa )
                 <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative">
                     <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
@@ -10,8 +11,16 @@
             @endforeach
         </ul>
     </div>
+    @endcan
 
-    <div class="col-span-3">
+    @can('room-choose')
+        <div class="col-span-3">
+        @php
+            $cursor="cursor-move";
+        @endphp
+    @else
+        <div class="col-span-4">
+    @endcan
 
         <h2 class="text-lg text-center">{{ __("Occupation des chambres") }}</h2>
 
@@ -45,7 +54,7 @@
                             <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
                             <td id="room{{ $room->id }}"class="{{ $tbody_class }} dropzone ui-widget-header">
                                 @foreach ( $this->getRoomAvailability($room) as $resa )
-                                    <div id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative">
+                                    <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative">
                                         <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                                         <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
 
@@ -60,7 +69,7 @@
         </table>
     </div>
 
-
+    @can('room-choose')
       <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script>
@@ -95,4 +104,5 @@
   } );
 
     </script>
+    @endcan
 </div>

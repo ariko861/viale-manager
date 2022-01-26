@@ -14,6 +14,10 @@
   .btn-warning {
      @apply bg-red-500 hover:bg-red-800;
   }
+  .btn-sm {
+      @apply p-2 border-2 text-xs;
+
+  }
   .card {
     background-color: theme('colors.white');
     border-radius: theme('borderRadius.lg');
@@ -31,6 +35,7 @@
     font-weight: 700;
     line-height: 1;
     color: #fff;
+    @apply bg-blue-500 rounded-xl;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;

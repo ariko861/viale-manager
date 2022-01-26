@@ -53,6 +53,7 @@ class RoleForm extends Component
     public function save()
     {
         $this->validate();
+        //$this->role->guard_name = 'sanctum';
         $this->role->save();
         $permissions = $this->permissionsInRole->map(function($item, $key){
             if ( $item )

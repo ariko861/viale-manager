@@ -15,18 +15,26 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
+                    @can('reservation-list')
                     <x-jet-nav-link href="{{ route('reservations') }}" :active="request()->routeIs('reservations')">
                         {{ __('Réservations') }}
                     </x-jet-nav-link>
+                    @endcan
+                    @can('visitor-list')
                     <x-jet-nav-link href="{{ route('visitors') }}" :active="request()->routeIs('visitors')">
                         {{ __('Visiteurs') }}
                     </x-jet-nav-link>
+                    @endcan
+                    @can('room-list')
                     <x-jet-nav-link href="{{ route('rooms') }}" :active="request()->routeIs('rooms')">
                         {{ __('Chambres') }}
                     </x-jet-nav-link>
+                    @endcan
+                    @can('config-manage')
                     <x-jet-nav-link href="{{ route('configuration') }}" :active="request()->routeIs('configuration')">
                         {{ __('Configuration') }}
                     </x-jet-nav-link>
+                    @endcan
 
 
                 </div>
@@ -115,14 +123,16 @@
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
 
-
+                            @can('user-manage')
                                 <x-jet-dropdown-link href="{{ route('users-management') }}">
                                     {{ __('Manage users') }}
                                 </x-jet-dropdown-link>
-
+                            @endcan
+                            @can('role-manage')
                                 <x-jet-dropdown-link href="{{ route('roles-management') }}">
                                     {{ __('Manage roles') }}
                                 </x-jet-dropdown-link>
+                            @endcan
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">

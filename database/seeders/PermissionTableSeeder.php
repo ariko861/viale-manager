@@ -27,12 +27,14 @@ class PermissionTableSeeder extends Seeder
            'visitor-create',
            'visitor-edit',
            'visitor-delete',
+           'room-choose',
+           'room-list',
         ];
 
 
 
         foreach ($permissions as $permission) {
-             Permission::create(['guard_name' => 'sanctum', 'name' => $permission]);
+             Permission::create(['name' => $permission]);
         }
     }
 }
