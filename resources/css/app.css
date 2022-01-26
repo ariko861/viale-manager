@@ -3,13 +3,16 @@
 @import 'tailwindcss/utilities';
 
 @layer components {
-  .btn {
+  .btn, button {
     /* ... */
     background-color: theme('colors.white');
     @apply p-2;
     @apply border-2;
     @apply rounded-xl;
     @apply bg-gray-200 hover:bg-gray-500;
+  }
+  .btn-warning {
+     @apply bg-red-500 hover:bg-red-800;
   }
   .card {
     background-color: theme('colors.white');

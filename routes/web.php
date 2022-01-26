@@ -42,6 +42,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/users-management', functi
     return view('users-management');
 })->name('users-management');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/roles-management', function () {
+    return view('roles-management');
+})->name('roles-management');
+
 
 
 //Route::resource('visitors', VisitorController::class)->name('visitors');
