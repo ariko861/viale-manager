@@ -14,13 +14,27 @@ class RoomOrganizer extends Component
 
 
     public $newComers;
+    public $previousBeginDay;
+    public $previousEndDay;
 
-    protected $listeners = ["roomChanged", "movingVisitor"];
+    protected $listeners = ["roomChanged", "movingVisitor", "restoreDays"];
 
     public function backToToday()
     {
         $this->beginDay = Carbon::now()->format('Y-m-d');
         $this->endDay = Carbon::now()->format('Y-m-d');
+    }
+
+    public function saveDays()
+    {
+        $this->previousBeginDay = $this->beginDay;
+        $this->previousEndDay = $this->endDay;
+    }
+
+    public function restoreDays()
+    {
+        $this->beginDay = $this->previousBeginDay;
+        $this->endDay = $this->previousEndDay;
     }
 
     public function getNewComers()
@@ -46,9 +60,15 @@ class RoomOrganizer extends Component
     {
         $resa_id = substr($resa_id, 4);
         $visitorReservation = VisitorReservation::find($resa_id);
+        $this->saveDays();
         $this->beginDay = $visitorReservation->reservation->arrivaldate;
-        $this->endDay = $visitorReservation->reservation->departuredate;
-//         dd($this->visibleDay);
+        if ($visitorReservation->reservation->nodeparturedate)
+        {
+            $this->endDay = Carbon::now()->addYear()->format('Y-m-d');
+
+        } else {
+            $this->endDay = $visitorReservation->reservation->departuredate;
+        }
         $refresh;
 
     }
@@ -61,7 +81,7 @@ class RoomOrganizer extends Component
         $visitorReservation = VisitorReservation::find($resa_id);
         $visitorReservation->room()->associate($room_id);
         $visitorReservation->save();
-        $this->backToToday();
+        $this->restoreDays();
         $this->getNewComers();
         $this->emit('showAlert', [ __("Le visiteur a bien été déplacé !"), "bg-green-500" ] );
     }

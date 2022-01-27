@@ -66,6 +66,23 @@ class ReservationsCalendar extends LivewireCalendar
         }
     }
 
+    public function getOtherVisitorsNames($visitors)
+    {
+        if ( $visitors->count() > 1 )
+        {
+            $visitorList = "Autres visiteurs :<br>";
+            foreach ( $visitors as $visitor ){
+                if ( ! $visitor->pivot->contact ){
+                    $visitorList = $visitorList.$visitor->full_name.'<br>';
+                }
+            }
+        } else {
+            $visitorList = "";
+        }
+
+        return $visitorList;
+    }
+
     public function events() : Collection
     {
 //         $event = collect([]);
@@ -86,21 +103,25 @@ class ReservationsCalendar extends LivewireCalendar
 
         $arrivalEvents = $reservations->map(function (Reservation $model) {
             $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
+            $visitorList = $this->getOtherVisitorsNames($model->visitors);
             return [
                 'id' => "a{$model->id}",
                 'title' => __("Arrivée").' '.$contact_person_name,
-                //'description' => $model->remarks,
+                'description' => $visitorList.'Remarques:<br>'.e($model->remarks),
                 'date' => $model->arrivaldate,
+                'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
             ];
         });
 
-        $departureEvents = $reservations->map(function (Reservation $model) {
+        $departureEvents = $reservations->where('nodeparturedate', false)->map(function (Reservation $model) {
             $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
+            $visitorList = $this->getOtherVisitorsNames($model->visitors);
             return [
                 'id' => "d{$model->id}",
                 'title' => __("Départ").' '.$contact_person_name,
-                'description' => $model->remarks,
+                'description' => $visitorList.'Remarques:<br>'.e($model->remarks),
                 'date' => $model->departuredate,
+                'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
             ];
         });
 

@@ -1,7 +1,7 @@
 <div>
     <h2 class="text-center mt-8">{{ __("Prochaines arrivées") }}</h2>
     @foreach ( $reservations as $reservation )
-        <div @class(['mt-4', 'w-full', 'card', 'border-l-4', 'border-yellow-400' => ! $reservation->confirmed, 'border-red-400' => $reservation->confirmed])>
+        <div @class(['mt-4', 'w-full', 'card', 'border-l-4', 'border-yellow-400' => ! $reservation->confirmed, 'border-green-400' => $reservation->confirmed])>
             @foreach ( $reservation->visitors as $visitor )
                 <div @class(['mt-2', 'w-full', 'card'])>
                     @if ( $visitor->pivot->contact )

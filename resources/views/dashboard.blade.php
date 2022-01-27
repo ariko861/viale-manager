@@ -9,7 +9,7 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 {{-- <x-jet-welcome /> --}}
-                <livewire:reservations-calendar before-calendar-view="/components/calendar-buttons">
+                <livewire:reservations-calendar before-calendar-view="/components/calendar-buttons" event-view="/components/calendar-event">
 
             </div>
         </div>

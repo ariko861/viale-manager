@@ -4,7 +4,7 @@
         <ul>
             <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             @foreach ( $resas as $resa )
-                <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative">
+                <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
                     <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                     <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
                 </li>
@@ -25,7 +25,7 @@
         <h2 class="text-lg text-center">{{ __("Occupation des chambres") }}</h2>
 
         <div class="text-center">
-            {{ __("Du")}} <input type="date" wire:model="beginDay" /> {{ __("au")}} <input type="date" wire:model="endDay" min="{{ $beginDay }}"/>
+            {{ __("Du")}} <input type="date" wire:change="$emit('dateChanged')" wire:model="beginDay" /> {{ __("au")}} <input type="date" wire:model="endDay" wire:change="$emit('dateChanged')" min="{{ $beginDay }}"/>
 
         </div>
 
@@ -54,7 +54,7 @@
                             <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
                             <td id="room{{ $room->id }}"class="{{ $tbody_class }} dropzone ui-widget-header">
                                 @foreach ( $this->getRoomAvailability($room) as $resa )
-                                    <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative">
+                                    <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
                                         <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                                         <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
 
@@ -77,17 +77,28 @@
   $( function() {
 
       function letDrag() {
-//         $(".draggable").off();
-        $( ".draggable" ).draggable({
-            revert: "invalid",
-            cursor: "move",
-            start: function( event, ui ){
-                Livewire.emit('movingVisitor', ui.helper[0].id);
-            }
-        });
+        setTimeout(function(){
+            $( ".draggable" ).draggable({
+                revert: function(is_valid){
+                    if (!is_valid) {
+                        Livewire.emit('restoreDays');
+                        return true;
+                    }
+                },
+                cursor: "move",
+                start: function( event, ui ){
+                    Livewire.emit('movingVisitor', ui.helper[0].id);
+                }
+            });
+        }, 500);
       }
 
       letDrag();
+
+    //To check when a date is changed
+    Livewire.on('dateChanged', () => {
+        letDrag();
+    });
 
     $( ".dropzone" ).droppable({
 //       classes: {
@@ -97,7 +108,7 @@
       drop: function( event, ui ) {
 
         Livewire.emit('roomChanged', { room: this.id, resa: ui.draggable[0].id });
-        //letDrag();
+        letDrag();
 
       }
     });

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VisitorController;
-
+use App\Http\Controllers\RegisterController;
+use App\Models\UserInvite;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +16,10 @@ use App\Http\Controllers\VisitorController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+// Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register')->middleware('hasInvitation');
+Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::class, 'showRegistrationForm'])->name('register');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

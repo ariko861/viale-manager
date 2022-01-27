@@ -2,25 +2,21 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Action\Fortify\CreateNewUser;
 
 class UserForm extends Component
 {
     public $modify = false;
-    protected $listeners = ["startNewUser", "editUser"];
+    protected $listeners = ["editUser"];
 
     protected $rules = [
-        'user.name' => 'required|string',
         'rolesInUser.*' => ''
     ];
 
-    public function startNewUser()
-    {
-        $this->user = new User();
-        $this->rolesInUser = collect([]);
-    }
 
     public function editUser($id)
     {
@@ -49,7 +45,6 @@ class UserForm extends Component
     public function save()
     {
         $this->validate();
-        $this->user->save();
         $roles = $this->rolesInUser->map(function($item, $key){
             if ( $item )
             {
@@ -57,7 +52,6 @@ class UserForm extends Component
             }
         });
         $this->user->syncRoles($roles);
-
         $this->emit('cancelForm');
 
     }
