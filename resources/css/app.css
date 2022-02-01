@@ -3,6 +3,11 @@
 @import 'tailwindcss/utilities';
 
 @layer components {
+
+    a {
+      @apply text-blue-600 hover:text-blue-200;
+
+    }
   .btn, button {
     /* ... */
     background-color: theme('colors.white');
@@ -17,6 +22,9 @@
   .btn-sm {
       @apply p-2 border-2 text-xs;
 
+  }
+  .btn-submit {
+     @apply bg-blue-500 hover:bg-blue-800;
   }
   .card {
     background-color: theme('colors.white');

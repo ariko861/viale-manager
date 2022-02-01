@@ -4,10 +4,12 @@
         <ul>
             <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             @foreach ( $resas as $resa )
+                @if ($resa->reservation)
                 <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
                     <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                     <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
                 </li>
+                @endif
             @endforeach
         </ul>
     </div>
@@ -70,7 +72,6 @@
     </div>
 
     @can('room-choose')
-      <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script>
 

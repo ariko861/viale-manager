@@ -9,13 +9,12 @@ class VisitorsList extends Component
 {
 
 //
-    public $confirming;
     public function mount()
     {
         $this->visitors = Visitor::where('confirmed', true)->get()->sortBy('name');
     }
 
-    protected $listeners = ['newVisitorSaved', 'visitorModified'];
+    protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction' => 'deleteVisitor', 'changeAction' => 'engageVisitorChange'];
 
     public function newVisitorSaved($id)
     {
@@ -37,11 +36,6 @@ class VisitorsList extends Component
         $this->emit('showVisitorForm');
         $this->emit('visitorChange', $id);
         //$this->emit('hideVisitorForm');
-    }
-
-    public function confirmDelete($id)
-    {
-        $this->confirming = $id;
     }
 
     public function deleteVisitor($visitor_id)

@@ -20,6 +20,13 @@ class Reservation extends Model
         'otherVisitorsAuthorized' => false,
     ];
 
+    protected $casts = [
+        'nodeparturedate' => 'boolean',
+        'confirmed' => 'boolean',
+        'otherVisitorsAuthorized' => 'boolean',
+
+    ];
+
     protected $appends = ['arrival', 'departure', 'contact_person'];
 
     public function getArrivalAttribute()
@@ -64,6 +71,11 @@ class Reservation extends Model
     public function visitors()
     {
         return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id');
+    }
+
+    public function links()
+    {
+        return $this->hasMany(ReservationLink::class);
     }
 
 }

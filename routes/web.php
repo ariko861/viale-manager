@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Models\UserInvite;
+use Illuminate\Auth\Middleware\Authorize;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,11 +22,13 @@ Route::get('/', function () {
 // Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register')->middleware('hasInvitation');
 Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::class, 'showRegistrationForm'])->name('register');
 
+Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationLinkController::class, 'showReservationConfirmationForm'])->name('confirmation');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/reservations', function () {
+Route::middleware('can:reservation-list')->get('/reservations', function () {
     return view('reservations');
 })->name('reservations');
 
