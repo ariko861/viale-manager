@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ConfirmationController;
 use App\Models\UserInvite;
 use Illuminate\Auth\Middleware\Authorize;
 /*
@@ -19,38 +20,42 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register')->middleware('hasInvitation');
 Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::class, 'showRegistrationForm'])->name('register');
 
-Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationLinkController::class, 'showReservationConfirmationForm'])->name('confirmation');
+Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationController::class, 'showConfirmationForm'])->name('confirmation');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
-Route::middleware('can:reservation-list')->get('/reservations', function () {
-    return view('reservations');
-})->name('reservations');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/visitors', function () {
-    return view('visitors');
-})->name('visitors');
+    Route::middleware('can:reservation-list')->get('/reservations', function () {
+        return view('reservations');
+    })->name('reservations');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/rooms', function () {
-    return view('rooms');
-})->name('rooms');
+    Route::middleware('can:visitor-list')->get('/visitors', function () {
+        return view('visitors');
+    })->name('visitors');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/configuration', function () {
-    return view('configuration');
-})->name('configuration');
+    Route::middleware('can:room-list')->get('/rooms', function () {
+        return view('rooms');
+    })->name('rooms');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/users-management', function () {
-    return view('users-management');
-})->name('users-management');
+    Route::middleware('can:config-manage')->get('/configuration', function () {
+        return view('configuration');
+    })->name('configuration');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/roles-management', function () {
-    return view('roles-management');
-})->name('roles-management');
+    Route::middleware('can:user-manage')->get('/users-management', function () {
+        return view('users-management');
+    })->name('users-management');
+
+    Route::middleware('can:role-manage')->get('/roles-management', function () {
+        return view('roles-management');
+    })->name('roles-management');
+
+});
+
 
 
 

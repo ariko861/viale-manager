@@ -18,7 +18,7 @@ class RolesList extends Component
     public function cancelRoleForm()
     {
         $this->showRoleForm = false;
-        $this->roles = Role::all();
+        $this->roles = Role::whereNotIn('name', ['Super Admin'])->get();
     }
 
     public function confirmDelete($id)
@@ -38,7 +38,7 @@ class RolesList extends Component
     }
     public function mount()
     {
-        $this->roles = Role::all();
+        $this->roles = Role::whereNotIn('name', ['Super Admin'])->get();
     }
 
     public function openRoleForm($role_id = null)

@@ -6,7 +6,15 @@
 
     a {
       @apply text-blue-600 hover:text-blue-200;
-
+    }
+    h1 {
+       @apply text-3xl;
+    }
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
     }
   .btn, button {
     /* ... */

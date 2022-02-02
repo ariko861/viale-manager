@@ -86,7 +86,10 @@ class UsersList extends Component
 
     public function mount()
     {
-        $this->users = User::all();
+//         $this->users = User::all();
+        $this->users = User::whereHas("roles", function($q) {
+            $q->where("name", "!=" , "Super Admin");
+        })->get();
         $this->userInvites = UserInvite::all();
     }
 

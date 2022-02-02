@@ -1,7 +1,7 @@
 <div>
     <h2 class="text-center mt-8 text-lg">{{ $listTitle }}</h2>
     <br>
-    <p><strong>{{__("Ou sélectionner par dates")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+    <p><strong>{{__("Ou sélectionner par date d'arrivée")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
     <br>
 
     @foreach ( $reservations as $reservation )
@@ -27,6 +27,12 @@
                     <p><label><strong>{{__("Réservation confirmée")}} : </strong></label><input type="checkbox" wire:model="reservationConfirmed"></p>
                     <br>
                     <p><button class="btn-warning" wire:click="$set('editing', '')">{{__("Annuler les changements")}}</button><button class="btn-submit" wire:click="saveEdit({{$reservation->id}})">{{__("Sauvegarder les changements")}}</button></p>
+                @endif
+                @if ($reservation->links)
+                    <h4>{{__("Liens de confirmation")}}</h4>
+                    @foreach ( $reservation->links as $link)
+                        <p><a href="{{ $link->getLink() }}" onclick="return false;">{{ $link->getLink() }}</a></p>
+                    @endforeach
                 @endif
 
             @foreach ( $reservation->visitors as $visitor )

@@ -41,7 +41,7 @@ class VisitorSearch extends Component
     public function setContactPerson($visitor)
     {
         if ($visitor["email"]){
-            $this->searchQuery = $visitor['full_name'];
+            $this->searchQuery = $visitor['full_name']." <".$visitor["email"].">";
             $this->visitorSet = true;
             $this->visitorsArray = [];
             $this->displayAddVisitorButton = false;

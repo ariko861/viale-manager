@@ -39,7 +39,7 @@ class UserForm extends Component
     public function mount()
     {
         $this->user = new User();
-        $this->roles = Role::all();
+        $this->roles = Role::whereNotIn('name', ['Super Admin'])->get();
     }
 
     public function save()

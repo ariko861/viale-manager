@@ -18,8 +18,9 @@ class CreateVisitorsTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->year('birthyear');
-            $table->string('email');
-            $table->string('phone');
+            $table->boolean('confirmed', true)->default(true);
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

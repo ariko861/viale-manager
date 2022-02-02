@@ -65,7 +65,18 @@ class Reservation extends Model
         return ( $arrivalDate <= $endDate ) && ( $departureDate >= $beginDate || $this->nodeparturedate );
     }
 
-
+    public function getNonContactVisitors()
+    {
+        $visitors = collect([]);
+        foreach ( $this->visitors as $visitor )
+        {
+            if (! $visitor->pivot->contact)
+            {
+                $visitors->push($visitor);
+            }
+        }
+        return $visitors;
+    }
 
 
     public function visitors()

@@ -17,8 +17,8 @@ class CreateReservationLinksTable extends Migration
             $table->id();
             $table->foreignId('reservation_id')->constrained();
             $table->uuid('link_token')->unique();
-            $table->int('max_days_change');
-            $table->int('max_added_visitors');
+            $table->integer('max_days_change');
+            $table->integer('max_added_visitors');
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
         });

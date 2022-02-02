@@ -920,6 +920,16 @@ a:hover {
   --tw-text-opacity: 1;
   color: rgb(191 219 254 / var(--tw-text-opacity));
 }
+h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+    }
 .btn, button {
     /* ... */
     background-color: #fff;

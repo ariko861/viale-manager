@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddHousesToRooms extends Migration
+class CreatePermissionsAndSuperUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class AddHousesToRooms extends Migration
      */
     public function up()
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            //
-            $table->foreignId('house_id')->nullable()->constrained()->onDelete('cascade');
-        });
+        Artisan::call('db:seed', [
+            '--class' => 'CreateSuperAdminSeeder',
+            '--force' => true // <--- add this line
+        ]);
+        Artisan::call('db:seed', [
+            '--class' => 'PermissionTableSeeder',
+            '--force' => true // <--- add this line
+        ]);
     }
 
     /**
@@ -26,8 +30,5 @@ class AddHousesToRooms extends Migration
      */
     public function down()
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            //
-        });
     }
 }

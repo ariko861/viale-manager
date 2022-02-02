@@ -9,7 +9,7 @@
         <tr>
             <td class="{{ $thead_class }}">{{ __("Nom du profil") }}</td>
             <td class="{{ $thead_class }}">{{ __("Prix") }}</td>
-            <td class="{{ $thead_class }}">{{ __("Remarques") }}</td>
+            <td class="{{ $thead_class }}">{{ __("Description") }}</td>
             <td class="{{ $thead_class }}">{{ __("Modifications") }}</td>
         </tr>
     </thead>

@@ -14,6 +14,7 @@ class ReservationsList extends Component
     public $visitorSelectedForRoom;
     public $reservationSelectedForRoom;
     public $editing;
+    public $reservations;
     public $beginDate;
     public $endDate;
     public $listTitle;
@@ -32,8 +33,9 @@ class ReservationsList extends Component
     public function getReservationsComing($amount)
     {
         $today = Carbon::now()->format('Y-m-d');
-        $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
-        $this->reservations = $allReservations->first();
+//         $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
+//         $this->reservations = $allReservations->first();
+        $this->reservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate');
         $this->listTitle = __("Prochaines arrivées");
     }
 

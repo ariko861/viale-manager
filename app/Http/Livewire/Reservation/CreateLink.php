@@ -35,7 +35,7 @@ class CreateLink extends Component
         $reservationLink->max_added_visitors = $this->maxVisitors;
 
         $reservationLink->generateLinkToken();
-//         $this->reservation->links()->save($reservationLink);
+        $this->reservation->links()->save($reservationLink);
 
         if ($sendmail)
         {

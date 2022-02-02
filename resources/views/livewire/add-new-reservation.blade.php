@@ -46,12 +46,10 @@
                 </div>
             </div>
         @endforeach
-<!--         Checkbox pour autoriser l'ajout de visiteurs par la personne de contact -->
-        <label class="col-span-1">{{ __("Autoriser la personne de contact à ajouter d'autres visiteurs") }}</label>
-        <input class="col-span-2" type="checkbox" wire:model="reservation.otherVisitorsAuthorized">
+
 <!--         Bouton de validation -->
         <div class="col-span-full text-center">
-            <button class="btn rounded-full p-2 border-4" type="submit">{{ __('Valider') }}</button>
+            <button class="btn btn-submit" type="submit">{{ __('Valider') }}</button>
         </div>
     </div>
  </form>

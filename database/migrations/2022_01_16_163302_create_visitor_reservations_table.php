@@ -13,12 +13,17 @@ class CreateVisitorReservationsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('visitor_reservation');
+
         Schema::create('visitor_reservation', function (Blueprint $table) {
-            $table->integer('visitor_id')->unsigned();
-            $table->integer('reservation_id')->unsigned();
-            $table->foreign('visitor_id')->references('id')->on('visitors');
-            $table->foreign('reservation_id')->references('id')->on('reservations');
+            //
+            $table->id();
+            $table->foreignId('visitor_id')->constrained()->onDelete('cascade');
+            $table->integer('reservation_id')->constrained()->onDelete('cascade');
             $table->boolean('contact');
+            $table->float('price', 8, 2)->nullable();
+            $table->foreignId('room_id')->nullable()->constrained();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +34,8 @@ class CreateVisitorReservationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('visitor_reservations');
+        Schema::table('visitor_reservation', function (Blueprint $table) {
+            //
+        });
     }
 }

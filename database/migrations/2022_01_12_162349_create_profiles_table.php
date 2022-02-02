@@ -17,6 +17,7 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->string('name');
             $table->float('price', 8, 2);
+            $table->boolean('is_default', false)->default(false);
             $table->string('remarks');
             $table->timestamps();
         });
