@@ -107,7 +107,7 @@ class ReservationsCalendar extends LivewireCalendar
             return [
                 'id' => "a{$model->id}",
                 'title' => __("Arrivée").' '.$contact_person_name,
-                'description' => $visitorList.'Remarques:<br>'.e($model->remarks),
+                'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->arrivaldate,
                 'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
             ];
@@ -119,7 +119,7 @@ class ReservationsCalendar extends LivewireCalendar
             return [
                 'id' => "d{$model->id}",
                 'title' => __("Départ").' '.$contact_person_name,
-                'description' => $visitorList.'Remarques:<br>'.e($model->remarks),
+                'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->departuredate,
                 'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
             ];

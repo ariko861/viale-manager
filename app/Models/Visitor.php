@@ -11,7 +11,7 @@ class Visitor extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'surname', 'email', 'phone', 'birthyear',
+        'name', 'surname', 'email', 'phone', 'birthyear', 'confirmed'
     ];
 
     protected $attributes = [
@@ -38,6 +38,6 @@ class Visitor extends Model
         'name' => 'string',
     ];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'age'];
 
 }

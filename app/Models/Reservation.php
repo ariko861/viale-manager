@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\VisitorReservation;
 
 class Reservation extends Model
 {
@@ -68,6 +69,7 @@ class Reservation extends Model
     public function getNonContactVisitors()
     {
         $visitors = collect([]);
+//         return $this->belongsToMany(Visitor::class)->wherePivot('contact', false);
         foreach ( $this->visitors as $visitor )
         {
             if (! $visitor->pivot->contact)
@@ -81,7 +83,7 @@ class Reservation extends Model
 
     public function visitors()
     {
-        return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id');
+        return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id', 'price');
     }
 
     public function links()
