@@ -107,7 +107,6 @@ class ConfirmationForm extends Component
     public function save()
     {
         $this->validate();
-        dd("saved");
         // Check if any changes for the contact Person
         $this->checkContactPersonChange($this->phoneNumber, 'phone');
         $this->checkContactPersonChange($this->birthyear, 'birthyear');
@@ -128,6 +127,7 @@ class ConfirmationForm extends Component
         // update dates
         $this->checkReservationChange($this->arrivaldate, 'arrivaldate');
         $this->checkReservationChange($this->departuredate, 'departuredate');
+        $this->link->reservation->remarks = $this->remark;
 
         // save added visitors
         foreach ($this->addedVisitors as $addedVisitor)
@@ -145,7 +145,10 @@ class ConfirmationForm extends Component
 
         $this->link->reservation->save();
 
-//         $this->link->destroy();
+        $this->emit('showRecapReservation', $this->link->reservation->id);
+
+        $this->link->delete();
+        $this->link = false;
     }
 
 

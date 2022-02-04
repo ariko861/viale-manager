@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use Carbon\Carbon;
+use Livewire\Component;
+use Illuminate\Database\Eloquent\Builder;
+use App\Models\House;
+use App\Models\VisitorReservation;
+use App\Models\Reservation;
+
+class Communities extends Component
+{
+
+    public $resas;
+    public $beginDate;
+    public $endDate;
+
+    protected $listeners = ["communityChanged"];
+
+    public function getCommunities(){
+        $this->communities = House::where('community', true)->get();
+    }
+
+    public function getResas()
+    {
+        $this->resas = VisitorReservation::whereNull('house_id')->whereRelation('reservation', function (Builder $query) {
+            $query->where(function($query) {
+                $query->whereDate('arrivaldate', '<=', $this->endDate)
+                        ->whereDate('departuredate', '>=', $this->beginDate);
+            })
+            ->orWhere(function($query) {
+                $query->whereDate('arrivaldate', '<=', $this->endDate)
+                        ->where('nodeparturedate', true );
+            });
+        })->get();
+        $this->emit('dateChanged');
+    }
+
+    public function prevWeek()
+    {
+        $this->beginDate = Carbon::parse($this->beginDate)->subWeek()->format('Y-m-d');
+        $this->endDate = Carbon::parse($this->endDate)->subWeek()->format('Y-m-d');
+        $this->getResas();
+    }
+    public function nextWeek()
+    {
+        $this->beginDate = Carbon::parse($this->beginDate)->addWeek()->format('Y-m-d');
+        $this->endDate = Carbon::parse($this->endDate)->addWeek()->format('Y-m-d');
+        $this->getResas();
+    }
+
+    public function communityChanged($item)
+    {
+        $house_id = substr($item["house"], 4);
+        $resa_id = substr($item["resa"], 4);
+//         dd($room_id, $resa_id);
+        $visitorReservation = VisitorReservation::find($resa_id);
+        $visitorReservation->community()->associate($house_id);
+        $visitorReservation->save();
+        $this->getCommunities();
+        $this->getResas();
+        $this->emit('showAlert', [ __("Le visiteur a bien été déplacé !"), "bg-green-500" ] );
+    }
+
+    public function emptyCommunities()
+    {
+//         $houses = House::all();
+//         foreach ($houses as $house)
+//         {
+//             $house->reservationVisitors()->detach();
+//         }
+        $resas = VisitorReservation::whereNotNull('house_id')->get();
+        foreach ($resas as $resa)
+        {
+            $resa->community()->dissociate();
+            $resa->save();
+        }
+        $this->getCommunities();
+    }
+
+    public function mount()
+    {
+        $this->communities = House::where('community', true)->get();
+        $today = Carbon::now();
+        $this->beginDate = $today->startOfWeek()->format('Y-m-d');
+        $this->beginDay = $today->startOfWeek()->format('l');
+        $this->endDate = $today->endOfWeek()->format('Y-m-d');
+        $this->endDay = $today->endOfWeek()->format('l');
+
+        $this->getResas();
+    }
+
+    public function render()
+    {
+        return view('livewire.communities');
+    }
+}

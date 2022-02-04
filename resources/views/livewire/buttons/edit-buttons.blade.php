@@ -1,12 +1,12 @@
 <div>
     @if($confirmingDeletion===$modelId)
         @can($deleteRights)
-            <button wire:click="$emitUp('deleteAction', {{ $modelId }})" class="bg-red-800 text-white hover:bg-red-600 rounded-lg border">{{ __("Confirmer la suppression ?") }}</button>
+            <button wire:click="$emitUp('deleteAction', {{ $options }} )" class="bg-red-800 text-white hover:bg-red-600 rounded-lg border">{{ __("Confirmer la suppression ?") }}</button>
             <button wire:click="$set('confirmingDeletion','')">{{ __("Annuler la suppression")}}</button>
         @endcan
     @else
         @can($editRights)
-            <svg wire:click="$emitUp('changeAction', {{ $modelId }})" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 float-right cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg wire:click="$emitUp('changeAction', {{ $options }} )" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 float-right cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
         @endcan

@@ -8,6 +8,10 @@
                 <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
                     <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                     <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
+                    <div class="hidden-remarks">
+                        <p>{{ $resa->reservation->remarks }}</p>
+                        <p>{{ $resa->visitor->remarks }}</p>
+                    </div>
                 </li>
                 @endif
             @endforeach
@@ -54,7 +58,7 @@
                         <tr>
                             <td class="{{ $tbody_class }} hover:bg-slate-400 cursor-pointer">{{ $room->name }}</td>
                             <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
-                            <td id="room{{ $room->id }}"class="{{ $tbody_class }} dropzone ui-widget-header">
+                            <td id="room{{ $room->id }}" class="{{ $tbody_class }} dropzone ui-widget-header">
                                 @foreach ( $this->getRoomAvailability($room) as $resa )
                                     <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
                                         <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
@@ -92,7 +96,11 @@
                 }
             });
         }, 500);
+        $(".draggable").click( function(){
+          $(this).children(".hidden-remarks").fadeToggle();
+      });
       }
+
 
       letDrag();
 
@@ -102,10 +110,10 @@
     });
 
     $( ".dropzone" ).droppable({
-//       classes: {
-//         "ui-droppable-active": "ui-state-active",
-//         "ui-droppable-hover": "ui-state-hover"
-//       },
+      classes: {
+        "ui-droppable-active": "ui-state-active",
+        "ui-droppable-hover": "ui-state-hover"
+      },
       drop: function( event, ui ) {
 
         Livewire.emit('roomChanged', { room: this.id, resa: ui.draggable[0].id });

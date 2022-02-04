@@ -25,8 +25,13 @@ class Visitor extends Model
 
     public function getAgeAttribute()
     {
-        $current_year = Carbon::now()->year;
-        return $current_year - $this->birthyear;
+        if ($this->birthyear)
+        {
+            $current_year = Carbon::now()->year;
+            return $current_year - $this->birthyear;
+        } else {
+            return "";
+        }
     }
 
     public function reservations()

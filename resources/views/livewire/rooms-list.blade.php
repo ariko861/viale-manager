@@ -7,25 +7,29 @@
     @endphp
 
     <tbody>
-        @foreach ( $houses as $house )
+        @foreach ( $houses as $key => $house )
             <tr>
-                <td class="{{ $thead_class }} text-center" colspan="2">
+                <td class="{{ $thead_class }} text-center" colspan="3">
                     <button wire:click="engageCreateRoom({{ $house->id }})" class="float-right mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </button>
                     <strong>{{ $house->name }}</strong>
+                    <input class="ml-2" type="checkbox" wire:change="updateCommunityRule()" wire:model="houses.{{ $key }}.community"><label class="ml-1 text-sm">{{__("Disponible pour maisonnées")}}</label>
                 </td>
             </tr>
             <tr>
                 <td class="{{ $thead_class }}"><i>{{ __("Chambres") }}</i></td>
                 <td class="{{ $thead_class }}"><i>{{ __("Nombre de lits") }}</i></td>
+                <td class="{{ $thead_class }}"><i>{{ __("Actions") }}</i></td>
+
             </tr>
             @foreach ( $house->rooms as $room )
                 <tr>
                     <td class="{{ $tbody_class }}">{{ $room->name }}</td>
                     <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
+                    <td class="{{ $tbody_class }}"><livewire:buttons.edit-buttons :wire:key="$room->id" model="room" :modelId="$room->id" editRights="config-manage" deleteRights="config-manage"></td>
                 </tr>
             @endforeach
 

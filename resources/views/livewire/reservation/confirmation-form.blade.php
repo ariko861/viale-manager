@@ -1,4 +1,5 @@
 <div>
+    @if ($link)
     <h1>{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
     <br>
     <form wire:submit.prevent="save" autocomplete="off">
@@ -59,10 +60,11 @@
                         </li>
                     @endforeach
                 </ul>
-                <br>
+
             @endif
 
             @if ( $link->max_added_visitors )
+                <br>
                 @unless ( $forbidAddingVisitors )
                     <div class="col-span-full">
                         <button class="btn w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>
@@ -117,9 +119,10 @@
             <textarea class="col-span-2 mt-6" wire:model="remark"></textarea>
 
             <div class="col-span-full text-center">
-                <button type="submit">{{ __('Valider') }}</button>
+                <button type="submit">{{ __('Confirmer la réservation') }}</button>
             </div>
         </div>
     </form>
+    @endif
 
 </div>

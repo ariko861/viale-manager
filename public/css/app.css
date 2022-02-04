@@ -974,6 +974,16 @@ h4,
   --tw-bg-opacity: 1;
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
+.option-field {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  padding: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.hidden-remarks {
+      display: none;
+  }
 .card {
     background-color: #fff;
     border-radius: 0.5rem;
@@ -987,6 +997,10 @@ h4,
           -ms-user-select: none;
               user-select: none;
   }
+.ui-state-hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
 .badge {
     display: inline-block;
     padding: .35em .65em;
@@ -1080,6 +1094,10 @@ h4,
   margin-left: auto;
   margin-right: auto;
 }
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -1153,6 +1171,9 @@ h4,
 .mb-4 {
   margin-bottom: 1rem;
 }
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
 .mr-4 {
   margin-right: 1rem;
 }
@@ -1210,11 +1231,11 @@ h4,
 .h-20 {
   height: 5rem;
 }
-.h-40 {
-  height: 10rem;
-}
 .h-full {
   height: 100%;
+}
+.h-40 {
+  height: 10rem;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -1293,6 +1314,9 @@ h4,
 }
 .table-auto {
   table-layout: auto;
+}
+.table-fixed {
+  table-layout: fixed;
 }
 .border-collapse {
   border-collapse: collapse;
@@ -1500,13 +1524,13 @@ h4,
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
-.border-yellow-400 {
-  --tw-border-opacity: 1;
-  border-color: rgb(250 204 21 / var(--tw-border-opacity));
-}
 .border-green-400 {
   --tw-border-opacity: 1;
   border-color: rgb(74 222 128 / var(--tw-border-opacity));
+}
+.border-yellow-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(250 204 21 / var(--tw-border-opacity));
 }
 .bg-white {
   --tw-bg-opacity: 1;

@@ -14,7 +14,7 @@ class VisitorsList extends Component
         $this->visitors = Visitor::where('confirmed', true)->get()->sortBy('name');
     }
 
-    protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction' => 'deleteVisitor', 'changeAction' => 'engageVisitorChange'];
+    protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction'];
 
     public function newVisitorSaved($id)
     {
@@ -29,6 +29,22 @@ class VisitorsList extends Component
     public function visitorModified($id)
     {
         $this->visitors->find($id)->fresh();
+    }
+
+    public function changeAction($options)
+    {
+        if ($options[1] == 'visitor')
+        {
+            $this->engageVisitorChange($options[0]);
+        }
+    }
+
+    public function deleteAction($options)
+    {
+        if ($options[1] == 'visitor')
+        {
+            $this->deleteVisitor($options[0]);
+        }
     }
 
     public function engageVisitorChange($id)

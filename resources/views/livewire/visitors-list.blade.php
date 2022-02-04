@@ -28,7 +28,7 @@
                 <td class="{{ $tbody_class }}">{{ $visitor["remarks"] }}</td>
                 @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $tbody_class }}">
-                <livewire:buttons.edit-buttons :wire:key="$visitor->id" :modelId="$visitor->id" editRights="visitor-edit" deleteRights="visitor-delete">
+                <livewire:buttons.edit-buttons :wire:key="$visitor->id" model="visitor" :modelId="$visitor->id" editRights="visitor-edit" deleteRights="visitor-delete">
                 </td>
                 @endcanany
             </tr>

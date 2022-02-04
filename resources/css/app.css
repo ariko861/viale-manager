@@ -38,7 +38,10 @@
   .btn-submit {
      @apply bg-blue-500 hover:bg-blue-800;
   }
-  .hidden-remark {
+  .option-field {
+      @apply p-6 bg-gray-100 text-sm;
+  }
+  .hidden-remarks {
       display: none;
   }
   .card {
@@ -50,6 +53,9 @@
   .draggable {
       touch-action: none;
       user-select: none;
+  }
+  .ui-state-hover {
+      @apply bg-blue-400;
   }
   .badge {
     display: inline-block;

@@ -1,7 +1,11 @@
 <div>
     <h2 class="text-center mt-8 text-lg">{{ $listTitle }}</h2>
     <br>
-    <p><strong>{{__("Ou sélectionner par date d'arrivée")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+    <div class="option-field">
+        <p><strong>{{__("Afficher les")}} <input type="number" step=1 wire:model="amountDisplayedReservation"> {{__("prochaines arrivées")}} : </strong><button wire:click="getReservationsComing">{{__("Chercher")}}</button></p>
+        <br>
+        <p><strong>{{__("Ou sélectionner par date d'arrivée")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+    </div>
     <br>
 
     @foreach ( $reservations as $reservation )
@@ -28,7 +32,10 @@
                     <br>
                     <p><button class="btn-warning" wire:click="$set('editing', '')">{{__("Annuler les changements")}}</button><button class="btn-submit" wire:click="saveEdit({{$reservation->id}})">{{__("Sauvegarder les changements")}}</button></p>
                 @endif
-                @if ($reservation->links)
+                @if ($reservation->remarks)
+                    <p><strong>{{ __("Remarques") }} :</strong> <span>{{ $reservation->remarks }}</span></p>
+                @endif
+                @if ( $reservation->links->count() )
                     <h4>{{__("Liens de confirmation")}}</h4>
                     @foreach ( $reservation->links as $link)
                         <p><a href="{{ $link->getLink() }}" onclick="return false;">{{ $link->getLink() }}</a></p>
@@ -74,7 +81,7 @@
             </div>
             <div class="p-4 text-right">
 
-                <livewire:buttons.edit-buttons :wire:key="$reservation->id" :modelId="$reservation->id" editRights="reservation-edit" deleteRights="reservation-delete">
+                <livewire:buttons.edit-buttons :wire:key="$reservation->id" model="reservation" :modelId="$reservation->id" editRights="reservation-edit" deleteRights="reservation-delete">
 
             </div>
         </div>

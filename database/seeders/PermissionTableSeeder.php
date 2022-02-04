@@ -29,6 +29,8 @@ class PermissionTableSeeder extends Seeder
            'visitor-delete',
            'room-choose',
            'room-list',
+           'community-list',
+           'community-choose',
         ];
 
 

@@ -21,9 +21,9 @@ class NewUserForm extends Component
     protected $rules = [
         'newvisitor.name' => 'required|string',
         'newvisitor.surname' => 'required|string',
-        'newvisitor.phone' => 'required|string',
+        'newvisitor.phone' => '',
         'newvisitor.email' => 'required|email',
-        'newvisitor.birthyear' => 'required',
+        'newvisitor.birthyear' => '',
         'newvisitor.remarks' => '',
     ];
 

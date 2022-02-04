@@ -50,6 +50,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return view('users-management');
     })->name('users-management');
 
+    Route::middleware('can:community-list')->get('/communities', function () {
+        return view('communities');
+    })->name('communities');
+
     Route::middleware('can:role-manage')->get('/roles-management', function () {
         return view('roles-management');
     })->name('roles-management');

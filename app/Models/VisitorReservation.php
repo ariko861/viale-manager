@@ -23,6 +23,10 @@ class VisitorReservation extends Pivot
      {
          return $this->belongsTo(Visitor::class);
      }
+     public function community()
+     {
+         return $this->belongsTo(House::class, 'house_id');
+     }
 
     protected $table = 'visitor_reservation';
 

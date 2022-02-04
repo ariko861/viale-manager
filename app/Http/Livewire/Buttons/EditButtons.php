@@ -11,7 +11,13 @@ class EditButtons extends Component
     public $editRights;
     public $deleteRights;
     public $confirmingDeletion;
+    public $model;
+    public $options;
 
+    public function mount()
+    {
+        $this->options = collect([ $this->modelId, $this->model ]);
+    }
 
     public function render()
     {

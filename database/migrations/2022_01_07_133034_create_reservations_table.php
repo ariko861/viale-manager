@@ -20,7 +20,7 @@ class CreateReservationsTable extends Migration
             $table->boolean('nodeparturedate');
             $table->boolean('confirmed');
             $table->boolean('otherVisitorsAuthorized');
-            $table->string('remarks')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }

@@ -13,11 +13,44 @@ class RoomsList extends Component
     public $creatingRoom = false;
     public $modifiedHouseId;
 
+    protected $listeners = ['changeAction', 'deleteAction'];
+
     protected $rules = [
         'newHouse.name' => 'required|string',
         'newRoom.name' => 'required|string',
         'newRoom.beds' => 'required|int|min:0',
+        'houses.*.community' => 'boolean',
     ];
+
+    public function changeAction($options)
+    {
+        if ($options[1] == 'room')
+        {
+//             $this->engageVisitorChange($options[0]);
+        }
+    }
+
+    public function deleteAction($options)
+    {
+        if ($options[1] == 'room')
+        {
+            $this->deleteRoom($options[0]);
+        }
+    }
+
+    public function deleteRoom($room_id)
+    {
+        Room::destroy($room_id);
+        $this->houses = House::all()->sortBy('name');
+
+    }
+
+    public function updateCommunityRule()
+    {
+        foreach ($this->houses as $house) {
+            $house->save();
+        }
+    }
 
     public function mount()
     {

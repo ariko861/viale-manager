@@ -59,6 +59,26 @@ class Reservation extends Model
 
     }
 
+    public function getTotalPriceAttribute()
+    {
+        if ( $this->confirmed )
+        {
+            $total = 0;
+            $begindate = new Carbon($this->arrivaldate);
+            $enddate = new Carbon($this->departuredate);
+            $nights = $begindate->diffInDays($enddate);
+
+            foreach ($this->visitors as $visitor)
+            {
+                $total += $visitor->pivot->price * $nights;
+            }
+            return number_format($total, 2,'€','€');
+
+        } else {
+            return 0;
+        }
+    }
+
     public function isBetweenDates($beginDate, $endDate)
     {
         $departureDate = new Carbon($this->departuredate);

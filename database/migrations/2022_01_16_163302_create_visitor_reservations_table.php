@@ -23,6 +23,7 @@ class CreateVisitorReservationsTable extends Migration
             $table->boolean('contact');
             $table->float('price', 8, 2)->nullable();
             $table->foreignId('room_id')->nullable()->constrained();
+            $table->foreignId('house_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

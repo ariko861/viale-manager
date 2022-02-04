@@ -13,6 +13,7 @@ class ReservationsList extends Component
     public $showRoomSelection = false;
     public $visitorSelectedForRoom;
     public $reservationSelectedForRoom;
+    public $amountDisplayedReservation = 10;
     public $editing;
     public $reservations;
     public $beginDate;
@@ -21,7 +22,7 @@ class ReservationsList extends Component
     public $numberOfReservationsDisplayed = 20;
     public $showSendLinkForm = false;
 
-    protected $listeners = ["hideRoomSelection", "deleteAction" => "deleteReservation", "changeAction" => "editReservation", "cancelLinkForm"];
+    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "cancelLinkForm", "displayReservation"];
 
     protected $rules = [
         'newArrivalDate' => 'required|date',
@@ -30,18 +31,43 @@ class ReservationsList extends Component
         'reservationConfirmed' => '',
     ];
 
-    public function getReservationsComing($amount)
+    public function displayReservation($res_id)
+    {
+        $this->reservations = Reservation::where('id', $res_id)->get();
+        $this->listTitle = __("Reservation")." ".$res_id;
+    }
+
+    public function changeAction($options)
+    {
+        if ($options[1] == 'reservation')
+        {
+            $this->editReservation($options[0]);
+        }
+    }
+
+    public function deleteAction($options)
+    {
+        if ($options[1] == 'reservation')
+        {
+            $this->deleteReservation($options[0]);
+        }
+    }
+
+    public function getReservationsComing()
     {
         $today = Carbon::now()->format('Y-m-d');
 //         $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
 //         $this->reservations = $allReservations->first();
-        $this->reservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate');
-        $this->listTitle = __("Prochaines arrivées");
+        $this->reservations = Reservation::whereDate('arrivaldate', '>', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
+        $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
     }
 
     public function getReservationsInBetween(){
         $this->reservations = Reservation::whereDate('arrivaldate', '>=', $this->beginDate)->whereDate('arrivaldate', '<=', $this->endDate)->get();
-        $this->listTitle = __("Arrivées entre ces dates");
+        $beginDate = new Carbon($this->beginDate);
+        $endDate = new Carbon($this->endDate);
+
+        $this->listTitle = __("Arrivées entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
     }
 
     public function mount()

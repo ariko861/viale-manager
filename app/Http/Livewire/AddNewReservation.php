@@ -103,6 +103,9 @@ class AddNewReservation extends Component
         $this->emit('showAlert', [ __("La réservation a bien été enregistré"), "bg-green-500" ] );
 
         $this->showReservationForm = false;
+
+        $this->emit('displayReservation', $this->reservation->id);
+
         $this->reservation = new Reservation();
         $this->otherVisitorsArray = collect([]);
         $this->contactPerson = "";

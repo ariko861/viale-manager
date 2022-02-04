@@ -30,6 +30,11 @@
                         {{ __('Chambres') }}
                     </x-jet-nav-link>
                     @endcan
+                    @can('community-list')
+                    <x-jet-nav-link href="{{ route('communities') }}" :active="request()->routeIs('communities')">
+                        {{ __('Maisonnées') }}
+                    </x-jet-nav-link>
+                    @endcan
                     @can('config-manage')
                     <x-jet-nav-link href="{{ route('configuration') }}" :active="request()->routeIs('configuration')">
                         {{ __('Configuration') }}
