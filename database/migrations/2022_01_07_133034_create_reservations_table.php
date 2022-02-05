@@ -22,6 +22,7 @@ class CreateReservationsTable extends Migration
             $table->boolean('otherVisitorsAuthorized');
             $table->text('remarks')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -23,6 +23,7 @@ class CreateVisitorsTable extends Migration
             $table->string('phone')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

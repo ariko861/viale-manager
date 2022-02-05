@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VisitorReservation;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'arrivaldate', 'departuredate',

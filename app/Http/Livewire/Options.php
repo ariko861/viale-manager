@@ -11,22 +11,26 @@ class Options extends Component
     public $email;
 
     protected $rules = [
-        'email' => 'required|email',
+        'email.value' => 'required|email',
+        'phone.value' => 'string',
+        'address.value' => 'string',
     ];
 
     public function mount()
     {
-        $email = Option::firstOrCreate(['name' => 'email']);
-        $this->email = $email->value;
+        $this->email = Option::firstOrNew(['name' => 'email']);;
+        $this->phone = Option::firstOrNew(['name' => 'phone']);
+        $this->address = Option::firstOrNew(['name' => 'address']);
+
+//         dd($this->email);
     }
 
-    public function saveMail()
+    public function save($property)
     {
         $this->validate();
-        $email = Option::firstWhere('name', 'email');
-        $email->value = $this->email;
-        $email->save();
-        $this->emit('showAlert', [ __("L'email a bien été changé"), "bg-green-600"] );
+        $this->$property->name = $property;
+        $this->$property->save();
+        $this->emit('showAlert', [ __("L'option a bien été changé"), "bg-green-600"] );
     }
 
     public function render()

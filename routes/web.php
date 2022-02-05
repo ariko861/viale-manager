@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ConfirmationController;
 use App\Models\UserInvite;
+use App\Models\Option;
 use Illuminate\Auth\Middleware\Authorize;
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,8 @@ use Illuminate\Auth\Middleware\Authorize;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $options = Option::all();
+    return view('welcome', ['options' => $options]);
 })->name('welcome');
 
 Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::class, 'showRegistrationForm'])->name('register');
