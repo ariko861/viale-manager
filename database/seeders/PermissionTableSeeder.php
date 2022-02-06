@@ -31,6 +31,8 @@ class PermissionTableSeeder extends Seeder
            'room-list',
            'community-list',
            'community-choose',
+           'statistics-read',
+           'statistics-remove',
         ];
 
 

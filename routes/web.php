@@ -48,6 +48,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return view('configuration');
     })->name('configuration');
 
+    Route::middleware('can:statistics-read')->get('/statistics', function () {
+        return view('statistics');
+    })->name('statistics');
+
     Route::middleware('can:user-manage')->get('/users-management', function () {
         return view('users-management');
     })->name('users-management');
@@ -59,6 +63,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware('can:role-manage')->get('/roles-management', function () {
         return view('roles-management');
     })->name('roles-management');
+
 
 });
 

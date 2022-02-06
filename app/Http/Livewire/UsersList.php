@@ -21,10 +21,16 @@ class UsersList extends Component
         'inviteEmail' => 'required|email',
     ];
 
+    public function getUsers()
+    {
+        $this->users = User::doesntHave('roles')->orWhereRelation("roles", function($q) {
+            $q->where("name", "!=" , "Super Admin");
+        })->get();
+    }
     public function cancelForm()
     {
         $this->showForm = false;
-        $this->users = User::all();
+        $this->getUsers();
     }
 
     public function confirmDelete($id)
@@ -55,7 +61,7 @@ class UsersList extends Component
             return $item->id != $id;
         });
 
-        $this->emit('showAlert', [ __("L'utilisateur a bien été supprimé"), "bg-red-600"] );
+        $this->emit('showAlert', [ __("Le lien d'invitation a bien été supprimé"), "bg-red-600"] );
     }
 
     public function sendInviteEmail()
@@ -87,9 +93,7 @@ class UsersList extends Component
     public function mount()
     {
 //         $this->users = User::all();
-        $this->users = User::whereHas("roles", function($q) {
-            $q->where("name", "!=" , "Super Admin");
-        })->get();
+        $this->getUsers();
         $this->userInvites = UserInvite::all();
     }
 

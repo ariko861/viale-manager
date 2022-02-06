@@ -20,13 +20,13 @@ class Reservation extends Model
     protected $attributes = [
         'nodeparturedate' => false,
         'confirmed' => false,
-        'otherVisitorsAuthorized' => false,
+        'removeFromStats' => false,
     ];
 
     protected $casts = [
         'nodeparturedate' => 'boolean',
         'confirmed' => 'boolean',
-        'otherVisitorsAuthorized' => 'boolean',
+        'removeFromStats' => 'boolean',
 
     ];
 
@@ -61,24 +61,44 @@ class Reservation extends Model
 
     }
 
-    public function getTotalPriceAttribute()
+    public function getNightsAttribute()
+    {
+        $begindate = new Carbon($this->arrivaldate);
+        $enddate = new Carbon($this->departuredate);
+        return $begindate->diffInDays($enddate);
+
+    }
+
+    public function getPerNightAttribute()
     {
         if ( $this->confirmed )
         {
             $total = 0;
-            $begindate = new Carbon($this->arrivaldate);
-            $enddate = new Carbon($this->departuredate);
-            $nights = $begindate->diffInDays($enddate);
 
             foreach ($this->visitors as $visitor)
             {
-                $total += $visitor->pivot->price * $nights;
+                $total += $visitor->pivot->price;
             }
-            return number_format($total, 2,'€','€');
+            return $total;
 
         } else {
             return 0;
         }
+    }
+
+    public function getPerNightEuroAttribute()
+    {
+        return number_format($this->per_night, 2,'€','€');
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->per_night * $this->nights;
+    }
+
+    public function getTotalPriceEuroAttribute()
+    {
+        return number_format($this->per_night * $this->nights, 2,'€','€');
     }
 
     public function isBetweenDates($beginDate, $endDate)

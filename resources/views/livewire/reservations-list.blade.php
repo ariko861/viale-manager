@@ -4,7 +4,13 @@
     <div class="option-field">
         <p><strong>{{__("Afficher les")}} <input type="number" step=1 wire:model="amountDisplayedReservation"> {{__("prochaines arrivées")}} : </strong><button wire:click="getReservationsComing">{{__("Chercher")}}</button></p>
         <br>
-        <p><strong>{{__("Ou sélectionner par date d'arrivée")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+        <p><strong>{{__("Ou sélectionner par date d'arrivée")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsWhereArrivalInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+        <br>
+        <p><strong>{{__("Ou sélectionner par date de départ")}} :</strong> {{__("Du")}} <input type="date" wire:model="beginDateForDeparture"> {{__("Au")}} <input wire:change="getReservationsWhereDepartureInBetween" type="date" wire:model="endDateForDeparture" min="{{$beginDateForDeparture}}"></p>
+        <br>
+        <p><strong>{{__("Ou rechercher par nom des visiteurs")}} :</strong> <input type="text" wire:keyup="getReservationsByVisitorName" wire:model="visitorSearch"></p>
+
+
     </div>
     <br>
 

@@ -72,7 +72,7 @@
         @foreach ( $userInvites as $userInvite )
             <tr>
                 <td class="{{ $tbody_class }}">{{ $userInvite->email }}</td>
-                <td class="{{ $tbody_class }}">{{ $userInvite->getLink() }}</td>
+                <td class="{{ $tbody_class }}"><a href="{{ $userInvite->getLink() }}" onclick="return false;">{{ $userInvite->getLink() }}</a></td>
                 <td class="{{ $tbody_class }}">{{ $userInvite->created_at }}</td>
 
                 <td class="{{ $tbody_class }}">

@@ -14,7 +14,7 @@
     @csrf
     <div class="w-full px-8 grid grid-cols-3 gap-4">
         <label class="col-span-1">{{ __("Date d'arrivée") }}</label>
-        <input class="col-span-2" type="date" wire:model="reservation.arrivaldate" min="{{ $today }}" wire:change="setMinDate($event.target.value)">
+        <input class="col-span-2" type="date" wire:model="reservation.arrivaldate" wire:change="setMinDate($event.target.value)">
         @error('reservation.arrivaldate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
         <label class="col-span-1">{{ __("Date de départ") }}</label>
         <input class="col-span-2 disabled:opacity-50" type="date" wire:model="reservation.departuredate" min="{{ $mindeparturedate }}" @if ( $reservation['nodeparturedate'] ) disabled @endif>

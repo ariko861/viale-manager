@@ -40,6 +40,11 @@
                         {{ __('Configuration') }}
                     </x-jet-nav-link>
                     @endcan
+                    @can('statistics-read')
+                    <x-jet-nav-link href="{{ route('statistics') }}" :active="request()->routeIs('statistics')">
+                        {{ __('Statistiques') }}
+                    </x-jet-nav-link>
+                    @endcan
 
 
                 </div>
@@ -130,12 +135,12 @@
 
                             @can('user-manage')
                                 <x-jet-dropdown-link href="{{ route('users-management') }}">
-                                    {{ __('Manage users') }}
+                                    {{ __('Gérer les utilisateurs') }}
                                 </x-jet-dropdown-link>
                             @endcan
                             @can('role-manage')
                                 <x-jet-dropdown-link href="{{ route('roles-management') }}">
-                                    {{ __('Manage roles') }}
+                                    {{ __('Gérer les rôles') }}
                                 </x-jet-dropdown-link>
                             @endcan
 

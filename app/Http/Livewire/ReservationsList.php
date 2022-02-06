@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Reservation;
 use App\Models\VisitorReservation;
 
@@ -15,9 +17,12 @@ class ReservationsList extends Component
     public $reservationSelectedForRoom;
     public $amountDisplayedReservation = 10;
     public $editing;
+    public $visitorSearch;
     public $reservations;
     public $beginDate;
     public $endDate;
+    public $beginDateForDeparture;
+    public $endDateForDeparture;
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
     public $showSendLinkForm = false;
@@ -62,12 +67,37 @@ class ReservationsList extends Component
         $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
     }
 
-    public function getReservationsInBetween(){
+    public function getReservationsWhereArrivalInBetween(){
         $this->reservations = Reservation::whereDate('arrivaldate', '>=', $this->beginDate)->whereDate('arrivaldate', '<=', $this->endDate)->get();
         $beginDate = new Carbon($this->beginDate);
         $endDate = new Carbon($this->endDate);
 
         $this->listTitle = __("Arrivées entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+    }
+
+    public function getReservationsWhereDepartureInBetween(){
+        $this->reservations = Reservation::whereDate('departuredate', '>=', $this->beginDateForDeparture)->whereDate('departuredate', '<=', $this->endDateForDeparture)->get();
+        $beginDate = new Carbon($this->beginDateForDeparture);
+        $endDate = new Carbon($this->endDateForDeparture);
+
+        $this->listTitle = __("Départs entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+    }
+
+    public function getReservationsByVisitorName(){
+        $value = $this->visitorSearch;
+        if ( Str::length($value) >= 3 )
+        {
+            $this->reservations = Reservation::whereHas('visitors', function (Builder $query) {
+                $query->where('name', 'like', '%'.$this->visitorSearch.'%')
+                    ->orWhere('surname', 'like', '%'.$this->visitorSearch.'%')
+                    ->orWhere('full_name', 'like', '%'.$this->visitorSearch.'%')
+                    ->orderBy('updated_at', 'desc');
+            })->get();
+        }
+        else
+        {
+            $this->reservations = [];
+        }
     }
 
     public function mount()
@@ -76,6 +106,8 @@ class ReservationsList extends Component
         $today = Carbon::now()->format('Y-m-d');
         $this->beginDate = $today;
         $this->endDate = $today;
+        $this->beginDateForDeparture = $today;
+        $this->endDateForDeparture = $today;
         $this->getReservationsComing($this->numberOfReservationsDisplayed);
     }
 
