@@ -1,0 +1,37 @@
+version: "3.5"
+
+services:
+  viale-manager:
+    container_name: diun
+    build: https://github.com/ariko861/viale-manager.git#main
+    command: serve
+    environment:
+      APP_NAME: Laravel
+      APP_ENV: production
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      APP_SUPER_ADMIN: superadmin
+      APP_SUPER_ADMIN_MAIL: admin@example.org
+      APP_SUPER_ADMIN_PASSWORD: password
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: viale_manager
+      DB_USERNAME: root
+      DB_PASSWORD: password
+
+      REDIS_HOST: 127.0.0.1
+      REDIS_PASSWORD: null
+      REDIS_PORT: 6379
+
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: null
+      MAIL_FROM_NAME: "${APP_NAME}"
+    restart: always
+
+
