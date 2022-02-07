@@ -2,7 +2,9 @@ version: "3.5"
 services:
     viale-manager:
         container_name: viale-manager
-        build: https://github.com/ariko861/viale-manager.git#main
+        build:
+            context: .
+            dockerfile: https://github.com/ariko861/viale-manager.git#main
         command: 'php artisan serve --host=0.0.0.0'
         #env_file: .env.backup
         environment:
@@ -34,9 +36,13 @@ services:
             MAIL_FROM_ADDRESS: null
             MAIL_FROM_NAME: "${APP_NAME}"
         restart: always
+        volumes:
+            - .:/app
         ports:
             - 8000:8000
         networks: ["viale-manager"]
+        depends_on:
+            - db
 
 
     db:
