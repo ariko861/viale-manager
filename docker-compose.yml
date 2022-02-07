@@ -1,37 +1,60 @@
 version: "3.5"
-
 services:
+    viale-manager:
+        container_name: viale-manager
+        build: https://github.com/ariko861/viale-manager.git#main
+        command: 'php artisan serve --host=0.0.0.0'
+        #env_file: .env.backup
+        environment:
+            APP_NAME: Laravel
+            APP_ENV: local
+            APP_KEY:
+            APP_DEBUG: "true"
+            APP_URL: http://127.0.0.1
+            APP_SUPER_ADMIN: superadmin
+            APP_SUPER_ADMIN_MAIL: admin@example.org
+            APP_SUPER_ADMIN_PASSWORD: password
+            DB_CONNECTION: pgsql
+            DB_HOST: db
+            DB_PORT: 5432
+            DB_DATABASE: viale_manager
+            DB_USERNAME: root
+            DB_PASSWORD: password
+
+            #REDIS_HOST: 127.0.0.1
+            #REDIS_PASSWORD: null
+            #REDIS_PORT: 6379
+
+            MAIL_MAILER: smtp
+            MAIL_HOST: mailhog
+            MAIL_PORT: 1025
+            MAIL_USERNAME: null
+            MAIL_PASSWORD: null
+            MAIL_ENCRYPTION: null
+            MAIL_FROM_ADDRESS: null
+            MAIL_FROM_NAME: "${APP_NAME}"
+        restart: always
+        ports:
+            - 8000:8000
+        networks: ["viale-manager"]
+
+
+    db:
+        image: postgres:13
+        container_name: viale-manager_db
+        restart: always
+        volumes:
+            - viale-manager_db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: viale_manager
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: password
+        ports:
+            - 5432:5432
+        networks: ["viale-manager"]
+
+volumes:
+  viale-manager_db:
+
+networks:
   viale-manager:
-    container_name: diun
-    build: https://github.com/ariko861/viale-manager.git#main
-    command: serve
-    environment:
-      APP_NAME: Laravel
-      APP_ENV: production
-      APP_DEBUG: "true"
-      APP_URL: http://localhost
-      APP_SUPER_ADMIN: superadmin
-      APP_SUPER_ADMIN_MAIL: admin@example.org
-      APP_SUPER_ADMIN_PASSWORD: password
-      DB_CONNECTION: mysql
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-      DB_DATABASE: viale_manager
-      DB_USERNAME: root
-      DB_PASSWORD: password
-
-      REDIS_HOST: 127.0.0.1
-      REDIS_PASSWORD: null
-      REDIS_PORT: 6379
-
-      MAIL_MAILER: smtp
-      MAIL_HOST: mailhog
-      MAIL_PORT: 1025
-      MAIL_USERNAME: null
-      MAIL_PASSWORD: null
-      MAIL_ENCRYPTION: null
-      MAIL_FROM_ADDRESS: null
-      MAIL_FROM_NAME: "${APP_NAME}"
-    restart: always
-
-
