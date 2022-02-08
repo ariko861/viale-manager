@@ -88,7 +88,7 @@ class Reservation extends Model
 
     public function getPerNightEuroAttribute()
     {
-        return number_format($this->per_night, 2,'€','€');
+        return number_format($this->per_night, 2,'€',' ');
     }
 
     public function getTotalPriceAttribute()
@@ -98,7 +98,7 @@ class Reservation extends Model
 
     public function getTotalPriceEuroAttribute()
     {
-        return number_format($this->per_night * $this->nights, 2,'€','€');
+        return number_format($this->per_night * $this->nights, 2,'€',' ');
     }
 
     public function isBetweenDates($beginDate, $endDate)

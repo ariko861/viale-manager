@@ -88,10 +88,9 @@ class ReservationsList extends Component
         if ( Str::length($value) >= 3 )
         {
             $this->reservations = Reservation::whereHas('visitors', function (Builder $query) {
-                $query->where('name', 'like', '%'.$this->visitorSearch.'%')
-                    ->orWhere('surname', 'like', '%'.$this->visitorSearch.'%')
-                    ->orderBy('updated_at', 'desc');
-            })->get();
+                $query->where('name', 'ilike', '%'.$this->visitorSearch.'%')
+                    ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%');
+            })->orderBy('arrivaldate')->get();
         }
         else
         {

@@ -11,7 +11,7 @@ class Profile extends Model
 
     public function getEuroAttribute()
     {
-        return number_format($this->price, 2,'€','€');
+        return number_format($this->price, 2,'€',' ');
     }
 
     protected $appends = ['euro'];

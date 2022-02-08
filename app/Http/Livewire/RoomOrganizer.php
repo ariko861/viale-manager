@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Room;
 use App\Models\House;
 use App\Models\VisitorReservation;
@@ -39,7 +40,11 @@ class RoomOrganizer extends Component
 
     public function getNewComers()
     {
-        $this->resas = VisitorReservation::whereNull('room_id')->get();
+        $this->today = Carbon::now();
+        $this->resas = VisitorReservation::whereNull('room_id')->whereRelation('reservation', function (Builder $query) {
+                $query->whereDate('departuredate', '>=', $this->today)
+                    ->orWhere('nodeparturedate', true );
+        })->get();
     }
 
     public function mount()

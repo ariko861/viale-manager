@@ -27,7 +27,7 @@ class StatisticsList extends Component
             $total += $reservation->total_price;
         }
 
-        $this->totalIncome = number_format($total, 2,'€','€');
+        $this->totalIncome = number_format($total, 2,'€',' ');
     }
 
     public function getTotalNights()
@@ -40,7 +40,7 @@ class StatisticsList extends Component
     }
 
     public function getReservationsInBetween(){
-        $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereDate('departuredate', '>=', $this->beginDate)->whereDate('departuredate', '<=', $this->endDate)->get();
+        $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereDate('departuredate', '>=', $this->beginDate)->whereDate('departuredate', '<=', $this->endDate)->orderBy('departuredate')->get();
         $beginDate = new Carbon($this->beginDate);
         $endDate = new Carbon($this->endDate);
 
@@ -54,11 +54,9 @@ class StatisticsList extends Component
         if ( Str::length($value) >= 3 )
         {
             $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereHas('visitors', function (Builder $query) {
-                $query->where('name', 'like', '%'.$this->visitorSearch.'%')
-                    ->orWhere('surname', 'like', '%'.$this->visitorSearch.'%')
-                    ->orWhere('full_name', 'like', '%'.$this->visitorSearch.'%')
-                    ->orderBy('updated_at', 'desc');
-            })->get();
+                $query->where('name', 'ilike', '%'.$this->visitorSearch.'%')
+                    ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%');
+            })->orderBy('departuredate')->get();
         }
         else
         {
@@ -75,7 +73,12 @@ class StatisticsList extends Component
         $this->beginDate = $today->copy()->startOfYear()->format('Y-m-d');
         $this->endDate = $today->copy()->endOfYear()->format('Y-m-d');
 
-        $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereDate('departuredate', '>=', $this->beginDate)->whereDate('departuredate', '<=', $this->endDate)->get();
+        $this->reservations = Reservation::where('removeFromStats', '!=', true)
+                        ->where('confirmed', true)
+                        ->whereDate('departuredate', '>=', $this->beginDate)
+                        ->whereDate('departuredate', '<=', $this->endDate)
+                        ->orderBy('departuredate')
+                        ->get();
         $this->getTotalIncome();
         $this->getTotalNights();
 

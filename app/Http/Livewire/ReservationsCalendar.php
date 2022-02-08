@@ -109,7 +109,7 @@ class ReservationsCalendar extends LivewireCalendar
                 'title' => __("Arrivée").' '.$contact_person_name,
                 'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->arrivaldate,
-                'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
+                'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-red-100",
             ];
         });
 
@@ -121,7 +121,7 @@ class ReservationsCalendar extends LivewireCalendar
                 'title' => __("Départ").' '.$contact_person_name,
                 'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->departuredate,
-                'classes' => $model->confirmed ? 'border-green-400' : 'border-yellow-400',
+                'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-yellow-100",
             ];
         });
 
