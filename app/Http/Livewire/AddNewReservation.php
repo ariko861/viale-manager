@@ -40,7 +40,6 @@ class AddNewReservation extends Component
             'reservation.arrivaldate' => 'required|date',
             'reservation.departuredate' => $departuredaterequirements,
             'reservation.nodeparturedate' => '',
-            'reservation.otherVisitorsAuthorized' => '',
             'contactPerson' => 'required',
 
         ];
