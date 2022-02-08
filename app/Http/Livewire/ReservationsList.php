@@ -90,7 +90,6 @@ class ReservationsList extends Component
             $this->reservations = Reservation::whereHas('visitors', function (Builder $query) {
                 $query->where('name', 'like', '%'.$this->visitorSearch.'%')
                     ->orWhere('surname', 'like', '%'.$this->visitorSearch.'%')
-                    ->orWhere('full_name', 'like', '%'.$this->visitorSearch.'%')
                     ->orderBy('updated_at', 'desc');
             })->get();
         }

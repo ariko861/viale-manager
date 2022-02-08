@@ -73,7 +73,6 @@ class VisitorSearch extends Component
 
             $this->visitorsArray = Visitor::where('name', 'like', '%'.$value.'%')
                 ->orWhere('surname', 'like', '%'.$value.'%')
-                ->orWhere('full_name', 'like', '%'.$value.'%')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
