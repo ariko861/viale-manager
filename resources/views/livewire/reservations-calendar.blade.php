@@ -1,3 +1,8 @@
 <div>
-{{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
+
+<script>
+        Livewire.on('eventClicked', eventId => {
+            alert('A post was added with the id of: ' + eventId);
+        });
+    </script>
 </div>

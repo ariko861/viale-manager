@@ -33,7 +33,9 @@ class Communities extends Component
                 $query->whereDate('arrivaldate', '<=', $this->endDate)
                         ->where('nodeparturedate', true );
             });
-        })->get();
+        })->get()->sortBy(function($item, $key) {
+            return $item->reservation->arrivaldate;
+        });
         $this->emit('dateChanged');
     }
 

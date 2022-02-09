@@ -26,7 +26,10 @@ class RoomsList extends Component
     {
         if ($options[1] == 'room')
         {
-//             $this->engageVisitorChange($options[0]);
+            $room = Room::find($options[0]);
+            $this->modifiedHouseId = $room->house_id;
+            $this->newRoom = $room;
+            $this->creatingRoom = true;
         }
     }
 

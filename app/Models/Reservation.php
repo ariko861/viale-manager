@@ -61,6 +61,20 @@ class Reservation extends Model
 
     }
 
+    public function getVisitorListAttribute()
+    {
+        $visitors = "";
+        foreach ($this->visitors as $visitor) {
+            if ($visitors == "")
+            {
+                $visitors = $visitors.$visitor->full_name;
+            } else {
+                $visitors = $visitors.", ".$visitor->full_name;
+            }
+        }
+        return $visitors;
+    }
+
     public function getNightsAttribute()
     {
         $begindate = new Carbon($this->arrivaldate);

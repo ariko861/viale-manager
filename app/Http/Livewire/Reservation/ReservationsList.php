@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Reservation;
 
 use Carbon\Carbon;
 use Livewire\Component;
@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Reservation;
 use App\Models\VisitorReservation;
+use App\Models\ReservationLink;
 
 class ReservationsList extends Component
 {
@@ -15,10 +16,12 @@ class ReservationsList extends Component
     public $showRoomSelection = false;
     public $visitorSelectedForRoom;
     public $reservationSelectedForRoom;
-    public $amountDisplayedReservation = 10;
+    public $amountDisplayedReservation = 20;
     public $editing;
     public $visitorSearch;
+    public $reservationNotInStats;
     public $reservations;
+    public $reservation_id;
     public $beginDate;
     public $endDate;
     public $beginDateForDeparture;
@@ -63,7 +66,7 @@ class ReservationsList extends Component
         $today = Carbon::now()->format('Y-m-d');
 //         $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
 //         $this->reservations = $allReservations->first();
-        $this->reservations = Reservation::whereDate('arrivaldate', '>', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
+        $this->reservations = Reservation::whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
     }
 
@@ -83,8 +86,22 @@ class ReservationsList extends Component
         $this->listTitle = __("Départs entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
     }
 
+    public function getReservationsHere() {
+
+        $this->reservations = Reservation::where('confirmed', true)->where(function($query) {
+                    $query->whereDate('arrivaldate', '<=', $this->today)
+                            ->whereDate('departuredate', '>=', $this->today);
+                    })
+                ->orWhere(function($query) {
+                    $query->whereDate('arrivaldate', '<=', $this->today)
+                    ->where('nodeparturedate', true );
+                })->get();
+        $this->listTitle = __("Personnes présentes en ce moment");
+    }
+
     public function getReservationsByVisitorName(){
         $value = $this->visitorSearch;
+
         if ( Str::length($value) >= 3 )
         {
             $this->reservations = Reservation::whereHas('visitors', function (Builder $query) {
@@ -98,16 +115,6 @@ class ReservationsList extends Component
         }
     }
 
-    public function mount()
-    {
-//         $this->reservations = Reservation::all()->sortBy('arrivaldate');
-        $today = Carbon::now()->format('Y-m-d');
-        $this->beginDate = $today;
-        $this->endDate = $today;
-        $this->beginDateForDeparture = $today;
-        $this->endDateForDeparture = $today;
-        $this->getReservationsComing($this->numberOfReservationsDisplayed);
-    }
 
     public function selectRoom( $visitor, $reservation )
     {
@@ -141,7 +148,14 @@ class ReservationsList extends Component
         $this->newDepartureDate = $reservation->departuredate;
         $this->noDepartureDate = $reservation->nodeparturedate;
         $this->reservationConfirmed = $reservation->confirmed;
+        $this->reservationNotInStats = $reservation->removeFromStats;
 
+    }
+
+    public function deleteLink($link, $key)
+    {
+        ReservationLink::destroy($link["id"]);
+        $this->reservations[$key]->refresh();
     }
 
     public function saveEdit($reservation_id)
@@ -160,6 +174,7 @@ class ReservationsList extends Component
         $reservation->departuredate = $this->newDepartureDate;
         $reservation->nodeparturedate = $this->noDepartureDate;
         $reservation->confirmed = $this->reservationConfirmed;
+        $reservation->removeFromStats = $this->reservationNotInStats;
         $reservation->save();
         $this->getReservationsComing($this->numberOfReservationsDisplayed);
 
@@ -176,8 +191,25 @@ class ReservationsList extends Component
         $this->showSendLinkForm = false;
     }
 
+    public function mount()
+    {
+//         $this->reservations = Reservation::all()->sortBy('arrivaldate');
+        $today = Carbon::now()->format('Y-m-d');
+        $this->today = Carbon::now();
+        $this->beginDate = $today;
+        $this->endDate = $today;
+        $this->beginDateForDeparture = $today;
+        $this->endDateForDeparture = $today;
+        if ($this->reservation_id)
+        {
+            $this->displayReservation($this->reservation_id);
+        } else {
+            $this->getReservationsComing($this->numberOfReservationsDisplayed);
+        }
+    }
+
     public function render()
     {
-        return view('livewire.reservations-list');
+        return view('livewire.reservation.reservations-list');
     }
 }

@@ -28,7 +28,11 @@
             <button class="mt-4" wire:click="$toggle('showPrice')">{{__("Afficher la participation totale pour le séjour")}}</button>
         @endunless
         @if ($showPrice)
-            <p class="mt-4"><strong>{{__("Participation total pour le séjour")}} : </strong>{{$reservation->total_price}}</p>
+            <p class="mt-4"><strong>{{__("Participation total pour le séjour")}} : </strong>{{$reservation->total_price_euro}}</p>
+        @endif
+        @if ( $confirmation_message )
+            <h2 class="mt-4">{{__("N'oubliez pas")}} :</h2>
+            <p class="mt-4">{!! $confirmation_message !!}<p>
         @endif
 
     @endif

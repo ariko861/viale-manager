@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Reservation;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -49,7 +49,7 @@ class AddNewReservation extends Component
 
     public function render()
     {
-        return view('livewire.add-new-reservation', [
+        return view('livewire.reservation.add-new-reservation', [
             'today' => Carbon::now()->format('Y-m-d'),
         ]);
     }

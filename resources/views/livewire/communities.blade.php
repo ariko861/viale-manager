@@ -12,7 +12,8 @@
         </div>
         <div class="col-span-1">
             <ul>
-                <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
+                <h2 class="text-lg font-bold mb-1">{{__("Futurs arrivants non placés")}}</h2>
+                <p class="mb-4">{{ $resas->count() }} {{__("Personnes prévues pour cette période")}}</p>
                 @foreach ( $resas as $resa )
                     @if ($resa->reservation)
                     <li id="resa{{ $resa->id }}" class="card p-2 cursor-move draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
@@ -41,13 +42,18 @@
 
     <table class="mt-8 w-full table-fixed border-collapse border border-gray-400">
         @php
-            $thead_class="border-2 border-gray-400 bg-gray-100";
+            $thead_class="border-2 border-gray-400 bg-gray-100 text-center";
             $tbody_class="border-2 border-gray-400 p-1"
         @endphp
         <thead>
             <tr>
                 @foreach ( $communities as $community )
                     <td class="{{ $thead_class }}">{{ $community->name }}</td>
+                @endforeach
+            </tr>
+            <tr>
+                @foreach ( $communities as $community )
+                    <td class="{{ $thead_class }} italic">{{ $community->reservationVisitors->count() }} {{__("Occupants")}}</td>
                 @endforeach
             </tr>
         </thead>

@@ -58,6 +58,10 @@ class StatisticsList extends Component
                     ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%');
             })->orderBy('departuredate')->get();
         }
+        else if ( Str::length($value) == 0 )
+        {
+            $this->getReservationsInBetween();
+        }
         else
         {
             $this->reservations = [];
@@ -65,7 +69,6 @@ class StatisticsList extends Component
         $this->getTotalIncome();
         $this->getTotalNights();
     }
-
 
     public function mount()
     {

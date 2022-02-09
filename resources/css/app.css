@@ -38,6 +38,7 @@
   .btn-submit {
      @apply bg-blue-500 hover:bg-blue-800;
   }
+
   .option-field {
       @apply p-6 bg-gray-100 text-sm;
   }

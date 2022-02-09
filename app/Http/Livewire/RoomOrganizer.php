@@ -44,7 +44,9 @@ class RoomOrganizer extends Component
         $this->resas = VisitorReservation::whereNull('room_id')->whereRelation('reservation', function (Builder $query) {
                 $query->whereDate('departuredate', '>=', $this->today)
                     ->orWhere('nodeparturedate', true );
-        })->get();
+        })->get()->sortBy(function($item, $key) {
+            return $item->reservation->arrivaldate;
+        });
     }
 
     public function mount()

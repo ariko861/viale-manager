@@ -27,6 +27,7 @@ class ReservationsCalendar extends LivewireCalendar
     {
         // This event is triggered when an event card is clicked
         // You will be given the event id that was clicked
+        $this->emit('eventClicked', $eventId);
 
     }
 
@@ -102,24 +103,22 @@ class ReservationsCalendar extends LivewireCalendar
             ->get();
 
         $arrivalEvents = $reservations->map(function (Reservation $model) {
-            $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
-            $visitorList = $this->getOtherVisitorsNames($model->visitors);
+            $allVisitors = $model->visitor_list;
             return [
                 'id' => "a{$model->id}",
-                'title' => __("Arrivée").' '.$contact_person_name,
-                'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
+                'title' => __("Arrivée").' '.$allVisitors,
+                'description' => '<span class="hidden-remarks">Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->arrivaldate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-red-100",
             ];
         });
 
         $departureEvents = $reservations->where('nodeparturedate', false)->map(function (Reservation $model) {
-            $contact_person_name = ( $model->contact_person ? $model->contact_person->full_name : "" );
-            $visitorList = $this->getOtherVisitorsNames($model->visitors);
+            $allVisitors = $model->visitor_list;
             return [
                 'id' => "d{$model->id}",
-                'title' => __("Départ").' '.$contact_person_name,
-                'description' => '<span class="hidden-remark">'.$visitorList.'Remarques:<br>'.e($model->remarks).'</span>',
+                'title' => __("Départ").' '.$allVisitors,
+                'description' => '<span class="hidden-remarks">Remarques:<br>'.e($model->remarks).'</span>',
                 'date' => $model->departuredate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-yellow-100",
             ];

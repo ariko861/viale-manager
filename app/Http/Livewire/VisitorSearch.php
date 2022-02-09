@@ -70,9 +70,9 @@ class VisitorSearch extends Component
         $value = $this->searchQuery;
         if ( Str::length($value) >= 3 )
         {
-
             $this->visitorsArray = Visitor::where('name', 'ilike', '%'.$value.'%')
                 ->orWhere('surname', 'ilike', '%'.$value.'%')
+                ->orWhere('email', 'ilike','%'.$value.'%')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 

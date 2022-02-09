@@ -32,8 +32,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::middleware('can:reservation-list')->get('/reservations', function () {
-        return view('reservations');
+    Route::middleware('can:reservation-list')->get('/reservations/{id?}', function ($reservation_id = null) {
+        return view('reservations', ['reservation_id' => $reservation_id]);
     })->name('reservations');
 
     Route::middleware('can:visitor-list')->get('/visitors', function () {

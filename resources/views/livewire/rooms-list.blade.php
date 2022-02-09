@@ -25,7 +25,7 @@
                 <td class="{{ $thead_class }}"><i>{{ __("Actions") }}</i></td>
 
             </tr>
-            @foreach ( $house->rooms as $room )
+            @foreach ( $house->rooms as $roomKey => $room )
                 <tr>
                     <td class="{{ $tbody_class }}">{{ $room->name }}</td>
                     <td class="{{ $tbody_class }}">{{ $room->beds }}</td>

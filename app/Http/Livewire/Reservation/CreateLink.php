@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Reservation;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationLink;
 use App\Models\Reservation;
 use App\Models\ReservationLink;
 
@@ -13,6 +15,7 @@ class CreateLink extends Component
     public $maxDays = 0;
     public $maxVisitors = 0;
     public $linkCreated;
+    public $emailSent = false;
 
     protected $listeners = ['engageLinkCreation'];
 
@@ -40,12 +43,11 @@ class CreateLink extends Component
         if ($sendmail)
         {
             // Ici code pour envoyer mail de confirmation
-            dd("envoi mail");
+            Mail::to($this->reservation->contact_person->email)->queue(new ConfirmationLink($reservationLink));
+            $this->emailSent = true;
         }
-        else
-        {
-            $this->linkCreated = $reservationLink->getLink();
-        }
+        $this->linkCreated = $reservationLink->getLink();
+
 
     }
 
