@@ -5,6 +5,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ConfirmationController;
 use App\Models\UserInvite;
 use App\Models\Option;
+use App\Models\MatrixLink;
 use Illuminate\Auth\Middleware\Authorize;
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,17 @@ Route::get('/', function () {
     $options = Option::all();
     return view('welcome', ['options' => $options]);
 })->name('welcome');
+
+Route::get('/matrix/{link?}', function($link = null) {
+    if ( $link )
+    {
+        $matrix = MatrixLink::where('link', $link)->get()->first();
+        if ($matrix) return view('matrix', ['matrix' => $matrix ]);
+        else return redirect('/');
+    } else {
+        return redirect('/');
+    }
+})->name('matrix');
 
 Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::class, 'showRegistrationForm'])->name('register');
 

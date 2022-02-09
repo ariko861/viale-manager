@@ -37,7 +37,7 @@ class ReservationConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->subject(__("Réservation à")." ".env("APP_NAME")." ".__("confirmée"))
+        return $this->subject(__("Réservation à")." ".env("APP_NAME")." ".__("confirmée par")." ".$this->reservation->full_name )
                     ->view('emails.reservation-confirmed');
     }
 }

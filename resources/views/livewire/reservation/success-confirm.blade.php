@@ -30,9 +30,13 @@
         @if ($showPrice)
             <p class="mt-4"><strong>{{__("Participation total pour le séjour")}} : </strong>{{$reservation->total_price_euro}}</p>
         @endif
-        @if ( $confirmation_message )
-            <h2 class="mt-4">{{__("N'oubliez pas")}} :</h2>
-            <p class="mt-4">{!! $confirmation_message !!}<p>
+        @if ( $confirmation_messages )
+        <div class="bg-red-100 w-full p-6 border-4 border-red-600 mt-4">
+            <h2>{{__("N'oubliez pas")}} :</h2>
+            @foreach ( $confirmation_messages as $message )
+                <p class="mt-4">{!! $message !!}<p>
+            @endforeach
+        </div>
         @endif
 
     @endif

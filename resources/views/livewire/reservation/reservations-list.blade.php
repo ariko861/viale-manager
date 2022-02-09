@@ -74,7 +74,7 @@
                         <span>
 
                         @if ( $visitor->pivot->room_id )
-                            {{ $visitor->pivot->room->name }}
+                            {{ $visitor->pivot->room->fullName() }}
                         @else
                             {{ __("Pas de chambre prévue") }}
                         @endif

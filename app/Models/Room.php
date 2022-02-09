@@ -40,7 +40,16 @@ class Room extends Model
             }
         }
         return $result;
+    }
 
+    public function fullName()
+    {
+        if ($this->house())
+        {
+            return ($this->house->name)."->".($this->name);
+        } else {
+            return $this->name;
+        }
     }
 
 

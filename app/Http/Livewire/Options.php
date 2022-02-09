@@ -6,17 +6,27 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 use App\Models\Option;
+use App\Models\MatrixLink;
 
 class Options extends Component
 {
 
     public $email;
+    public $newMatrixLink;
 
     protected $rules = [
         'email.value' => 'required|email',
         'phone.value' => 'string',
         'address.value' => 'string',
         'confirmation_message.value' => '',
+        'confirmation_messages.*.value' => '',
+        'matrix_links.*.homeserver' => '',
+        'matrix_links.*.roomID' => '',
+        'matrix_links.*.filteredUser' => '',
+        'matrix_links.*.gallery' => '',
+        'matrix_links.*.displayDate' => '',
+        'matrix_links.*.displayAddress' => '',
+
     ];
 
     public function mount()
@@ -24,10 +34,57 @@ class Options extends Component
         $this->email = Option::firstOrNew(['name' => 'email']);
         $this->phone = Option::firstOrNew(['name' => 'phone']);
         $this->address = Option::firstOrNew(['name' => 'address']);
-        $this->confirmation_message = Option::firstOrNew(['name' => 'confirmation_message']);
+        $this->confirmation_messages = Option::where('name', 'confirmation_message')->get();
+        $this->matrix_links = MatrixLink::all();
+    }
 
+    public function addNewMessage()
+    {
+        $message = new Option(['name' => 'confirmation_message', 'value' => ' ']);
+        $message->save();
+        $this->confirmation_messages->push($message);
+    }
 
-//         dd($this->email);
+    public function deleteMessage($message_id)
+    {
+        Option::destroy($message_id);
+        $this->confirmation_messages = Option::where('name', 'confirmation_message')->get();
+    }
+    public function saveMessages()
+    {
+        foreach ($this->confirmation_messages as $message)
+        {
+            $message->save();
+            $this->emit('showAlert', [ __("L'option a bien été changé"), "bg-green-600"] );
+        }
+    }
+
+    public function addNewMatrix()
+    {
+        $this->validate([
+            'newMatrixLink' => 'required|string',
+        ]);
+        $matrix = new MatrixLink();
+        $matrix->link = strtolower($this->newMatrixLink);
+        $matrix->save();
+        $matrix->refresh();
+        $this->matrix_links->push($matrix);
+        $this->newMatrixLink = "";
+    }
+
+    public function deleteMatrix($matrix_id)
+    {
+        MatrixLink::destroy($matrix_id);
+        $this->matrix_links = MatrixLink::all();
+    }
+
+    public function saveMatrix()
+    {
+        foreach ($this->matrix_links as $matrix)
+        {
+            $matrix->save();
+            $this->emit('showAlert', [ __("Les liens Matrix ont bien été changés"), "bg-green-600"] );
+        }
     }
 
     public function testEmail()
