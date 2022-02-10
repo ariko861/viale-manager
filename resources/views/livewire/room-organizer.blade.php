@@ -1,7 +1,7 @@
 <div class="grid grid-cols-4 gap-4 w-full">
     @can('room-choose')
     <div class="col-span-1">
-        <ul>
+        <ul class="fixed overflow-auto">
             <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             @foreach ( $resas as $resa )
                 @if ($resa->reservation)

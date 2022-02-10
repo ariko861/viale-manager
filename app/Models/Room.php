@@ -44,7 +44,7 @@ class Room extends Model
 
     public function fullName()
     {
-        if ($this->house())
+        if ($this->house && $this->house->displayHouseNameWithRoom)
         {
             return ($this->house->name)."->".($this->name);
         } else {

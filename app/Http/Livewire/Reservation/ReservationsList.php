@@ -17,6 +17,7 @@ class ReservationsList extends Component
     public $visitorSelectedForRoom;
     public $reservationSelectedForRoom;
     public $amountDisplayedReservation = 20;
+    public $advancedSearch = false;
     public $editing;
     public $visitorSearch;
     public $reservationNotInStats;
@@ -26,6 +27,8 @@ class ReservationsList extends Component
     public $endDate;
     public $beginDateForDeparture;
     public $endDateForDeparture;
+    public $presenceBeginDate;
+    public $presenceEndDate;
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
     public $showSendLinkForm = false;
@@ -68,6 +71,7 @@ class ReservationsList extends Component
 //         $this->reservations = $allReservations->first();
         $this->reservations = Reservation::whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
+        $this->emit('scrollToReservationList');
     }
 
     public function getReservationsWhereArrivalInBetween(){
@@ -75,7 +79,8 @@ class ReservationsList extends Component
         $beginDate = new Carbon($this->beginDate);
         $endDate = new Carbon($this->endDate);
 
-        $this->listTitle = __("Arrivées entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+        $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("arrivées entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+        $this->emit('scrollToReservationList');
     }
 
     public function getReservationsWhereDepartureInBetween(){
@@ -83,20 +88,37 @@ class ReservationsList extends Component
         $beginDate = new Carbon($this->beginDateForDeparture);
         $endDate = new Carbon($this->endDateForDeparture);
 
-        $this->listTitle = __("Départs entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+        $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("départs entre le")." ".$beginDate->format('d F Y')." ".__("et le")." ".$endDate->format('d F Y');
+        $this->emit('scrollToReservationList');
+    }
+
+    public function getReservationsPresenceBetweenDates($dateBegin, $dateEnd, $confirmed = true){
+
+        $this->reservations = Reservation::where(function($query) use ($confirmed){
+                    if ($confirmed) $query->where('confirmed', true);
+                })
+                ->where(function($query) use ($dateBegin, $dateEnd) {
+                    $query->whereDate('arrivaldate', '<=', $dateEnd)
+                            ->whereDate('departuredate', '>=', $dateBegin);
+                    })
+                ->orWhere(function($query) use ($dateBegin, $dateEnd) {
+                    $query->whereDate('arrivaldate', '<=', $dateEnd)
+                    ->where('nodeparturedate', true );
+                })->get();
     }
 
     public function getReservationsHere() {
 
-        $this->reservations = Reservation::where('confirmed', true)->where(function($query) {
-                    $query->whereDate('arrivaldate', '<=', $this->today)
-                            ->whereDate('departuredate', '>=', $this->today);
-                    })
-                ->orWhere(function($query) {
-                    $query->whereDate('arrivaldate', '<=', $this->today)
-                    ->where('nodeparturedate', true );
-                })->get();
-        $this->listTitle = __("Personnes présentes en ce moment");
+        $this->getReservationsPresenceBetweenDates($this->today, $this->today, true);
+        $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("personnes présentes en ce moment");
+        $this->emit('scrollToReservationList');
+    }
+
+    public function getPresenceBetweenDates() {
+
+        $this->getReservationsPresenceBetweenDates($this->presenceBeginDate, $this->presenceEndDate, false);
+        $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("personnes prévues entre ces dates");
+        $this->emit('scrollToReservationList');
     }
 
     public function getReservationsByVisitorName(){
@@ -111,8 +133,9 @@ class ReservationsList extends Component
         }
         else
         {
-            $this->reservations = [];
+            $this->reservations = collect([]);
         }
+        $this->listTitle = __("Cette personne est présente dans")." ".$this->reservations->count()." ".__("réservations");
     }
 
 
@@ -196,10 +219,14 @@ class ReservationsList extends Component
 //         $this->reservations = Reservation::all()->sortBy('arrivaldate');
         $today = Carbon::now()->format('Y-m-d');
         $this->today = Carbon::now();
-        $this->beginDate = $today;
-        $this->endDate = $today;
-        $this->beginDateForDeparture = $today;
-        $this->endDateForDeparture = $today;
+        $this->fill([
+            'beginDate' => $today,
+            'endDate' => $today,
+            'beginDateForDeparture' => $today,
+            'endDateForDeparture' => $today,
+            'presenceBeginDate' => $today,
+            'presenceEndDate' => $today,
+        ]);
         if ($this->reservation_id)
         {
             $this->displayReservation($this->reservation_id);

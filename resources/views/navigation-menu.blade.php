@@ -183,8 +183,38 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Tableau de bord') }}
             </x-jet-responsive-nav-link>
+            @can('reservation-list')
+            <x-jet-responsive-nav-link href="{{ route('reservations') }}" :active="request()->routeIs('reservations')">
+                {{ __('Réservations') }}
+            </x-jet-responsive-nav-link>
+            @endcan
+            @can('visitor-list')
+            <x-jet-responsive-nav-link href="{{ route('visitors') }}" :active="request()->routeIs('visitors')">
+                {{ __('Visiteurs') }}
+            </x-jet-responsive-nav-link>
+            @endcan
+            @can('room-list')
+            <x-jet-responsive-nav-link href="{{ route('rooms') }}" :active="request()->routeIs('rooms')">
+                {{ __('Chambres') }}
+            </x-jet-responsive-nav-link>
+            @endcan
+            @can('community-list')
+            <x-jet-responsive-nav-link href="{{ route('communities') }}" :active="request()->routeIs('communities')">
+                {{ __('Maisonnées') }}
+            </x-jet-responsive-nav-link>
+            @endcan
+            @can('config-manage')
+            <x-jet-responsive-nav-link href="{{ route('configuration') }}" :active="request()->routeIs('configuration')">
+                {{ __('Configuration') }}
+            </x-jet-responsive-nav-link>
+            @endcan
+            @can('statistics-read')
+            <x-jet-responsive-nav-link href="{{ route('statistics') }}" :active="request()->routeIs('statistics')">
+                {{ __('Statistiques') }}
+            </x-jet-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

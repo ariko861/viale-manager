@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VisitorReservation;
+use App\Support\ReservationCollection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
@@ -145,6 +146,11 @@ class Reservation extends Model
     public function links()
     {
         return $this->hasMany(ReservationLink::class);
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new ReservationCollection($models);
     }
 
 }

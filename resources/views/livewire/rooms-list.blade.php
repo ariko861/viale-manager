@@ -16,7 +16,10 @@
                         </svg>
                     </button>
                     <strong>{{ $house->name }}</strong>
-                    <input class="ml-2" type="checkbox" wire:change="updateCommunityRule()" wire:model="houses.{{ $key }}.community"><label class="ml-1 text-sm">{{__("Disponible pour maisonnées")}}</label>
+                    <div class="">
+                        <input class="ml-2" type="checkbox" wire:change="updateHouses()" wire:model="houses.{{ $key }}.community"><label class="ml-1 text-sm">{{__("Disponible pour maisonnées")}}</label>
+                        <input class="ml-2" type="checkbox" wire:change="updateHouses()" wire:model="houses.{{ $key }}.displayHouseNameWithRoom"><label class="ml-1 text-xs">{{__("Afficher le nom de la maison avec le nom de la chambre")}}</label>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -53,13 +56,13 @@
     @endif
 
    @if ( $creatingRoom )
-        <div class="absolute top-0 left-0 right-0 bottom-0 bg-slate-600/75">
+        <div class="fixed top-0 left-0 right-0 bottom-0 bg-slate-600/75 overflow-auto">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white shadow-xl sm:rounded-lg p-5 m-10">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" wire:click="cancelRoomForm" class="h-6 w-6 cursor-pointer float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <h2 class="text-lg text-center">{{ __("Ajouter une nouvelle chambre") }}</h2>
+                    <h2 class="text-lg text-center mb-6 mt-2">{{ __("Ajouter une nouvelle chambre") }}</h2>
                     <div class="w-full px-8 grid grid-cols-3 gap-4">
                         <label class="col-span-1">{{ __("Nom de la chambre") }}</label>
                         <input class="col-span-2" type="text" wire:model="newRoom.name">

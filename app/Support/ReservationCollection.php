@@ -14,5 +14,15 @@ class ReservationCollection extends Collection
                     ->orWhere('surname', 'like', '%'.$searchQuery.'%');
             });
     }
+
+    public function getTotalAmountOfVisitors()
+    {
+        $visitor_count = 0;
+        foreach ($this as $reservation)
+        {
+            $visitor_count += $reservation->visitors->count();
+        }
+        return $visitor_count;
+    }
 }
 

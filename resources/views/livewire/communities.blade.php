@@ -68,6 +68,7 @@
                                 <div class="hidden-remarks">
                                     <p>{{ $resa->reservation->remarks }}</p>
                                     <p>{{ $resa->visitor->remarks }}</p>
+                                    <p><button wire:click="getOutOfCommunity({{ $resa->id }})" class="btn-warning">{{__("Retirer")}}</button></p>
                                 </div>
                             </div>
                         @endforeach

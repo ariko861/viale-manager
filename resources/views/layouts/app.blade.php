@@ -55,7 +55,6 @@
         <script>
         Livewire.on('showAlert', message => {
 
-            console.log(message);
             var alertPopup = document.getElementById("alert-popup");
             alertPopup.getElementsByTagName('span')[0].innerHTML = message[0];
             alertPopup.getElementsByTagName('span')[0].className = message[1] + " p-2 rounded-sm";

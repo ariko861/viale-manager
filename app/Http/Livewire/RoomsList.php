@@ -20,6 +20,7 @@ class RoomsList extends Component
         'newRoom.name' => 'required|string',
         'newRoom.beds' => 'required|int|min:0',
         'houses.*.community' => 'boolean',
+        'houses.*.displayHouseNameWithRoom' => 'boolean'
     ];
 
     public function changeAction($options)
@@ -48,12 +49,13 @@ class RoomsList extends Component
 
     }
 
-    public function updateCommunityRule()
+    public function updateHouses()
     {
         foreach ($this->houses as $house) {
             $house->save();
         }
     }
+
 
     public function mount()
     {

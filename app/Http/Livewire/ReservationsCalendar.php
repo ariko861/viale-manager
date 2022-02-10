@@ -104,20 +104,23 @@ class ReservationsCalendar extends LivewireCalendar
 
         $arrivalEvents = $reservations->map(function (Reservation $model) {
             $allVisitors = $model->visitor_list;
-            $rooms = "";
-            $rooms_count = 0;
-            foreach ( $model->visitors as $visitor ){
-                if ( $visitor->pivot->room_id ) {
-                    if ( $rooms_count === 0 ) $rooms = $rooms."<p>".__("Chambres")."</p><ul>";
-                    $rooms_count += 1;
-                    $rooms = $rooms."<li><strong>".$visitor->surname." :</strong> ".$visitor->pivot->room->fullName()."</li>";
-                }
-            }
-            if ( $rooms_count > 0 ) $rooms = $rooms."</ul>";
+//             $contact_person = ( $model->contact_person->full_name ?? "" );
+//             $otherVisitors = $model->visitors->count() -1 ;
+//             $allVisitors = $contact_person.( $otherVisitors ? " ".__("et")." ".$otherVisitors." ".__("personnes") : "");
+//             $rooms = "";
+//             $rooms_count = 0;
+//             foreach ( $model->visitors as $visitor ){
+//                 if ( $visitor->pivot->room_id ) {
+//                     if ( $rooms_count === 0 ) $rooms = $rooms."<p>".__("Chambres")."</p><ul>";
+//                     $rooms_count += 1;
+//                     $rooms = $rooms."<li><strong>".$visitor->surname." :</strong> ".$visitor->pivot->room->fullName()."</li>";
+//                 }
+//             }
+//             if ( $rooms_count > 0 ) $rooms = $rooms."</ul>";
             return [
                 'id' => "a{$model->id}",
                 'title' => __("Arrivée").' '.$allVisitors,
-                'description' => "<div class='text-xs'>".$rooms."</div>",
+                'description' => "",
                 'date' => $model->arrivaldate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-red-100",
             ];
@@ -125,20 +128,20 @@ class ReservationsCalendar extends LivewireCalendar
 
         $departureEvents = $reservations->where('nodeparturedate', false)->map(function (Reservation $model) {
             $allVisitors = $model->visitor_list;
-            $rooms = "";
-            $rooms_count = 0;
-            foreach ( $model->visitors as $visitor ){
-                if ( $visitor->pivot->room_id ) {
-                    if ( $rooms_count === 0 ) $rooms = $rooms."<p>".__("Chambres")."</p><ul>";
-                    $rooms_count += 1;
-                    $rooms = $rooms."<li><strong>".$visitor->surname." :</strong> ".$visitor->pivot->room->fullName()."</li>";
-                }
-            }
-            if ( $rooms_count > 0 ) $rooms = $rooms."</ul>";
+//             $rooms = "";
+//             $rooms_count = 0;
+//             foreach ( $model->visitors as $visitor ){
+//                 if ( $visitor->pivot->room_id ) {
+//                     if ( $rooms_count === 0 ) $rooms = $rooms."<p>".__("Chambres")."</p><ul>";
+//                     $rooms_count += 1;
+//                     $rooms = $rooms."<li><strong>".$visitor->surname." :</strong> ".$visitor->pivot->room->fullName()."</li>";
+//                 }
+//             }
+//             if ( $rooms_count > 0 ) $rooms = $rooms."</ul>";
             return [
                 'id' => "d{$model->id}",
                 'title' => __("Départ").' '.$allVisitors,
-                'description' => "<div class='text-xs'>".$rooms."</div>",
+                'description' => "",
                 'date' => $model->departuredate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-yellow-100",
             ];

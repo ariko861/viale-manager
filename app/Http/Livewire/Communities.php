@@ -24,8 +24,13 @@ class Communities extends Component
 
     public function getResas()
     {
-        $this->resas = VisitorReservation::whereNull('house_id')->whereRelation('reservation', function (Builder $query) {
-            $query->where(function($query) {
+        $today = Carbon::now();
+        $this->resas = VisitorReservation::whereNull('house_id')->whereRelation('reservation', function (Builder $query) use ($today){
+            $query->where(function($query) use ($today) {
+                $query->whereDate('departuredate', '>=', $today)
+                    ->orWhere('nodeparturedate', true);
+            })
+            ->where(function($query) {
                 $query->whereDate('arrivaldate', '<=', $this->endDate)
                         ->whereDate('departuredate', '>=', $this->beginDate);
             })
@@ -67,11 +72,6 @@ class Communities extends Component
 
     public function emptyCommunities()
     {
-//         $houses = House::all();
-//         foreach ($houses as $house)
-//         {
-//             $house->reservationVisitors()->detach();
-//         }
         $resas = VisitorReservation::whereNotNull('house_id')->get();
         foreach ($resas as $resa)
         {
@@ -79,11 +79,22 @@ class Communities extends Component
             $resa->save();
         }
         $this->getCommunities();
+        $this->getResas();
+    }
+
+    public function getOutOfCommunity($resa_id)
+    {
+        $resa = VisitorReservation::find($resa_id);
+        $community = $resa->community;
+        $resa->community()->dissociate();
+        $resa->save();
+        $this->getCommunities();
+        $this->getResas();
     }
 
     public function mount()
     {
-        $this->communities = House::where('community', true)->get();
+        $this->getCommunities();
         $today = Carbon::now();
         $this->beginDate = $today->startOfWeek()->format('Y-m-d');
         $this->beginDay = $today->startOfWeek()->format('l');
