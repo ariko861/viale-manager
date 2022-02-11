@@ -9,9 +9,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-5">
                     @can('reservation-create')
-                    <livewire:reservation.add-new-reservation >
+                        <livewire:reservation.add-new-reservation >
+                    @endcan
+                    @can('visitor-create')
+                        <livewire:visitor.new-visitor-form >
                     @endcan
                     <livewire:reservation.reservations-list :reservation_id='$reservation_id'>
+
 
             </div>
         </div>

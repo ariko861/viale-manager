@@ -19,7 +19,7 @@ class Communities extends Component
     protected $listeners = ["communityChanged"];
 
     public function getCommunities(){
-        $this->communities = House::where('community', true)->get();
+        $this->communities = House::where('community', true)->get()->sortBy('name');
     }
 
     public function getResas()

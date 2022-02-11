@@ -1,7 +1,7 @@
 <div class="grid grid-cols-4 gap-4 w-full">
     @can('room-choose')
     <div class="col-span-1">
-        <ul class="fixed overflow-auto">
+        <ul id="newComersList" class="">
             <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             @foreach ( $resas as $resa )
                 @if ($resa->reservation)
@@ -78,6 +78,20 @@
     @can('room-choose')
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script>
+
+    $(document).ready(function(){
+        const list = $("#newComersList");
+        const fromTopInit = list.offset().top;
+        $(window).scroll(function() {
+            var fromTop = $(window).scrollTop();
+            console.log(fromTop);
+            if ( fromTop >= fromTopInit ) {
+                list.css({ 'position': 'fixed', 'top': 0});
+            } else {
+                list.css('position', 'initial');
+            }
+        });
+    });
 
   $( function() {
 

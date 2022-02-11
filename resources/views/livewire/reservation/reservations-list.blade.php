@@ -40,16 +40,20 @@
                         <span>{{ $reservation->departure }}</span>
                     @endif
                 </p>
+                @can('statistics-remove')
+                    <p><label><strong>{{__("Retirer des statistiques")}} : </strong></label><input type="checkbox" wire:change="updateReservation({{$key}})" wire:model="reservations.{{ $key }}.removeFromStats"></p>
+                @endcan
+                @can('read-statistics')
+                    @if ($reservation->confirmed)
+                        <p><strong>{{ __("Prix total de la réservation") }} :</strong> <span>{{ $reservation->getTotalPriceEuroAttribute() }}</span></p>
+                    @endif
+                @endcan
                 @if ( $editing === $reservation->id )
                     <br>
                     <p><label><strong>{{__("Ne connait pas sa date de départ")}} : </strong></label><input type="checkbox" wire:model="noDepartureDate"></p>
                     <br>
                     <p><label><strong>{{__("Réservation confirmée")}} : </strong></label><input type="checkbox" wire:model="reservationConfirmed"></p>
                     <br>
-                    @can('statistics-remove')
-                        <p><label><strong>{{__("Retirer des statistiques")}} : </strong></label><input type="checkbox" wire:model="reservationNotInStats"></p>
-                        <br>
-                    @endcan
                     <p><button class="btn-warning" wire:click="$set('editing', '')">{{__("Annuler les changements")}}</button><button class="btn-submit" wire:click="saveEdit({{$reservation->id}})">{{__("Sauvegarder les changements")}}</button></p>
                 @endif
                 @if ($reservation->remarks)
@@ -72,12 +76,23 @@
                     @endif
                 @endcan
 
-            @foreach ( $reservation->visitors as $visitor )
+            @foreach ( $reservation->visitors->sortByDesc('pivot.contact') as $vkey => $visitor )
                 <div @class(['mt-2', 'w-full', 'card'])>
                     @if ( $visitor->pivot->contact )
                         <p class="text-lg"><strong>{{ __("Personne de contact") }} :</strong> </p>
                     @endif
-                    <p><strong>{{ __("Nom") }} :</strong> <span>{{ $visitor->full_name }} {{ $visitor->age}}, {{ __("ans") }}</span></p>
+                    @if ( $editing === $reservation->id )
+                        <div class="float-right">
+                            <input type="number" min=0 wire:model="reservations.{{$key}}.visitors.{{$vkey}}.pivot.price"/>€ {{__("par nuit")}}
+                        </div>
+                    @else
+                        @can ('read-statistics')
+                            <div class="float-right">
+                                <span>{{number_format($visitor->pivot->price, 2,'€',' ')}} {{__("par nuit")}}
+                            </div>
+                        @endcan
+                    @endif
+                    <p><strong>{{ __("Nom") }} :</strong> <span>{{ $visitor->full_name }}, {{ $visitor->age}} {{ __("ans") }}</span></p>
                     <p><strong>{{ __("Email") }} :</strong> <span><a class="text-blue-600" href="mailto:{{ $visitor->email }}">{{ $visitor->email }}</a></span></p>
                     <p><strong>{{ __("Numéro de téléphone") }} :</strong> <span>{{ $visitor->phone }}</span></p>
                     <p><strong>{{ __("Chambre") }} :</strong>
@@ -100,8 +115,26 @@
                         @endif
                         </p>
                     @endcan
+                    @if ( $editing === $reservation->id )
+                    <div class="p-4 text-right">
+                        <livewire:buttons.edit-buttons :wire:key="'visitor-'.$visitor->id.'-in-reservation-'.$reservation->id" model="visitorInReservation" :modelId="$reservation->id.'-'.$visitor->id" editRights="visitor-edit" deleteRights="reservation-edit">
+                    </div>
+                    @endif
                 </div>
             @endforeach
+
+            @if ( $editing === $reservation->id )
+                <div class="card">
+                    @unless ( $newVisitorInReservation )
+                        <div class="w-full">
+                            <button class="btn w-full" wire:click="$toggle('newVisitorInReservation')">{{ __("Ajouter un autre visiteur") }}</button>
+                        </div>
+                    @endunless
+                    @if ($newVisitorInReservation)
+                        <livewire:visitor-search :key="'add-visitor-in-reservation-'.$reservation->id" :visitorKey="$reservation->id" visitorType="otherVisitor" >
+                    @endif
+                </div>
+            @endif
 
 <!--             Footer for each reservation -->
             @can('reservation-edit')

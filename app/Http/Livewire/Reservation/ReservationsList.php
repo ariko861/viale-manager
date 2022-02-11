@@ -7,6 +7,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Reservation;
+use App\Models\Visitor;
 use App\Models\VisitorReservation;
 use App\Models\ReservationLink;
 
@@ -19,6 +20,7 @@ class ReservationsList extends Component
     public $amountDisplayedReservation = 20;
     public $advancedSearch = false;
     public $editing;
+    public $newVisitorInReservation = false;
     public $visitorSearch;
     public $reservationNotInStats;
     public $reservations;
@@ -33,13 +35,15 @@ class ReservationsList extends Component
     public $numberOfReservationsDisplayed = 20;
     public $showSendLinkForm = false;
 
-    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "cancelLinkForm", "displayReservation"];
+    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "cancelLinkForm", "displayReservation", "visitorAdded"];
 
     protected $rules = [
         'newArrivalDate' => 'required|date',
         'newDepartureDate' => '',
         'noDepartureDate' => '',
         'reservationConfirmed' => '',
+        'reservations.*.removeFromStats' => 'boolean',
+        'reservations.*.visitors.*.pivot.price' => 'integer|nullable',
     ];
 
     public function displayReservation($res_id)
@@ -50,18 +54,20 @@ class ReservationsList extends Component
 
     public function changeAction($options)
     {
-        if ($options[1] == 'reservation')
-        {
-            $this->editReservation($options[0]);
-        }
+        if ($options[1] == 'reservation') $this->editReservation($options[0]);
+        else if ($options[1] == 'visitorInReservation');
     }
 
     public function deleteAction($options)
     {
-        if ($options[1] == 'reservation')
-        {
-            $this->deleteReservation($options[0]);
-        }
+        if ($options[1] == 'reservation') $this->deleteReservation($options[0]);
+        else if ($options[1] == 'visitorInReservation') $this->removeVisitorFromReservation($options[0]);
+    }
+
+    public function updateReservation($key)
+    {
+        $this->reservations[$key]->save();
+        $this->emit('showAlert', [ __("La réservation a été mise à jour"), "bg-lime-600"] );
     }
 
     public function getReservationsComing()
@@ -171,7 +177,35 @@ class ReservationsList extends Component
         $this->newDepartureDate = $reservation->departuredate;
         $this->noDepartureDate = $reservation->nodeparturedate;
         $this->reservationConfirmed = $reservation->confirmed;
-        $this->reservationNotInStats = $reservation->removeFromStats;
+
+    }
+
+    public function removeVisitorFromReservation($res_and_visitor_id)
+    {
+        $ids = explode('-', $res_and_visitor_id);
+        $reservation = Reservation::find($ids[0]);
+        $visitor = $reservation->visitors()->find($ids[1]);
+        if ( $visitor->pivot->contact ) $this->emit('showAlert', [ __("Vous ne pouvez pas supprimer un visiteur contact, supprimez la réservation"), "bg-red-400"] );
+        else {
+            $reservation->visitors()->detach($ids[1]);
+            $this->reservations->find($ids[0])->refresh();
+            $this->emit('showAlert', [ __("Le visiteur a bien été enlevé de la réservation"), "bg-green-400"] );
+
+        }
+    }
+
+    public function visitorAdded($options)
+    {
+       $visitor_id = $options[0]["id"];
+       $reservation = $this->reservations->find($options[1]);
+       if ( $reservation->visitors()->find( $visitor_id ) ) {
+           $this->emit('showAlert', [ __("Cette personne est déjà dans cette réservation"), "bg-red-400"] );
+           $this->emit('cancelVisitorSelection');
+       } else {
+            $reservation->visitors()->attach($visitor_id, ['contact' => false ]);
+            $reservation->refresh();
+            $this->newVisitorInReservation = false;
+       }
 
     }
 
@@ -185,21 +219,18 @@ class ReservationsList extends Component
     {
         $this->validate();
         $this->editing = "";
-        $reservation = Reservation::find($reservation_id);
-//         $reservation->update([
-//             'arrivaldate' => $this->newArrivalDate,
-//             'departuredate' => $this->newDepartureDate,
-//             'nodeparturedate' => $this->noDepartureDate,
-//             'confirmed' => $this->reservationConfirmed,
-//
-//         ]);
+//         $reservation = Reservation::find($reservation_id);
+        $reservation = $this->reservations->find($reservation_id);
         $reservation->arrivaldate = $this->newArrivalDate;
         $reservation->departuredate = $this->newDepartureDate;
         $reservation->nodeparturedate = $this->noDepartureDate;
         $reservation->confirmed = $this->reservationConfirmed;
-        $reservation->removeFromStats = $this->reservationNotInStats;
+        foreach ($reservation->visitors as $visitor)
+        {
+            $visitor->pivot->save();
+        }
         $reservation->save();
-        $this->getReservationsComing($this->numberOfReservationsDisplayed);
+//         $this->getReservationsComing($this->numberOfReservationsDisplayed);
 
     }
 

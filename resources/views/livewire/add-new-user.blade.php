@@ -1,9 +1,8 @@
 <div>
     <div class="w-full border-4 p-5">
-        <button class="w-full h-full rounded-full p-6" wire:click="$toggle('showUserForm')">{{ __("Ajouter un nouveau visiteur") }}</button>
+        <button class="w-full h-full rounded-full p-6" wire:click="$emit('newVisitorForm')">{{ __("Ajouter un nouveau visiteur") }}</button>
     </div>
 
-    @if ($showUserForm )
-        <livewire:new-user-form >
-    @endif
+    <livewire:visitor.new-visitor-form >
+
 </div>

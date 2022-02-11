@@ -5,7 +5,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </div>
-            <h3 class="text-center text-lg">{{__("Envoyer un email de confirmation à")}} {{ $reservation->contact_person->full_name ?? "" }}</h3>
+            <h3 class="text-center text-lg">{{__("Envoyer un lien de confirmation à")}} {{ $reservation->contact_person->full_name ?? "" }}</h3>
             <br>
             <label>{{__("Autoriser à décaler les dates de")}} </label><input type="number" min=0 wire:model="maxDays"><span> {{__("jours")}}</span>
             <br><br>
@@ -13,10 +13,12 @@
             <br><br>
             @unless ($linkCreated)
                 <button class="btn-submit" wire:click="send(false)">{{__("Générer un lien de confirmation")}}</button>
-                <br><p>{{__("Ou")}}</p>
-                <button class="btn-submit btn-sm" wire:click="send(true)">{{__("Envoyer un email de confirmation à")}} {{ $reservation->contact_person->email ?? "" }}</button>
-                <br>
-                <p wire:loading>{{__("Email en cours d'envoi")}}</p>
+                @if ($reservation->contact_person && $reservation->contact_person->email)
+                    <br><p>{{__("Ou")}}</p>
+                    <button class="btn-submit btn-sm" wire:click="send(true)">{{__("Envoyer un email de confirmation à")}} {{ $reservation->contact_person->email ?? "" }}</button>
+                    <br>
+                    <p wire:loading>{{__("Email en cours d'envoi")}}</p>
+                @endif
 
             @endunless
             @if ($linkCreated)

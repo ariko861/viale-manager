@@ -1,53 +1,57 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Visitor;
 
 use App\Models\Visitor;
 use Livewire\Component;
 
-class NewUserForm extends Component
+class NewVisitorForm extends Component
 {
 //     public Visitor $newvisitor;
 
     public $modify = false;
+    public $showUserForm = false;
 
     public function mount()
     {
         $this->newvisitor = new Visitor();
     }
 
-    protected $listeners = ['visitorChange'];
+    protected $listeners = ['newVisitorForm', 'visitorChangeForm'];
 
     protected $rules = [
         'newvisitor.name' => 'required|string',
         'newvisitor.surname' => 'required|string',
         'newvisitor.phone' => '',
-        'newvisitor.email' => 'required|email',
+        'newvisitor.email' => 'email|nullable',
         'newvisitor.birthyear' => '',
         'newvisitor.remarks' => '',
     ];
 
-    public function visitorChange($id)
+    public function newVisitorForm()
+    {
+        $this->newvisitor = new Visitor();
+        $this->showUserForm = true;
+        $this->modify = false;
+    }
+    public function visitorChangeForm($id)
     {
         $this->newvisitor = Visitor::find($id);
+        $this->showUserForm = true;
         $this->modify = true;
     }
 
     public function cancelVisitorForm()
     {
-        $this->emit('hideVisitorForm');
+        $this->showUserForm = false;
         $this->newvisitor = new Visitor();
+        $this->emit('hideVisitorForm');
     }
 
-    public function render()
-    {
-        return view('livewire.new-user-form');
-    }
      public function save()
     {
         $this->validate();
         $this->newvisitor->save();
-        $this->emit('hideVisitorForm');
         if ( $this->modify )
         {
             $this->emit('visitorModified', $this->newvisitor->id );
@@ -55,5 +59,11 @@ class NewUserForm extends Component
             $this->emit('newVisitorSaved', $this->newvisitor->id );
         }
         $this->emit('showAlert', [ __("L'utilisateur a bien été enregistré"), "bg-green-500" ] );
+        $this->cancelVisitorForm();
+    }
+
+    public function render()
+    {
+        return view('livewire.visitor.new-visitor-form');
     }
 }

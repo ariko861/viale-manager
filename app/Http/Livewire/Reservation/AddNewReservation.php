@@ -16,12 +16,11 @@ class AddNewReservation extends Component
     public $message;
     public $showReservationForm = false;
     public $mindeparturedate;
-    public $showUserForm = false;
     public $otherVisitorsArray;
     public $contactPerson;
 
 
-    protected $listeners = ['hideVisitorForm', 'showUserForm', 'visitorAdded', 'contactPersonAdded', 'contactPersonRemoved'];
+    protected $listeners = ['visitorAdded', 'contactPersonAdded', 'contactPersonRemoved'];
 
     public function mount()
     {
@@ -57,15 +56,6 @@ class AddNewReservation extends Component
     public function setMinDate($value)
     {
         $this->mindeparturedate = $value;
-    }
-
-    public function showUserForm()
-    {
-        $this->showUserForm = true;
-    }
-    public function hideVisitorForm()
-    {
-        $this->showUserForm = false;
     }
 
     public function contactPersonAdded($visitor)

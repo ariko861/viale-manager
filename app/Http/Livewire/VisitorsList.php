@@ -20,8 +20,8 @@ class VisitorsList extends Component
     {
         if ($id)
         {
-            $newvisitor = Visitor::find($id);
-            $this->visitors->push($newvisitor);
+            $visitor = Visitor::find($id);
+            $this->visitors->push($visitor);
             $this->visitors = $this->visitors->sortBy('name');
         }
     }
@@ -49,9 +49,7 @@ class VisitorsList extends Component
 
     public function engageVisitorChange($id)
     {
-        $this->emit('showVisitorForm');
-        $this->emit('visitorChange', $id);
-        //$this->emit('hideVisitorForm');
+        $this->emit('visitorChangeForm', $id);
     }
 
     public function deleteVisitor($visitor_id)

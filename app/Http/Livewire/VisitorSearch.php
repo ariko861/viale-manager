@@ -16,7 +16,7 @@ class VisitorSearch extends Component
     public $visitorType;
     public $visitorKey;
 
-    protected $listeners = ['hideVisitorForm'];
+    protected $listeners = ['cancelVisitorSelection', 'newVisitorSaved'];
 
     public function render()
     {
@@ -24,12 +24,14 @@ class VisitorSearch extends Component
 
     }
 
-    public function hideVisitorForm()
-    {
-        $this->noResult = false;
-        $this->searchQuery = "";
-        $this->displayAddVisitorButton = false;
+    public function newVisitorSaved($id){
+        if ($this->visitorSet == false && $this->displayAddVisitorButton){
+            $visitor = Visitor::find($id);
+            $this->setContactPerson($visitor);
+        }
     }
+
+
 
     public function cancelVisitorSelection()
     {
@@ -40,11 +42,11 @@ class VisitorSearch extends Component
 
     public function setContactPerson($visitor)
     {
-        if ($visitor["email"]){
-            $this->searchQuery = $visitor['full_name']." <".$visitor["email"].">";
+            $this->searchQuery = $visitor['full_name']." <".( $visitor["email"] ?? "" ).">";
             $this->visitorSet = true;
             $this->visitorsArray = [];
             $this->displayAddVisitorButton = false;
+            $this->noResult = false;
             switch($this->visitorType) {
                 case('contactPerson'):
                     $this->emitUp('contactPersonAdded', $visitor);
@@ -54,19 +56,10 @@ class VisitorSearch extends Component
                     $this->emitUp('visitorAdded', $result);
                     break;
             }
-        } else {
-            $this->emit('showAlert', [ __("La personne de contact doit avoir un email enregistré"), "bg-red-500" ] );
-            $this->searchQuery="";
-            $this->visitorSet = false;
-            $this->visitorsArray = [];
-            $this->displayAddVisitorButton = false;
-
-        }
     }
 
     public function searchVisitor()
     {
-        //error_log($value);
         $value = $this->searchQuery;
         if ( Str::length($value) >= 3 )
         {

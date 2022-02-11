@@ -21,7 +21,7 @@
         @error('reservation.nodeparturedate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
         <label class="col-span-1">{{ __("Personne de contact") }}</label>
         <div class="col-span-2">
-            <livewire:visitor-search visitorType="contactPerson">
+            <livewire:visitor-search :key="'new-reservation-contact-person'" visitorType="contactPerson">
         </div>
         @error('contactPerson') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
@@ -39,7 +39,7 @@
                     {{ __("Visiteur") }}
                 </label>
                 <div class="col-span-2">
-                    <livewire:visitor-search :key="$key" :visitorKey="$key" visitorType="otherVisitor" >
+                    <livewire:visitor-search :key="'new-reservation-visitor-'.$key" :visitorKey="$key" visitorType="otherVisitor" >
                 </div>
             </div>
         @endforeach
@@ -50,9 +50,6 @@
         </div>
     </div>
  </form>
- @if ( $showUserForm )
-    <livewire:new-user-form >
- @endif
 </div>
 @endif
 

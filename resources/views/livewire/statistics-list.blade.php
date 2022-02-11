@@ -43,7 +43,7 @@
                     @endforeach
                 </td>
                 <td class="{{ $tbody_class }}">{{ $reservation->departure }}</td>
-                <td class="{{ $tbody_class }}">{{ $reservation->nights }}</td>
+                <td class="{{ $tbody_class }}">{{ $reservation->nights*$reservation->visitors->count() ?? $reservation->nights }}</td>
                 <td class="{{ $tbody_class }}">{{ $reservation->per_night_euro }}</td>
                 <td class="{{ $tbody_class }}">{{ $reservation->total_price_euro }}</td>
             </tr>

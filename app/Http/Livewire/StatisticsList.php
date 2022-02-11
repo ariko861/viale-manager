@@ -74,7 +74,7 @@ class StatisticsList extends Component
     {
         $today = Carbon::now();
         $this->beginDate = $today->copy()->startOfYear()->format('Y-m-d');
-        $this->endDate = $today->copy()->endOfYear()->format('Y-m-d');
+        $this->endDate = $today->format('Y-m-d');
 
         $this->reservations = Reservation::where('removeFromStats', '!=', true)
                         ->where('confirmed', true)
