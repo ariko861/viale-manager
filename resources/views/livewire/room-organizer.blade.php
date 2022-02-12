@@ -60,7 +60,8 @@
                             <td class="{{ $tbody_class }}">{{ $room->beds }}</td>
                             <td id="room{{ $room->id }}" class="{{ $tbody_class }} dropzone ui-widget-header">
                                 @foreach ( $this->getRoomAvailability($room) as $resa )
-                                    <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }}">
+                                    <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} draggable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }} {{ $resa->reservation->arrivaldate == $endDay ? 'bg-red-100' : ''}} {{ $resa->reservation->departuredate == $beginDay ? 'bg-yellow-100' : ''}}">
+                                        <div class="float-right text-sm italic">{{ $resa->reservation->arrivaldate == $endDay ? __("Arrive")." ".$lastDay : ''}}{{ $resa->reservation->departuredate == $beginDay ? __("Part")." ".$firstDay : ''}}</div>
                                         <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                                         <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
 

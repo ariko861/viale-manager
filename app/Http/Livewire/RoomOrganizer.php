@@ -17,8 +17,11 @@ class RoomOrganizer extends Component
     public $newComers;
     public $previousBeginDay;
     public $previousEndDay;
+    public $today;
+    public $lastDay;
+    public $firstDay;
 
-    protected $listeners = ["roomChanged", "movingVisitor", "restoreDays"];
+    protected $listeners = ["roomChanged", "movingVisitor", "restoreDays", "dateChanged"];
 
     public function backToToday()
     {
@@ -38,6 +41,13 @@ class RoomOrganizer extends Component
         $this->endDay = $this->previousEndDay;
     }
 
+    public function dateChanged(){
+        if ($this->beginDay == $this->today ) $this->firstDay = __("aujourd'hui");
+        else $this->firstDay = __("le premier jour");
+        if ($this->endDay == $this->today ) $this->lastDay = __("aujourd'hui");
+        else $this->lastDay = __("le dernier jour");
+    }
+
     public function getNewComers()
     {
         $this->today = Carbon::now();
@@ -54,6 +64,11 @@ class RoomOrganizer extends Component
         $this->houses = House::all();
         $this->backToToday();
         $this->getNewComers();
+        $this->today = Carbon::now()->format('Y-m-d');
+        $this->fill([
+            'firstDay' => __("aujourd'hui"),
+            'lastDay' => __("aujourd'hui"),
+        ]);
 
     }
 

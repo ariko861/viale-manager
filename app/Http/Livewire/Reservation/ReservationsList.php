@@ -219,7 +219,6 @@ class ReservationsList extends Component
     {
         $this->validate();
         $this->editing = "";
-//         $reservation = Reservation::find($reservation_id);
         $reservation = $this->reservations->find($reservation_id);
         $reservation->arrivaldate = $this->newArrivalDate;
         $reservation->departuredate = $this->newDepartureDate;
@@ -230,7 +229,6 @@ class ReservationsList extends Component
             $visitor->pivot->save();
         }
         $reservation->save();
-//         $this->getReservationsComing($this->numberOfReservationsDisplayed);
 
     }
 
