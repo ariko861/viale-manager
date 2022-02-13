@@ -19,6 +19,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td class="{{ $tbody_class }} bg-red-100 text-center hover:bg-red-300 cursor-pointer" colspan=3 wire:click="cancelRoom">{{__("Retirer de sa chambre")}}</td>
+                        </tr>
                         @foreach ( $houses as $house )
                             <tr>
                                 <td class="{{ $thead_class }} text-center" colspan="3"><strong>{{ $house->name }}</strong></td>

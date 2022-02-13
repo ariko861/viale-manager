@@ -17,16 +17,23 @@ class RoomOrganizer extends Component
     public $newComers;
     public $previousBeginDay;
     public $previousEndDay;
+    public $beginDay;
+    public $endDay;
     public $today;
     public $lastDay;
     public $firstDay;
-
-    protected $listeners = ["roomChanged", "movingVisitor", "restoreDays", "dateChanged"];
+    public $onMoving;
+    public $movingFromRoom;
+    protected $listeners = ["roomChanged", "movingVisitor", "restoreDays"];
 
     public function backToToday()
     {
         $this->beginDay = Carbon::now()->format('Y-m-d');
         $this->endDay = Carbon::now()->format('Y-m-d');
+        $this->fill([
+            'firstDay' => __("aujourd'hui"),
+            'lastDay' => __("aujourd'hui"),
+        ]);
     }
 
     public function saveDays()
@@ -39,50 +46,62 @@ class RoomOrganizer extends Component
     {
         $this->beginDay = $this->previousBeginDay;
         $this->endDay = $this->previousEndDay;
+        $this->dateChanged();
     }
 
     public function dateChanged(){
-        if ($this->beginDay == $this->today ) $this->firstDay = __("aujourd'hui");
-        else $this->firstDay = __("le premier jour");
         if ($this->endDay == $this->today ) $this->lastDay = __("aujourd'hui");
         else $this->lastDay = __("le dernier jour");
+        if ($this->beginDay == $this->today ) $this->firstDay = __("aujourd'hui");
+        else $this->firstDay = __("le premier jour");
     }
 
     public function getNewComers()
     {
-        $this->today = Carbon::now();
-        $this->resas = VisitorReservation::whereNull('room_id')->whereRelation('reservation', function (Builder $query) {
-                $query->whereDate('departuredate', '>=', $this->today)
+        $today = Carbon::now();
+        $this->resas = VisitorReservation::whereNull('room_id')->whereRelation('reservation', function (Builder $query) use ($today) {
+                $query->whereDate('departuredate', '>=', $today)
                     ->orWhere('nodeparturedate', true );
-        })->get()->sortBy(function($item, $key) {
-            return $item->reservation->arrivaldate;
-        });
+        })->get();
+
+    }
+
+    public function getHouses()
+    {
+        $this->houses = House::all()->sortBy('name');
     }
 
     public function mount()
     {
-        $this->houses = House::all();
+        $this->getHouses();
         $this->backToToday();
         $this->getNewComers();
         $this->today = Carbon::now()->format('Y-m-d');
-        $this->fill([
-            'firstDay' => __("aujourd'hui"),
-            'lastDay' => __("aujourd'hui"),
-        ]);
+
 
     }
 
     public function getRoomAvailability($room)
     {
+        $this->dateChanged();
         $room = Room::find($room["id"]);
         return $room->visitorsInReservationsForRoom($this->beginDay, $this->endDay);
     }
 
-    public function movingVisitor($resa_id)
+    public function movingVisitor($resa_id, $room_id = null)
     {
-        $resa_id = substr($resa_id, 4);
+//         $resa_id = substr($resa_id, 4);
+        if ($room_id) $this->movingFromRoom = $room_id;
+        if ($this->onMoving === $resa_id) {
+            $this->onMoving = null;
+            $this->restoreDays();
+            return;
+        }
+        if (! $this->onMoving) $this->saveDays(); // Ne conserver les jours sélectionnés que si un visiteur n'a pas été sélectionné avant
+
+        $this->onMoving = $resa_id;
+
         $visitorReservation = VisitorReservation::find($resa_id);
-        $this->saveDays();
         $this->beginDay = $visitorReservation->reservation->arrivaldate;
         if ($visitorReservation->reservation->nodeparturedate)
         {
@@ -91,21 +110,36 @@ class RoomOrganizer extends Component
         } else {
             $this->endDay = $visitorReservation->reservation->departuredate;
         }
+        $this->dateChanged();
         $refresh;
 
     }
 
-    public function roomChanged($roomId)
+    public function takeOutOfRoom()
     {
-        $room_id = substr($roomId["room"], 4);
-        $resa_id = substr($roomId["resa"], 4);
-//         dd($room_id, $resa_id);
-        $visitorReservation = VisitorReservation::find($resa_id);
-        $visitorReservation->room()->associate($room_id);
-        $visitorReservation->save();
-        $this->restoreDays();
-        $this->getNewComers();
-        $this->emit('showAlert', [ __("Le visiteur a bien été déplacé !"), "bg-green-500" ] );
+        if ($this->onMoving) {
+            $resa_id = $this->onMoving;
+            $this->onMoving = null;
+            $visitorReservation = VisitorReservation::find($resa_id);
+            $visitorReservation->room()->dissociate();
+            $visitorReservation->save();
+            $this->restoreDays();
+//
+        }
+
+    }
+
+    public function roomChanged($room_id)
+    {
+        if ($this->onMoving) {
+            $resa_id = $this->onMoving;
+            $visitorReservation = VisitorReservation::find($resa_id);
+            $visitorReservation->room()->associate($room_id);
+            $visitorReservation->save();
+            $this->restoreDays();
+            $this->onMoving = null;
+            $this->getNewComers();
+        }
     }
 
     public function render()

@@ -51,6 +51,34 @@
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.xl');
   }
+
+    /*@keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }*/
+
+    @keyframes blinker {
+        50% {
+            @apply bg-blue-400;
+        }
+    }
+    @keyframes otherblinker {
+        50% {
+            @apply bg-red-100;
+        }
+    }
+
+
+  .moving {
+    animation: blinker 2s linear infinite;
+  }
+  .movable-receiver {
+    animation: otherblinker 6s linear infinite;
+    cursor: pointer;
+    @apply hover:bg-lime-600;
+  }
+
   .draggable {
       touch-action: none;
       user-select: none;
