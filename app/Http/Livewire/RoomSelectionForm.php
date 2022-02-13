@@ -43,6 +43,15 @@ class RoomSelectionForm extends Component
     {
         $this->emitUp("hideRoomSelection");
     }
+
+    public function cancelRoom()
+    {
+        $resa = $this->visitor["pivot"];
+        $visitorReservation = VisitorReservation::find($resa["id"]);
+        $visitorReservation->room()->dissociate();
+        $visitorReservation->save();
+        $this->emitUp("hideRoomSelection");
+    }
     public function selectRoom($room)
     {
         $room = Room::find($room["id"]);
