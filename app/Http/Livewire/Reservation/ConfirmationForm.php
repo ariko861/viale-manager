@@ -12,30 +12,29 @@ class ConfirmationForm extends Component
 {
     public $reservation;
     public $link;
-    public $arrivaldate;
-    public $departuredate;
+    public $contact_person;
     public $minarrivaldate;
     public $maxarrivaldate;
     public $mindeparturedate;
     public $maxdeparturedate;
     public $price;
-    public $birthyear;
+    public $unknown;
     public $profiles;
     public $otherVisitorsArray;
     public $addedVisitors;
     public $forbidAddingVisitors;
     public $current_year;
-    public $remark;
-    public $phoneNumber;
-
-    public $devMessage;
 
         protected $rules = [
-            'phoneNumber' => 'required',
-            'birthyear' => 'required|integer|between:1900,2100',
-            'arrivaldate' => 'required|date',
-            'departuredate' => 'required|date',
-            'remark' => '',
+            'contact_person.name' => 'required|string',
+            'contact_person.surname' => 'required|string',
+            'contact_person.phone' => 'required',
+            'contact_person.email' => 'required|string',
+            'contact_person.birthyear' => 'required|integer|between:1900,2100',
+            'price' => '',
+            'reservation.arrivaldate' => 'required|date',
+            'reservation.departuredate' => 'required|date',
+            'reservation.remarks' => '',
             'addedVisitors.*.name' => 'required|string',
             'addedVisitors.*.surname' => 'required|string',
             'addedVisitors.*.birthyear' => 'required|integer|between:1900,2100',
@@ -74,26 +73,11 @@ class ConfirmationForm extends Component
         $this->forbidAddingVisitors = false;
     }
 
-    public function checkContactPersonChange($input, $attribute)
-    {
-        if ($input != $this->link->reservation->contact_person[$attribute])
-        {
-            $this->link->reservation->contact_person[$attribute] = $input;
-        }
-    }
-
-    public function checkReservationChange($input, $attribute)
-    {
-        if ($input != $this->link->reservation[$attribute])
-        {
-            $this->link->reservation[$attribute] = $input;
-        }
-    }
 
     public function setMinDepartureDate()
     {
-        $departure = $this->link->reservation->departuredate;
-        $carbonArrivalDate = new Carbon($this->arrivaldate);
+        $departure = $this->reservation->departuredate;
+        $carbonArrivalDate = new Carbon($this->reservation->arrivaldate);
 
         if ( $carbonArrivalDate->gt($this->getMinDate($departure) ) )
         {
@@ -108,26 +92,19 @@ class ConfirmationForm extends Component
     {
         $this->validate();
         // Check if any changes for the contact Person
-        $this->checkContactPersonChange($this->phoneNumber, 'phone');
-        $this->checkContactPersonChange($this->birthyear, 'birthyear');
         // Update Price for the contact Person
-        $this->link->reservation->visitors()->updateExistingPivot($this->link->reservation->contact_person->id, [
+        $this->reservation->visitors()->updateExistingPivot($this->contact_person->id, [
             'price' => $this->price,
         ]);
-        $this->link->reservation->contact_person->save();
+        $this->contact_person->save();
 
         // Update prices for pre-register other visitors
         foreach ($this->otherVisitorsArray as $otherVisitor)
         {
-            $this->link->reservation->visitors()->updateExistingPivot($otherVisitor["id"], [
+            $this->reservation->visitors()->updateExistingPivot($otherVisitor["id"], [
                 'price' => $otherVisitor["price"],
             ]);
         }
-
-        // update dates
-        $this->checkReservationChange($this->arrivaldate, 'arrivaldate');
-        $this->checkReservationChange($this->departuredate, 'departuredate');
-        $this->link->reservation->remarks = $this->remark;
 
         // save added visitors
         foreach ($this->addedVisitors as $addedVisitor)
@@ -139,13 +116,14 @@ class ConfirmationForm extends Component
                 'confirmed' => false,
             ]);
 
-            $this->link->reservation->visitors()->attach($visitor, [ 'price' => $addedVisitor["price"], 'contact' => false ]);
+            $this->reservation->visitors()->attach($visitor, [ 'price' => $addedVisitor["price"], 'contact' => false ]);
         }
-        $this->link->reservation->confirmed = true;
+        $this->reservation->confirmed = true;
+        $this->reservation->quickLink = false;
 
-        $this->link->reservation->save();
+        $this->reservation->save();
 
-        $this->emit('showRecapReservation', $this->link->reservation->id);
+        $this->emit('showRecapReservation', $this->reservation->id);
 
         $this->link->delete();
         $this->link = false;
@@ -155,22 +133,33 @@ class ConfirmationForm extends Component
 
     public function mount()
     {
-        $arrival = $this->link->reservation->arrivaldate;
-        $departure = $this->link->reservation->departuredate;
-        $carbonArrivalDate = new Carbon($arrival);
-
         $this->fill([
             'addedVisitors' => collect([]),
+            'reservation' => $this->link->reservation,
+            'contact_person' => $this->link->reservation->contact_person,
             'current_year' => Carbon::now()->year,
-            'arrivaldate' => $arrival,
-            'departuredate' => $departure,
-            'phoneNumber' => $this->link->reservation->contact_person->phone,
             'profiles' => Profile::all(),
             'price' => Profile::firstWhere('is_default', true)->price ?? Profile::first()->price,
-            'birthyear' => $this->link->reservation->contact_person->birthyear,
+            'unknown' => collect([]),
         ]);
 
-        $this->otherVisitorsArray = $this->link->reservation->getNonContactVisitors()->each(function($item, $key) { $item["price"] = $this->price; });
+        if ( $this->contact_person->name == 'x-inconnu' ){ //check if name hasn't been filled yet
+            $this->unknown->push('name');
+            $this->contact_person->name = "";
+        }
+        if ( $this->contact_person->surname == 'x-inconnu' ){ //check if surname hasn't been filled yet
+            $this->unknown->push('surname');
+            $this->contact_person->surname = "";
+        }
+        if ( $this->contact_person->email == '' ){ //check if email hasn't been filled yet
+            $this->unknown->push('email');
+        }
+
+
+        $this->otherVisitorsArray = $this->reservation->getNonContactVisitors()->each(function($item, $key) { $item["price"] = $this->price; });
+        $arrival = $this->reservation->arrivaldate;
+        $departure = $this->reservation->departuredate;
+
 
         $this->maxarrivaldate = $this->getMaxDate($arrival)->format('Y-m-d');
         $this->minarrivaldate = $this->getMinDate($arrival)->format('Y-m-d');

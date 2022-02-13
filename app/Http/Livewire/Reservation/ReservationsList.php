@@ -75,13 +75,13 @@ class ReservationsList extends Component
         $today = Carbon::now()->format('Y-m-d');
 //         $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
 //         $this->reservations = $allReservations->first();
-        $this->reservations = Reservation::whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
+        $this->reservations = Reservation::where('quickLink', false)->whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
         $this->emit('scrollToReservationList');
     }
 
     public function getReservationsWhereArrivalInBetween(){
-        $this->reservations = Reservation::whereDate('arrivaldate', '>=', $this->beginDate)->whereDate('arrivaldate', '<=', $this->endDate)->get();
+        $this->reservations = Reservation::where('quickLink', false)->whereDate('arrivaldate', '>=', $this->beginDate)->whereDate('arrivaldate', '<=', $this->endDate)->get();
         $beginDate = new Carbon($this->beginDate);
         $endDate = new Carbon($this->endDate);
 
@@ -90,7 +90,7 @@ class ReservationsList extends Component
     }
 
     public function getReservationsWhereDepartureInBetween(){
-        $this->reservations = Reservation::whereDate('departuredate', '>=', $this->beginDateForDeparture)->whereDate('departuredate', '<=', $this->endDateForDeparture)->get();
+        $this->reservations = Reservation::where('quickLink', false)->whereDate('departuredate', '>=', $this->beginDateForDeparture)->whereDate('departuredate', '<=', $this->endDateForDeparture)->get();
         $beginDate = new Carbon($this->beginDateForDeparture);
         $endDate = new Carbon($this->endDateForDeparture);
 
@@ -100,16 +100,17 @@ class ReservationsList extends Component
 
     public function getReservationsPresenceBetweenDates($dateBegin, $dateEnd, $confirmed = true){
 
-        $this->reservations = Reservation::where(function($query) use ($confirmed){
+        $this->reservations = Reservation::where('quickLink', false)->where(function($query) use ($confirmed){
                     if ($confirmed) $query->where('confirmed', true);
-                })
-                ->where(function($query) use ($dateBegin, $dateEnd) {
+                })->where(function($query) use ($dateBegin, $dateEnd) {
+                $query->where(function($query) use ($dateBegin, $dateEnd) {
                     $query->whereDate('arrivaldate', '<=', $dateEnd)
                             ->whereDate('departuredate', '>=', $dateBegin);
                     })
-                ->orWhere(function($query) use ($dateBegin, $dateEnd) {
-                    $query->whereDate('arrivaldate', '<=', $dateEnd)
-                    ->where('nodeparturedate', true );
+                    ->orWhere(function($query) use ($dateBegin, $dateEnd) {
+                        $query->whereDate('arrivaldate', '<=', $dateEnd)
+                        ->where('nodeparturedate', true );
+                    });
                 })->get();
     }
 
@@ -134,7 +135,8 @@ class ReservationsList extends Component
         {
             $this->reservations = Reservation::whereHas('visitors', function (Builder $query) {
                 $query->where('name', 'ilike', '%'.$this->visitorSearch.'%')
-                    ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%');
+                    ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%')
+                    ->orWhere('email', 'ilike', '%'.$this->visitorSearch.'%');
             })->orderBy('arrivaldate')->get();
         }
         else

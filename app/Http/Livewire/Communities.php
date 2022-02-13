@@ -26,18 +26,21 @@ class Communities extends Component
     {
         $today = Carbon::now();
         $this->resas = VisitorReservation::whereNull('house_id')->whereRelation('reservation', function (Builder $query) use ($today){
-            $query->where(function($query) use ($today) {
-                $query->whereDate('departuredate', '>=', $today)
-                    ->orWhere('nodeparturedate', true);
-            })
-            ->where(function($query) {
-                $query->whereDate('arrivaldate', '<=', $this->endDate)
-                        ->whereDate('departuredate', '>=', $this->beginDate);
-            })
-            ->orWhere(function($query) {
-                $query->whereDate('arrivaldate', '<=', $this->endDate)
-                        ->where('nodeparturedate', true );
+            $query->where('confirmed', true)->where(function($query) use ($today){
+                $query->where(function($query) use ($today) {
+                    $query->whereDate('departuredate', '>=', $today)
+                        ->orWhere('nodeparturedate', true);
+                })
+                ->where(function($query) {
+                    $query->whereDate('arrivaldate', '<=', $this->endDate)
+                            ->whereDate('departuredate', '>=', $this->beginDate);
+                })
+                ->orWhere(function($query) {
+                    $query->whereDate('arrivaldate', '<=', $this->endDate)
+                            ->where('nodeparturedate', true );
+                });
             });
+
         })->get()->sortBy(function($item, $key) {
             return $item->reservation->arrivaldate;
         });

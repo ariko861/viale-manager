@@ -51,6 +51,9 @@
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.xl');
   }
+  .error {
+    @apply text-red-500;
+  }
 
     /*@keyframes blinker {
         50% {

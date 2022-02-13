@@ -89,11 +89,13 @@ class ReservationsCalendar extends LivewireCalendar
 
         $reservations = Reservation::query()
             ->where(function($query) {
-                $query->whereDate('arrivaldate', '>=', $this->gridStartsAt)
+                $query->where('quickLink', false)
+                        ->whereDate('arrivaldate', '>=', $this->gridStartsAt)
                         ->whereDate('arrivaldate', '<=', $this->gridEndsAt);
             })
             ->orWhere(function($query) {
-                $query->whereDate('departuredate', '>=', $this->gridStartsAt)
+                $query->where('quickLink', false)
+                        ->whereDate('departuredate', '>=', $this->gridStartsAt)
                         ->whereDate('departuredate', '<=', $this->gridEndsAt);
             })
             ->get();

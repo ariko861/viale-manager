@@ -10,6 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-5">
                     @can('reservation-create')
                         <livewire:reservation.add-new-reservation >
+                        <livewire:reservation.quick-reservation >
                     @endcan
                     @can('visitor-create')
                         <livewire:visitor.new-visitor-form >

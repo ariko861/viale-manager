@@ -5,21 +5,40 @@
     <form wire:submit.prevent="save" autocomplete="off">
         @csrf
         <div class="w-full px-8 grid grid-cols-3 gap-4">
-            <span class="col-span-full">{{ $devMessage }}</span>
 
-            <label class="col-span-1">{{ __("Nom de la personne de contact") }}</label>
-            <span class="col-span-2">{{ $link->reservation->contact_person->full_name }}</span>
+            <h3 class="col-span-full mt-6 mb-4">{{ __("Personne de contact") }}</h3>
+
+            <label class="col-span-1">{{ __("Nom") }}</label>
+            @if ( $unknown->contains('name') )
+                <input type="text" class="col-span-2" wire:model="contact_person.name">
+                @error('contact_person.name') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+            @else
+                <span class="col-span-2">{{ $contact_person->name }}</span>
+            @endif
+
+            <label class="col-span-1">{{ __("Prénom") }}</label>
+            @if ( $unknown->contains('surname') )
+                <input type="text" class="col-span-2" wire:model="contact_person.surname">
+                @error('contact_person.surname') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+            @else
+                <span class="col-span-2">{{ $contact_person->surname }}</span>
+            @endif
 
             <label class="col-span-1">{{ __("Email") }}</label>
-            <span class="col-span-2">{{ $link->reservation->contact_person->email }}</span>
+            @if ( $unknown->contains('email') )
+                <input type="email" class="col-span-2" wire:model="contact_person.email">
+                @error('contact_person.email') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+            @else
+                <span class="col-span-2">{{ $contact_person->email }}</span>
+            @endif
 
             <label class="col-span-1">{{ __("Numéro de téléphone") }}</label>
-            <input type="tel" class="col-span-2" wire:model="phoneNumber">
-            @error('phoneNumber') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+            <input type="tel" class="col-span-2" wire:model="contact_person.phone">
+            @error('contact_person.phone') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
             <label class="col-span-1">{{ __("Année de naissance") }}</label>
-            <input type="number" class="col-span-2" min=1900 max=2100 wire:model="birthyear">
-            @error('birthyear') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+            <input type="number" class="col-span-2" min=1900 max=2100 wire:model="contact_person.birthyear">
+            @error('contact_person.birthyear') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
 
             <h3 class="col-span-full">{{__("Votre participation aux frais")}} :</h3>
@@ -35,17 +54,16 @@
                 <h3 class="col-span-full">{{__("Modifier vos dates")}} : </h3>
 
                 <label class="col-span-1">{{ __("Date d'arrivée") }}</label>
-                <input class="col-span-2" wire:model="arrivaldate" wire:change="setMinDepartureDate" max="{{ $maxarrivaldate }}" min="{{ $minarrivaldate }}" type="date" />
-                @error('arrivaldate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
+                <input class="col-span-2" wire:model="reservation.arrivaldate" wire:change="setMinDepartureDate" max="{{ $maxarrivaldate }}" min="{{ $minarrivaldate }}" type="date" />
+                @error('reservation.arrivaldate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
                 <label class="col-span-1">{{ __("Date de départ") }}</label>
-                <input class="col-span-2" wire:model="departuredate" max="{{ $maxdeparturedate }}" min="{{ $mindeparturedate }}" type="date" />
-                @error('departuredate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
-
+                <input class="col-span-2" wire:model="reservation.departuredate" max="{{ $maxdeparturedate }}" min="{{ $mindeparturedate }}" type="date" />
+                @error('reservation.departuredate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
             @endif
 
-            @if ($otherVisitorsArray)
+            @if ($otherVisitorsArray->count())
                 <h3 class="col-span-full">{{__("Autres visiteurs")}} :</h3>
                 <ul class="col-span-full list-disc list-inside">
                     @foreach ( $otherVisitorsArray as $key =>$otherVisitor )
@@ -65,9 +83,10 @@
 
             @if ( $link->max_added_visitors )
                 <br>
+                <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné ? Vous pouvez ajouter d'autres visiteurs à la réservation")}} :</h3>
                 @unless ( $forbidAddingVisitors )
                     <div class="col-span-full">
-                        <button class="btn w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>
+                        <button class="btn bg-blue-400 w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>
                     </div>
                 @endunless
         <!--    Pour chaque visiteur ajouté à la réservation -->
@@ -89,15 +108,15 @@
                             </span>
                         </div>
 
-                        <label class="col-span-1">{{ __("Nom de famille") }}</label>
+                        <label class="col-span-1">{{ __("Nom de famille") }} *</label>
                         <input type="text" class="col-span-2" wire:model="addedVisitors.{{ $key }}.name">
                         @error('addedVisitors.'.$key.'.name') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
-                        <label class="col-span-1">{{ __("Prénom") }}</label>
+                        <label class="col-span-1">{{ __("Prénom") }} *</label>
                         <input type="text" class="col-span-2" wire:model="addedVisitors.{{ $key }}.surname">
                         @error('addedVisitors.'.$key.'.surname') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
-                        <label class="col-span-1">{{ __("Année de naissance") }}</label>
+                        <label class="col-span-1">{{ __("Année de naissance") }} *</label>
                         <input type="number" class="col-span-2" min=1900 max=2100 wire:model.debounce.1000ms="addedVisitors.{{ $key }}.birthyear">
                         @error('addedVisitors.'.$key.'.birthyear') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
@@ -116,7 +135,7 @@
                 @endif
             @endif
             <label class="col-span-1 mt-6">{{ __("Nous faire part d'une remarque") }}</label>
-            <textarea class="col-span-2 mt-6" wire:model="remark"></textarea>
+            <textarea class="col-span-2 mt-6" wire:model="reservation.remarks"></textarea>
 
             <div class="col-span-full text-center">
                 <button type="submit">{{ __('Confirmer la réservation') }}</button>

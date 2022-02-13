@@ -98,6 +98,7 @@ class AddNewReservation extends Component
         $this->reservation = new Reservation();
         $this->otherVisitorsArray = collect([]);
         $this->contactPerson = "";
+        $this->emit('scrollToReservationList');
 
     }
 

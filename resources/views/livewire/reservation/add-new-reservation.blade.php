@@ -6,10 +6,15 @@
 
 @if ($showReservationForm )
 <div>
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" wire:click="$set('showReservationForm', false)" class="h-6 w-6 cursor-pointer float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </div>
  <h3 class="text-center uppercase text-lg m-4">{{ __("Ajouter une nouvelle réservation") }}</h3>
  <form wire:submit.prevent="save" autocomplete="off">
     @csrf
-    <div class="w-full px-8 grid grid-cols-3 gap-4">
+    <div class="w-full px-8 grid grid-cols-3 gap-4 mb-48">
         <label class="col-span-1">{{ __("Date d'arrivée") }}</label>
         <input class="col-span-2" type="date" wire:model="reservation.arrivaldate" wire:change="setMinDate($event.target.value)">
         @error('reservation.arrivaldate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
@@ -46,7 +51,7 @@
 
 <!--         Bouton de validation -->
         <div class="col-span-full text-center">
-            <button class="btn btn-submit" type="submit">{{ __('Valider') }}</button>
+            <button class="btn btn-submit w-1/2 mx-16 mb-8 mt-8" type="submit">{{ __('Créer la nouvelle réservation') }}</button>
         </div>
     </div>
  </form>

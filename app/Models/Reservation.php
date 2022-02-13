@@ -153,4 +153,15 @@ class Reservation extends Model
         return new ReservationCollection($models);
     }
 
+    protected static function booted()
+    {
+        static::updated(function ($reservation) {
+
+            if ($reservation->confirmed && $reservation->quickLink) {
+                $reservation->quickLink = false;
+                $reservation->save();
+            }
+        });
+    }
+
 }

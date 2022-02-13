@@ -60,8 +60,10 @@ class RoomOrganizer extends Component
     {
         $today = Carbon::now();
         $this->resas = VisitorReservation::whereNull('room_id')->whereRelation('reservation', function (Builder $query) use ($today) {
-                $query->whereDate('departuredate', '>=', $today)
+                $query->where('quickLink', false)->where(function($query) use ($today) {
+                    $query->whereDate('departuredate', '>=', $today)
                     ->orWhere('nodeparturedate', true );
+                });
         })->get();
 
     }

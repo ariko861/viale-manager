@@ -40,7 +40,7 @@ class StatisticsList extends Component
     }
 
     public function getReservationsInBetween(){
-        $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereDate('departuredate', '>=', $this->beginDate)->whereDate('departuredate', '<=', $this->endDate)->orderBy('departuredate')->get();
+        $this->reservations = Reservation::where('confirmed', true)->where('removeFromStats', '!=', true)->whereDate('departuredate', '>=', $this->beginDate)->whereDate('departuredate', '<=', $this->endDate)->orderBy('departuredate')->get();
         $beginDate = new Carbon($this->beginDate);
         $endDate = new Carbon($this->endDate);
 
@@ -53,7 +53,7 @@ class StatisticsList extends Component
         $value = $this->visitorSearch;
         if ( Str::length($value) >= 3 )
         {
-            $this->reservations = Reservation::where('removeFromStats', '!=', true)->whereHas('visitors', function (Builder $query) {
+            $this->reservations = Reservation::where('confirmed', true)->where('removeFromStats', '!=', true)->whereHas('visitors', function (Builder $query) {
                 $query->where('name', 'ilike', '%'.$this->visitorSearch.'%')
                     ->orWhere('surname', 'ilike', '%'.$this->visitorSearch.'%');
             })->orderBy('departuredate')->get();

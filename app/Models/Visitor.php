@@ -22,7 +22,10 @@ class Visitor extends Model
 
     public function getFullNameAttribute()
     {
-        return "{$this->surname} {$this->name}";
+        $surname = $this->surname === "x-inconnu" ? 'Prénom inconnu' : $this->surname;
+        $name = $this->name === "x-inconnu" ? 'Nom inconnu' : $this->name;
+
+        return "{$surname} {$name}";
     }
 
     public function getAgeAttribute()
@@ -32,7 +35,7 @@ class Visitor extends Model
             $current_year = Carbon::now()->year;
             return $current_year - $this->birthyear;
         } else {
-            return "";
+            return "Âge inconnu";
         }
     }
 
