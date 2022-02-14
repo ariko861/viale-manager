@@ -168,6 +168,7 @@ class ConfirmationForm extends Component
             'price' => $this->price,
         ]);
         $this->contact_person->confirmed = true;
+        $this->contact_person->quickLink = false;
         $this->contact_person->normalize();
         $this->contact_person->save();
 

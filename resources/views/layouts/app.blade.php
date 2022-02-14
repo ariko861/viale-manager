@@ -42,6 +42,8 @@
             <main>
                 {{ $slot }}
             </main>
+            <livewire:offline-indicator >
+
         </div>
 
         @stack('modals')

@@ -1031,9 +1031,6 @@ h4,
     display: none;
     transition: all 500ms ease;
   }
-.inline-child > div {
-      display: inline;
-  }
 .card {
     background-color: #fff;
     border-radius: 0.5rem;
@@ -1155,6 +1152,9 @@ h4,
 }
 .right-8 {
   right: 2rem;
+}
+.left-8 {
+  left: 2rem;
 }
 .z-0 {
   z-index: 0;
@@ -1772,6 +1772,10 @@ h4,
 .bg-red-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
