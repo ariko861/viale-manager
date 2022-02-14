@@ -59,6 +59,9 @@
     display: none;
     transition: all 500ms ease;
   }
+  .inline-child > div {
+      display: inline;
+  }
   .card {
     background-color: theme('colors.white');
     border-radius: theme('borderRadius.lg');

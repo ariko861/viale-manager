@@ -12,6 +12,7 @@ class EmailSearch extends Component
     public $visitors;
     public $user;
     public $selectedVisitor = false;
+    public $visitorKey;
 
     protected $rules = [
         'email' => 'email|required',
@@ -31,8 +32,20 @@ class EmailSearch extends Component
         if ($this->selectedVisitor == $visitor_id) {
             $this->showVisitorList = false;
             $this->visitors = collect([]);
-            if ($visitor_id == 'none') $this->emitUp('emailNotFound', $this->email);
-            else $this->emitUp('visitorSelectedFromEmail', $visitor_id);
+            if ($visitor_id == 'none') {
+                $options = [
+                    'email' => $this->email,
+                    'visitorKey' => $this->visitorKey,
+                ];
+                $this->emitUp('emailNotFound', $options);
+            }
+            else {
+                $options = [
+                    'visitor_id' => $visitor_id,
+                    'visitorKey' => $this->visitorKey,
+                ];
+                $this->emitUp('visitorSelectedFromEmail', $options);
+            }
 
             $this->selectedVisitor = false;
             $this->email = "";
@@ -49,7 +62,11 @@ class EmailSearch extends Component
         if ( $this->visitors->count() ) {
             $this->showVisitorList = true;
         } else {
-            $this->emitUp('emailNotFound', $email);
+            $options = [
+                'email' => $this->email,
+                'visitorKey' => $this->visitorKey,
+            ];
+            $this->emitUp('emailNotFound', $options);
             $this->email = "";
 
         }

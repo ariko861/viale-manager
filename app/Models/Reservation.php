@@ -168,7 +168,7 @@ class Reservation extends Model
 
     protected static function booted()
     {
-        static::updated(function ($reservation) {
+        static::updating(function ($reservation) {
 
             if ($reservation->confirmed && $reservation->quickLink) {
                 $reservation->quickLink = false;
@@ -178,9 +178,11 @@ class Reservation extends Model
 
         static::deleting(function ($reservation) {
 
-            foreach ($reservation->links as $link)
-            {
-                $link->delete();
+            if ( $reservation->links && $reservation->links->count() ){
+                foreach ($reservation->links as $link)
+                {
+                    $link->delete();
+                }
             }
             VisitorReservation::where('reservation_id', $reservation->id)->delete();
 

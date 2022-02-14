@@ -1,7 +1,7 @@
 <div class="grid grid-cols-4 gap-4 w-full">
     @can('room-choose')
-    <div class="col-span-1">
-        <ul id="newComersList" class="">
+    <div class="col-span-1" id="newComersContainer">
+        <ul id="newComersList" class="col-span-1">
             <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
             <li class="card p-2 h-16 border-l-4 relative {{ $onMoving && ! $resas->find($onMoving)? 'movable-receiver' : 'hidden' }}" wire:click="takeOutOfRoom">
                 <p>{{__("Retirer de la chambre")}}</p>
@@ -89,12 +89,14 @@
 
     $(document).ready(function(){
         const list = $("#newComersList");
+        const container = $("#newComersContainer");
         const fromTopInit = list.offset().top;
         $(window).scroll(function() {
             var fromTop = $(window).scrollTop();
             console.log(fromTop);
             if ( fromTop >= fromTopInit ) {
-                list.css({ 'position': 'fixed', 'top': 0});
+                list.css({ 'position': 'fixed', 'top': 0 });
+                list.width(container.width());
             } else {
                 list.css('position', 'initial');
             }

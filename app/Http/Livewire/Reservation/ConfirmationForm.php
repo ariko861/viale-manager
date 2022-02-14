@@ -37,9 +37,10 @@ class ConfirmationForm extends Component
             'reservation.arrivaldate' => 'required|date',
             'reservation.departuredate' => 'required|date',
             'reservation.remarks' => '',
-            'addedVisitors.*.name' => 'required|string',
-            'addedVisitors.*.surname' => 'required|string',
-            'addedVisitors.*.birthyear' => 'required|integer|between:1900,2100',
+            'addedVisitors.*.visitor.name' => 'required|string',
+            'addedVisitors.*.visitor.surname' => 'required|string',
+            'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
+            'addedVisitors.*.visitor.email' => 'email',
 
         ];
 
@@ -73,12 +74,12 @@ class ConfirmationForm extends Component
         }
     }
 
-    public function addVisitor()
+    public function addVisitor($visitor = null)
     {
         if ($this->addedVisitors->count() < $this->link->max_added_visitors)
         {
-            $visitor = new Visitor();
-            $this->addedVisitors->push(['visitor' => $visitor, 'price' => $this->price]);
+            if ($visitor === null) $visitor = new Visitor();
+            $this->addedVisitors->push(['visitor' => $visitor, 'price' => $this->price, 'showEmailForm' => true]);
             if ($this->addedVisitors->count() == $this->link->max_added_visitors)
             {
                 $this->forbidAddingVisitors = true;
@@ -117,29 +118,44 @@ class ConfirmationForm extends Component
         }
     }
 
-    public function emailNotFound($email)
+    public function emailNotFound($options)
     {
-        $this->contact_person->name = $this->contact_person->getOriginal('name');
-        $this->contact_person->surname = $this->contact_person->getOriginal('surname');
-        $this->contact_person->email = $email;
-        $this->contact_person->save();
-        $this->checkEmptyFields();
-        $this->showEmailForm = false;
+        if ( $options["visitorKey"] === "contact" ){
+            $this->contact_person->name = $this->contact_person->getOriginal('name');
+            $this->contact_person->surname = $this->contact_person->getOriginal('surname');
+            $this->contact_person->email = $options["email"];
+            $this->contact_person->save();
+            $this->checkEmptyFields();
+            $this->showEmailForm = false;
+        } else {
+            $this->addedVisitors = $this->addedVisitors->replaceRecursive([
+                $options["visitorKey"] => [ 'showEmailForm' => 'notfound', 'visitor' => [ 'email' => $options["email"] ] ]
+
+            ]);
+
+        }
     }
 
-    public function visitorSelectedFromEmail($visitor_id)
+    public function visitorSelectedFromEmail($options)
     {
-        $visitor = Visitor::find($visitor_id);
-        $visitor_id_to_destroy = $this->contact_person->id;
-        $this->reservation->visitors()->detach($visitor_id_to_destroy);
-        $this->reservation->visitors()->attach($visitor_id, ['contact' => true]);
-        $this->reservation->save();
-        $this->reservation->refresh();
-        $this->contact_person = $this->reservation->contact_person;
-        Visitor::destroy($visitor_id_to_destroy);
-        $this->showEmailForm = false;
-        $this->checkEmptyFields();
-        $refresh;
+        $visitor = Visitor::find( $options["visitor_id"] );
+
+        if ($options["visitorKey"] === 'contact') {
+            $visitor_id_to_destroy = $this->contact_person->id;
+            $this->reservation->visitors()->detach($visitor_id_to_destroy);
+            $this->reservation->visitors()->attach($visitor->id, ['contact' => true]);
+            $this->reservation->save();
+            $this->reservation->refresh();
+            $this->contact_person = $this->reservation->contact_person;
+            Visitor::destroy($visitor_id_to_destroy);
+            $this->showEmailForm = false;
+            $this->checkEmptyFields();
+            $refresh;
+        } else {
+            $this->addedVisitors = $this->addedVisitors->replaceRecursive([
+                $options["visitorKey"] => [ 'visitor' => $visitor, 'showEmailForm' => 'found' ]
+            ]);
+        }
 
     }
 
@@ -166,12 +182,19 @@ class ConfirmationForm extends Component
         // save added visitors
         foreach ($this->addedVisitors as $addedVisitor)
         {
-            $visitor = Visitor::create([
-                'name' => $addedVisitor["name"],
-                'surname' => $addedVisitor["surname"],
-                'birthyear' => $addedVisitor["birthyear"],
-                'confirmed' => false,
-            ]);
+            if ($addedVisitor["showEmailForm"] === "found" && $addedVisitor["visitor"]["id"]) {
+                $visitor = Visitor::find($addedVisitor["visitor"]["id"]);
+                $visitor->birthyear = $addedVisitor["visitor"]["birthyear"];
+            } else {
+
+                $visitor = Visitor::create([
+                    'name' => $addedVisitor["visitor"]["name"],
+                    'surname' => $addedVisitor["visitor"]["surname"],
+                    'birthyear' => $addedVisitor["visitor"]["birthyear"],
+                    'email' => ( $addedVisitor["visitor"]["email"] ?? ''),
+                    'confirmed' => ( isset($addedVisitor["visitor"]["email"]) ? true : false),
+                ]);
+            }
 
             $visitor->normalize();
             $visitor->save();

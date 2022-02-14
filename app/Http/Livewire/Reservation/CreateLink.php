@@ -35,6 +35,13 @@ class CreateLink extends Component
         if (isset($options["genlink"]) && $options["genlink"]) $this->send();
     }
 
+    public function cancelLinkForm()
+    {
+        $this->linkCreated = null;
+        $this->emailSent = false;
+        $this->showSendLinkForm = false;
+    }
+
 
     public function send($sendmail = false)
     {

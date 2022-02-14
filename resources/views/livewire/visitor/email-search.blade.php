@@ -1,8 +1,7 @@
 <div>
     <input type="email" wire:model="email" placeholder="{{__('Saisissez ici un email valide')}}">
-    <button wire:click="submit">{{__("Rechercher l'adresse email")}}</button>
+    <button wire:click.prevent="submit">{{__("Rechercher l'adresse email")}}</button>
     @error('email')<p class="error">{{ $message }}</p>@enderror
-
     @if ($showVisitorList)
     <div class="fixed top-0 left-0 right-0 bottom-0 bg-slate-600/75 overflow-auto">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white shadow-xl sm:rounded-lg p-5 m-10">
@@ -11,7 +10,7 @@
             </svg>
 
             <h2 class="text-lg text-center">{{ __("Voici la liste des visiteurs enregistrés avec cette adresse email") }}</h2>
-            <p>{{__("Séléctionnez le nom correspondant en cliquant sur la liste")}}</p>
+            <p>{{__("Séléctionnez le nom correspondant en cliquant 2x sur la ligne correspondante")}}</p>
             <table class="mt-8 w-full table-auto border-separate border border-gray-400 border-spacing">
                 @php
                     $thead_class="border-2 border-gray-400 bg-gray-100";
@@ -27,10 +26,10 @@
                 </thead>
                 <tbody>
                     @foreach($visitors as $visitor)
-                    <tr  wire:click="selectVisitor({{$visitor->id}})" class="{{$selectedVisitor == $visitor->id ? 'bg-blue-400 hover:bg-blue-600' : 'hover:bg-blue-300'}}">
-                        <td class="{{ $tbody_class }} text-center cursor-pointer">{{ $visitor->full_name }}</td>
-                        <td class="{{ $tbody_class }} text-center cursor-pointer">{{ $visitor->age }}</td>
-                        <td class="{{ $tbody_class }} text-center cursor-pointer">{{ $visitor->phone }}</td>
+                    <tr  wire:click.prevent="selectVisitor({{$visitor->id}})" class="{{$selectedVisitor == $visitor->id ? 'cursor-pointer bg-blue-400 hover:bg-blue-600' : 'hover:bg-blue-300'}}">
+                        <td class="{{ $tbody_class }} text-center">{{ $visitor->full_name }}</td>
+                        <td class="{{ $tbody_class }} text-center">{{ $visitor->age }}</td>
+                        <td class="{{ $tbody_class }} text-center">{{ $visitor->phone }}</td>
                     </tr>
                     @endforeach
                     <tr class="{{ $selectedVisitor == 'none' ? 'bg-red-500 hover:bg-red-700' : 'bg-red-100 hover:bg-red-400' }}" wire:click="selectVisitor">
@@ -42,4 +41,4 @@
     </div>
 
     @endif
-<div>
+</div>

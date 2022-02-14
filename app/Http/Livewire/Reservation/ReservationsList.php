@@ -123,6 +123,8 @@ class ReservationsList extends Component
 
     public function getWaitingConfirmation() {
         $this->reservations = Reservation::where('confirmed', false)->orWhere('quickLink', true)->get()->sortBy('arrivaldate');
+        $this->listTitle = $this->reservations->count()." ".__("réservations en attente de confirmation");
+        $this->emit('scrollToReservationList');
     }
 
     public function getPresenceBetweenDates() {
