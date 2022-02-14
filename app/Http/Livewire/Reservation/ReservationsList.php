@@ -121,6 +121,10 @@ class ReservationsList extends Component
         $this->emit('scrollToReservationList');
     }
 
+    public function getWaitingConfirmation() {
+        $this->reservations = Reservation::where('confirmed', false)->orWhere('quickLink', true)->get()->sortBy('arrivaldate');
+    }
+
     public function getPresenceBetweenDates() {
 
         $this->getReservationsPresenceBetweenDates($this->presenceBeginDate, $this->presenceEndDate, false);
@@ -159,13 +163,12 @@ class ReservationsList extends Component
         $this->showRoomSelection = false;
     }
 
-    public function deleteReservation($profile_id)
+    public function deleteReservation($reservation_id)
     {
-        Reservation::destroy($profile_id);
-        VisitorReservation::where('reservation_id', $profile_id)->delete();
-
-        $this->reservations = $this->reservations->filter(function($item) use ($profile_id) {
-            return $item->id != $profile_id;
+        $this->reservations->find($reservation_id)->delete();
+        VisitorReservation::where('reservation_id', $reservation_id)->delete();
+        $this->reservations = $this->reservations->reject(function($item) use ($reservation_id) {
+            return $item->id == $reservation_id;
         });
 
         $this->emit('showAlert', [ __("La réservation a bien été supprimé"), "bg-red-600"] );

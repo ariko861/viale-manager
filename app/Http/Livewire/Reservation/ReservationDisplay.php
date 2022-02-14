@@ -25,4 +25,8 @@ class ReservationDisplay extends Component
     {
         return view('livewire.reservation.reservation-display');
     }
+
+    public function superUserInfo(){
+      dd($this->reservation);
+    }
 }

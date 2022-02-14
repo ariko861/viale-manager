@@ -9,13 +9,10 @@
         <p class="text-center text-sm mt-4 mb-6"><span wire:click="$toggle('advancedSearch')" class="cursor-pointer">{{__("Recherche avancée")}}<x-buttons.arrow-chevron :up="$advancedSearch" size=4/></span></p>
         @if ($advancedSearch)
         <div>
-            <p>{{__("Ou sélectionner les personnes présentes entre ces dates")}} : {{__("Du")}} <input type="date" wire:model="presenceBeginDate"> {{__("Au")}} <input wire:change="getPresenceBetweenDates" type="date" wire:model="presenceEndDate" min="{{$presenceBeginDate}}"></p>
-            <br>
-
-            <p>{{__("Ou sélectionner par date d'")}}<strong>{{__("arrivée")}}</strong> : {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsWhereArrivalInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
-            <br>
-            <p>{{__("Ou sélectionner par date de")}} <strong>{{__("départ")}}</strong> : {{__("Du")}} <input type="date" wire:model="beginDateForDeparture"> {{__("Au")}} <input wire:change="getReservationsWhereDepartureInBetween" type="date" wire:model="endDateForDeparture" min="{{$beginDateForDeparture}}"></p>
-            <br>
+            <p class="my-8">{{__("Ou sélectionner les personnes présentes entre ces dates")}} : {{__("Du")}} <input type="date" wire:model="presenceBeginDate"> {{__("Au")}} <input wire:change="getPresenceBetweenDates" type="date" wire:model="presenceEndDate" min="{{$presenceBeginDate}}"></p>
+            <p class="my-8">{{__("Ou sélectionner par date d'")}}<strong>{{__("arrivée")}}</strong> : {{__("Du")}} <input type="date" wire:model="beginDate"> {{__("Au")}} <input wire:change="getReservationsWhereArrivalInBetween" type="date" wire:model="endDate" min="{{$beginDate}}"></p>
+            <p class="my-8">{{__("Ou sélectionner par date de")}} <strong>{{__("départ")}}</strong> : {{__("Du")}} <input type="date" wire:model="beginDateForDeparture"> {{__("Au")}} <input wire:change="getReservationsWhereDepartureInBetween" type="date" wire:model="endDateForDeparture" min="{{$beginDateForDeparture}}"></p>
+            <p class="my-8">{{__("Afficher les")}} <button wire:click="getWaitingConfirmation">{{__("confirmations en attente")}}</button></p>
 
         </div>
         @endif
@@ -75,9 +72,10 @@
                     @endif
                 @endcan
 
+            @if ( $reservation->visitors && $reservation->visitors->count() )
             @foreach ( $reservation->visitors->sortByDesc('pivot.contact') as $vkey => $visitor )
                 <div @class(['mt-2', 'w-full', 'card'])>
-                    @if ( $visitor->pivot->contact )
+                    @if ( $visitor && $visitor->pivot && $visitor->pivot->contact )
                         <p class="text-lg"><strong>{{ __("Personne de contact") }} :</strong> </p>
                     @endif
                     @if ( $editing === $reservation->id )
@@ -121,6 +119,7 @@
                     @endif
                 </div>
             @endforeach
+            @endif
 
             @if ( $editing === $reservation->id )
                 <div class="card">

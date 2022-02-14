@@ -55,6 +55,8 @@
                 <p><strong>{{__("Remarques faites à la confirmation")}} : </strong>{{$reservation->remarks}}</p>
             @endif
 
+            <p class="mt-8"><button wire:click="superUserInfo">Super User Info</button></p>
+
 
         </div>
     </div>
