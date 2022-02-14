@@ -36,7 +36,7 @@ class Reservation extends Model
     public function getArrivalAttribute()
     {
         $date = new Carbon($this->arrivaldate);
-        return $date->format('d F Y');;
+        return $date->format('d F Y');
     }
 
     public function getDepartureAttribute()
@@ -47,7 +47,7 @@ class Reservation extends Model
         }
         else {
             $date = new Carbon($this->departuredate);
-            return $date->format('d F Y');;
+            return $date->format('d F Y');
         }
     }
 
@@ -175,6 +175,17 @@ class Reservation extends Model
                 $reservation->save();
             }
         });
+
+        static::deleting(function ($reservation) {
+
+            foreach ($reservation->links as $link)
+            {
+                $link->delete();
+            }
+            VisitorReservation::where('reservation_id', $reservation->id)->delete();
+
+        });
     }
+
 
 }

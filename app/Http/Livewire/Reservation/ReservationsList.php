@@ -166,7 +166,6 @@ class ReservationsList extends Component
     public function deleteReservation($reservation_id)
     {
         $this->reservations->find($reservation_id)->delete();
-        VisitorReservation::where('reservation_id', $reservation_id)->delete();
         $this->reservations = $this->reservations->reject(function($item) use ($reservation_id) {
             return $item->id == $reservation_id;
         });
