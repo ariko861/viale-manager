@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Reservation;
 
 use Carbon\Carbon;
 use Livewire\Component;
-// use Illuminate\Support\Collection;
 use App\Models\Profile;
 use App\Models\Visitor;
 
@@ -24,6 +23,9 @@ class ConfirmationForm extends Component
     public $addedVisitors;
     public $forbidAddingVisitors;
     public $current_year;
+    public $showEmailForm = false;
+
+    protected $listeners = ['visitorSelectedFromEmail', 'emailNotFound' ];
 
         protected $rules = [
             'contact_person.name' => 'required|string',
@@ -54,6 +56,23 @@ class ConfirmationForm extends Component
         return $carbonDate->subDays($this->link->max_days_change);
     }
 
+    public function checkEmptyFields()
+    {
+
+        $this->unknown = collect([]);
+        if ( $this->contact_person->name == 'x-inconnu' ){ //check if name hasn't been filled yet
+            $this->unknown->push('name');
+            $this->contact_person->name = "";
+        }
+        if ( $this->contact_person->surname == 'x-inconnu' ){ //check if surname hasn't been filled yet
+            $this->unknown->push('surname');
+            $this->contact_person->surname = "";
+        }
+        if ( $this->contact_person->email == '' ){ //check if email hasn't been filled yet
+            $this->unknown->push('email');
+        }
+    }
+
     public function addVisitor()
     {
         if ($this->addedVisitors->count() < $this->link->max_added_visitors)
@@ -73,7 +92,17 @@ class ConfirmationForm extends Component
         $this->forbidAddingVisitors = false;
     }
 
+    public function setMinArrivalDate()
+    {
+        $carbonArrivalDate = $this->getMinDate($this->reservation->arrivaldate);
+        $today = Carbon::now();
+        if ( $today->gt( $carbonArrivalDate ) ) {
+            $this->minarrivaldate = $today->format('Y-m-d');
+        } else {
+            $this->minarrivaldate = $carbonArrivalDate->format('Y-m-d');
+        }
 
+    }
     public function setMinDepartureDate()
     {
         $departure = $this->reservation->departuredate;
@@ -88,6 +117,32 @@ class ConfirmationForm extends Component
         }
     }
 
+    public function emailNotFound($email)
+    {
+        $this->contact_person->name = $this->contact_person->getOriginal('name');
+        $this->contact_person->surname = $this->contact_person->getOriginal('surname');
+        $this->contact_person->email = $email;
+        $this->contact_person->save();
+        $this->checkEmptyFields();
+        $this->showEmailForm = false;
+    }
+
+    public function visitorSelectedFromEmail($visitor_id)
+    {
+        $visitor = Visitor::find($visitor_id);
+        $visitor_id_to_destroy = $this->contact_person->id;
+        $this->reservation->visitors()->detach($visitor_id_to_destroy);
+        $this->reservation->visitors()->attach($visitor_id, ['contact' => true]);
+        $this->reservation->save();
+        $this->reservation->refresh();
+        $this->contact_person = $this->reservation->contact_person;
+        Visitor::destroy($visitor_id_to_destroy);
+        $this->showEmailForm = false;
+        $this->checkEmptyFields();
+        $refresh;
+
+    }
+
     public function save()
     {
         $this->validate();
@@ -96,6 +151,8 @@ class ConfirmationForm extends Component
         $this->reservation->visitors()->updateExistingPivot($this->contact_person->id, [
             'price' => $this->price,
         ]);
+        $this->contact_person->confirmed = true;
+        $this->contact_person->normalize();
         $this->contact_person->save();
 
         // Update prices for pre-register other visitors
@@ -116,13 +173,15 @@ class ConfirmationForm extends Component
                 'confirmed' => false,
             ]);
 
+            $visitor->normalize();
+            $visitor->save();
+
             $this->reservation->visitors()->attach($visitor, [ 'price' => $addedVisitor["price"], 'contact' => false ]);
         }
         $this->reservation->confirmed = true;
         $this->reservation->quickLink = false;
 
         $this->reservation->save();
-
         $this->emit('showRecapReservation', $this->reservation->id);
 
         $this->link->delete();
@@ -140,21 +199,12 @@ class ConfirmationForm extends Component
             'current_year' => Carbon::now()->year,
             'profiles' => Profile::all(),
             'price' => Profile::firstWhere('is_default', true)->price ?? Profile::first()->price,
-            'unknown' => collect([]),
         ]);
+        $this->checkEmptyFields();
 
-        if ( $this->contact_person->name == 'x-inconnu' ){ //check if name hasn't been filled yet
-            $this->unknown->push('name');
-            $this->contact_person->name = "";
+        if ( $this->reservation->quickLink && $this->unknown->contains('email') ) {
+            $this->showEmailForm = true;
         }
-        if ( $this->contact_person->surname == 'x-inconnu' ){ //check if surname hasn't been filled yet
-            $this->unknown->push('surname');
-            $this->contact_person->surname = "";
-        }
-        if ( $this->contact_person->email == '' ){ //check if email hasn't been filled yet
-            $this->unknown->push('email');
-        }
-
 
         $this->otherVisitorsArray = $this->reservation->getNonContactVisitors()->each(function($item, $key) { $item["price"] = $this->price; });
         $arrival = $this->reservation->arrivaldate;
@@ -162,7 +212,7 @@ class ConfirmationForm extends Component
 
 
         $this->maxarrivaldate = $this->getMaxDate($arrival)->format('Y-m-d');
-        $this->minarrivaldate = $this->getMinDate($arrival)->format('Y-m-d');
+        $this->setMinArrivalDate();
 
         $this->maxdeparturedate = $this->getMaxDate($departure)->format('Y-m-d');
         $this->setMinDepartureDate();

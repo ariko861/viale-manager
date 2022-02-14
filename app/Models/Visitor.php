@@ -28,6 +28,12 @@ class Visitor extends Model
         return "{$surname} {$name}";
     }
 
+    public function normalize()
+    {
+        $this->name = ucfirst(strtolower($this->name));
+        $this->surname = ucfirst(strtolower($this->surname));
+    }
+
     public function getAgeAttribute()
     {
         if ($this->birthyear)
@@ -43,6 +49,19 @@ class Visitor extends Model
     {
         return $this->belongsToMany(Reservation::class, 'visitor_reservations');
     }
+
+    public static function createQuickVisitor($email) {
+        $visitor = new static();
+        $visitor->email = $email;
+        $visitor->name = "x-inconnu";
+        $visitor->surname = "x-inconnu";
+        $visitor->confirmed = false;
+        $visitor->quickLink = true;
+        $visitor->save();
+        return $visitor;
+    }
+
+
 
     protected $casts = [
         'name' => 'string',

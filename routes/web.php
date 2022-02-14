@@ -38,7 +38,7 @@ Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::c
 
 Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationController::class, 'showConfirmationForm'])->name('confirmation');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:web', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
         return view('dashboard');

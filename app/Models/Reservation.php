@@ -153,6 +153,19 @@ class Reservation extends Model
         return new ReservationCollection($models);
     }
 
+    public static function createQuickReservation($visitor_id) {
+        $date = Carbon::now();
+        $reservation = new static();
+        $reservation->arrivaldate = $date;
+        $reservation->departuredate = $date;
+        $reservation->nodeparturedate = false;
+        $reservation->confirmed = false;
+        $reservation->quickLink = true;
+        $reservation->save();
+        $reservation->visitors()->attach($visitor_id, ['contact' => true ]);
+        return $reservation;
+    }
+
     protected static function booted()
     {
         static::updated(function ($reservation) {

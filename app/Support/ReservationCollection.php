@@ -24,5 +24,6 @@ class ReservationCollection extends Collection
         }
         return $visitor_count;
     }
+
 }
 

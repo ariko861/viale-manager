@@ -1,7 +1,14 @@
 <div>
     @if ($link)
-    <h1>{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
+    <h1 class="mt-4 mb-8">{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
     <br>
+
+    @if ($showEmailForm)
+        <p class="mb-4">{{__("Veuillez saisir une adresse email pour voir si vous nous retrouvons dans nos précédentes inscriptions")}} :</p>
+        <livewire:visitor.email-search user="visitor">
+    @endif
+
+    @unless ($showEmailForm)
     <form wire:submit.prevent="save" autocomplete="off">
         @csrf
         <div class="w-full px-8 grid grid-cols-3 gap-4">
@@ -142,6 +149,7 @@
             </div>
         </div>
     </form>
+    @endunless
     @endif
 
 </div>

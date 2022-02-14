@@ -33,9 +33,8 @@ class ReservationsList extends Component
     public $presenceEndDate;
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
-    public $showSendLinkForm = false;
 
-    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "cancelLinkForm", "displayReservation", "visitorAdded"];
+    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "displayReservation", "visitorAdded"];
 
     protected $rules = [
         'newArrivalDate' => 'required|date',
@@ -50,6 +49,7 @@ class ReservationsList extends Component
     {
         $this->reservations = Reservation::where('id', $res_id)->get();
         $this->listTitle = __("Reservation")." ".$res_id;
+        $this->emitSelf('scrollToReservationList');
     }
 
     public function changeAction($options)
@@ -236,14 +236,13 @@ class ReservationsList extends Component
 
     public function sendConfirmationMail($reservation_id)
     {
-        $this->emit('engageLinkCreation', $reservation_id);
-        $this->showSendLinkForm = true;
+        $options = collect([
+            'reservation_id' => $reservation_id,
+        ]);
+        $this->emit('engageLinkCreation', $options);
 
     }
-    public function cancelLinkForm()
-    {
-        $this->showSendLinkForm = false;
-    }
+
 
     public function mount()
     {

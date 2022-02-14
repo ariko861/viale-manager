@@ -45,6 +45,20 @@
   .hidden-remarks {
       display: none;
   }
+  .border-spacing {
+      border-spacing: 0 15px;
+  }
+  .hover-discover:hover .discover-child {
+    display: block;
+
+  }
+  .hover-discover:hover .cover-child {
+    display: none;
+  }
+  .discover-child {
+    display: none;
+    transition: all 500ms ease;
+  }
   .card {
     background-color: theme('colors.white');
     border-radius: theme('borderRadius.lg');

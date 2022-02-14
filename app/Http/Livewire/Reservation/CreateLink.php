@@ -15,6 +15,7 @@ class CreateLink extends Component
     public $maxDays = 0;
     public $maxVisitors = 0;
     public $linkCreated;
+    public $showSendLinkForm = false;
     public $emailSent = false;
 
     protected $listeners = ['engageLinkCreation'];
@@ -24,11 +25,16 @@ class CreateLink extends Component
         'maxVisitors' => 'required|int',
     ];
 
-    public function engageLinkCreation($reservation_id)
+    public function engageLinkCreation($options)
     {
-        $this->reservation = Reservation::find($reservation_id);
-//         dd($this->reservation->contact_person->full_name);
+        $this->reservation = Reservation::find($options["reservation_id"]);
+        $this->emit('displayReservation', $this->reservation->id);
+        $this->maxDays = $options["max_days"] ?? 0;
+        $this->maxVisitors = $options["max_visitors"] ?? 0;
+        $this->showSendLinkForm = true;
+        if (isset($options["genlink"]) && $options["genlink"]) $this->send();
     }
+
 
     public function send($sendmail = false)
     {
@@ -47,6 +53,7 @@ class CreateLink extends Component
             $this->emailSent = true;
         }
         $this->linkCreated = $reservationLink->getLink();
+        $this->emit('displayReservation', $this->reservation->id);
 
 
     }

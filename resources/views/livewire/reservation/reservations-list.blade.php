@@ -152,9 +152,7 @@
     @if ( $showRoomSelection )
         <livewire:room-selection-form :visitor="$visitorSelectedForRoom" :reservation="$reservationSelectedForRoom">
     @endif
-    @if ($showSendLinkForm )
-        <livewire:reservation.create-link >
-    @endif
+
 
     <script defer>
         $(document).ready(function(){

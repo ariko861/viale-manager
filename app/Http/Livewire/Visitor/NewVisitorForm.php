@@ -51,6 +51,7 @@ class NewVisitorForm extends Component
      public function save()
     {
         $this->validate();
+        $this->newvisitor->normalize();
         $this->newvisitor->save();
         if ( $this->modify )
         {
