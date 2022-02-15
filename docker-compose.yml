@@ -22,6 +22,9 @@ services:
             DB_DATABASE: viale_manager
             DB_USERNAME: root
             DB_PASSWORD: password
+            QUEUE_CONNECTION: database
+            SESSION_DRIVER: database
+            SESSION_LIFETIME: 120
 
             #REDIS_HOST: 127.0.0.1
             #REDIS_PASSWORD: null

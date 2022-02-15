@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Config;
 
 use Livewire\Component;
 use App\Models\House;
@@ -107,6 +107,6 @@ class RoomsList extends Component
 
     public function render()
     {
-        return view('livewire.rooms-list');
+        return view('livewire.config.rooms-list');
     }
 }

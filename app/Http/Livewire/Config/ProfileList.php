@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Config;
 
 use Livewire\Component;
 use App\Models\Profile;
@@ -54,6 +54,6 @@ class ProfileList extends Component
     }
     public function render()
     {
-        return view('livewire.profile-list');
+        return view('livewire.config.profile-list');
     }
 }

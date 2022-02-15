@@ -1,7 +1,14 @@
 <div>
     @if ($link)
-    <h1 class="mt-4 mb-8">{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
+    <h1 class="my-4">{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
     <br>
+    @if ( $reservation_link_messages )
+    <div class="w-full p-4 border-4 mt-2 mb-6">
+        @foreach ( $reservation_link_messages as $message )
+            <p class="my-2">{!! $message !!}<p>
+        @endforeach
+    </div>
+    @endif
 
     @if ($showEmailForm)
         <p class="mb-4">{{__("Veuillez saisir une adresse email pour voir si vous nous retrouvons dans nos précédentes inscriptions")}} :</p>

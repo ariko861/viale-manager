@@ -33,6 +33,20 @@
         </div>
     @endif
 
+    <!--     Messages en introduction du lien de confirmation -->
+    <h3 class="mt-8 mb-2 text-center">{{__("Introduction des liens de réservation")}}</h3>
+    <p class="text-center">{{__("Messages affichés en ouvrant un lien de réservation")}}</p>
+    @foreach ($reservation_link_messages as $key => $message)
+    <div class="w-full px-8 grid grid-cols-6 gap-4 mt-6">
+        <label class="col-span-2">{{ __("Message affiché sur la page de réservation") }}</label>
+        <textarea class="col-span-2" wire:model="reservation_link_messages.{{ $key }}.value"></textarea>
+        <button class="btn-submit col-span-1" wire:click="saveReservationLinkMessages">{{__("Sauvegarder le changement")}}</button>
+        <button class="btn-warning col-span-1" wire:click="deleteMessage({{$message->id}})">{{__("Supprimer le message")}}</button>
+        @error('reservation_link_messages.{{$key}}.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
+    </div>
+    @endforeach
+    <button class="w-full rounded-full p-2 mt-4" wire:click="addNewReservationLinkMessage"> Ajouter un nouveau message à la réservation</button>
+
 
     <!--     Messages après confirmation -->
     <h3 class="mt-8 mb-2 text-center">{{__("Messages de confirmations")}}</h3>

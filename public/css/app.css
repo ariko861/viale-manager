@@ -1150,11 +1150,11 @@ h4,
 .bottom-8 {
   bottom: 2rem;
 }
-.right-8 {
-  right: 2rem;
-}
 .left-8 {
   left: 2rem;
+}
+.right-8 {
+  right: 2rem;
 }
 .z-0 {
   z-index: 0;
@@ -1769,13 +1769,13 @@ h4,
   --tw-bg-opacity: 1;
   background-color: rgb(224 231 255 / var(--tw-bg-opacity));
 }
-.bg-red-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-}
 .bg-red-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;

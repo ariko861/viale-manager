@@ -6,8 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Models\Reservation;
 use App\Models\Option;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ReservationConfirmed;
+use App\Jobs\SendReservationConfirmed;
 
 class SuccessConfirm extends Component
 {
@@ -20,7 +19,12 @@ class SuccessConfirm extends Component
     {
         $this->reservation = Reservation::find($res_id);
         $to = Option::firstOrNew(['name' => 'email'])->value;
-        Mail::to($to)->queue(new ReservationConfirmed($this->reservation));
+        $details = [
+            'email' => $to,
+            'reservation' => $this->reservation,
+        ];
+        dispatch(new SendReservationConfirmed($details));
+//         Mail::to($to)->queue(new ReservationConfirmed($this->reservation));
 
     }
 

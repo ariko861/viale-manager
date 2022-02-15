@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Reservation;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use App\Models\Profile;
 use App\Models\Visitor;
+use App\Models\Option;
 
 class ConfirmationForm extends Component
 {
@@ -18,6 +20,7 @@ class ConfirmationForm extends Component
     public $maxdeparturedate;
     public $price;
     public $unknown;
+    public $reservation_link_messages;
     public $profiles;
     public $otherVisitorsArray;
     public $addedVisitors;
@@ -36,7 +39,7 @@ class ConfirmationForm extends Component
             'price' => '',
             'reservation.arrivaldate' => 'required|date',
             'reservation.departuredate' => 'required|date',
-            'reservation.remarks' => '',
+            'reservation.remarks' => 'string|nullable',
             'addedVisitors.*.visitor.name' => 'required|string',
             'addedVisitors.*.visitor.surname' => 'required|string',
             'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
@@ -226,6 +229,15 @@ class ConfirmationForm extends Component
         ]);
         $this->checkEmptyFields();
 
+        // Pour afficher les messages en introduction de la page de confirmation
+        $this->reservation_link_messages = collect([]);
+        $messages = Option::where('name', 'reservation_link_message')->get();
+        foreach ($messages as $message )
+        {
+            $this->reservation_link_messages->push( Str::markdown($message->value) );
+        }
+
+        // Pour afficher le champ de recherche par email si la réservation a été créée avec un lien super rapide
         if ( $this->reservation->quickLink && $this->unknown->contains('email') ) {
             $this->showEmailForm = true;
         }
