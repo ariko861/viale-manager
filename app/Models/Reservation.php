@@ -78,9 +78,15 @@ class Reservation extends Model
 
     public function getNightsAttribute()
     {
+        $today = Carbon::now();
         $begindate = new Carbon($this->arrivaldate);
-        $enddate = ( $this->nodeparturedate ? Carbon::now() : new Carbon($this->departuredate) );
-        return $begindate->diffInDays($enddate);
+        $enddate = new Carbon($this->departuredate);
+
+        if ( $this->nodeparturedate ) {
+            return ( $begindate->gt($today) ? 0 : $begindate->diffInDays($enddate) );
+        } else {
+            return (  $begindate->diffInDays($enddate) );
+        }
 
     }
 

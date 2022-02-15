@@ -47,7 +47,7 @@ class Visitor extends Model
 
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'visitor_reservations');
+        return $this->belongsToMany(Reservation::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id', 'price');
     }
 
     public static function createQuickVisitor($email) {

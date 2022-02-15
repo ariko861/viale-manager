@@ -4,7 +4,7 @@
     @endif
     @if ( $editing === $reservation->id )
         <div class="float-right">
-            <input type="number" min=0 wire:model="reservations.{{$key}}.visitors.{{$vkey}}.pivot.price"/>€ {{__("par nuit")}}
+            <input type="number" min=0 wire:model="visitor.pivot.price"/>€ {{__("par nuit")}}
         </div>
     @else
         @can ('read-statistics')

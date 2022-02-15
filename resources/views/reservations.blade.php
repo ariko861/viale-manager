@@ -14,7 +14,7 @@
                     @endcan
                     @canany(['reservation-create', 'reservation-edit'])
                         <livewire:reservation.create-link >
-                    @endcan
+                    @endcanany
                     @can('visitor-create')
                         <livewire:visitor.new-visitor-form >
                     @endcan
