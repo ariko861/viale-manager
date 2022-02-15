@@ -20,12 +20,12 @@ class NewVisitorForm extends Component
     protected $listeners = ['newVisitorForm', 'visitorChangeForm'];
 
     protected $rules = [
-        'newvisitor.name' => 'required|string',
-        'newvisitor.surname' => 'required|string',
-        'newvisitor.phone' => '',
+        'newvisitor.name' => 'required|string|max:255',
+        'newvisitor.surname' => 'required|string|max:255',
+        'newvisitor.phone' => 'string|nullable|max:255',
         'newvisitor.email' => 'email|nullable',
-        'newvisitor.birthyear' => '',
-        'newvisitor.remarks' => '',
+        'newvisitor.birthyear' => 'integer|between:1900,2100',
+        'newvisitor.remarks' => 'string|nullable',
     ];
 
     public function newVisitorForm()

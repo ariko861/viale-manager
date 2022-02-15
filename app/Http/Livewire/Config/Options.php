@@ -15,20 +15,26 @@ class Options extends Component
     public $newMatrixLink;
 
     protected $rules = [
-        'email.value' => 'required|email',
-        'phone.value' => 'string|nullable',
-        'address.value' => 'string|nullable',
-        'confirmation_messages.*.value' => 'string|nullable',
-        'reservation_link_messages.*.value' => 'string|nullable',
-        'matrix_links.*.homeserver' => 'string|nullable',
-        'matrix_links.*.roomID' => 'string|nullable',
-        'matrix_links.*.filteredUser' => 'string|nullable',
+        'email.value' => 'required|email|max:255',
+        'phone.value' => 'string|nullable|max:255',
+        'address.value' => 'string|nullable|max:255',
+        'confirmation_messages.*.value' => 'string|nullable|max:255',
+        'reservation_link_messages.*.value' => 'string|nullable|max:255',
+        'matrix_links.*.homeserver' => 'string|nullable|max:255',
+        'matrix_links.*.roomID' => 'string|nullable|max:255',
+        'matrix_links.*.filteredUser' => 'string|nullable|max:255',
         'matrix_links.*.gallery' => 'boolean',
         'matrix_links.*.displayDate' => 'boolean',
         'matrix_links.*.displayAddress' => 'boolean',
 
     ];
 
+    protected $messages = [
+
+        'reservation_link_messages.*.value.max' => 'Le message ne peut pas être plus long que 255 caractères.',
+        'email.email' => 'The Email Address format is not valid.',
+
+    ];
     public function mount()
     {
         $this->email = Option::firstOrNew(['name' => 'email']);
@@ -61,6 +67,7 @@ class Options extends Component
     }
     public function saveMessages()
     {
+        $this->validate();
         foreach ($this->confirmation_messages as $message)
         {
             $message->save();
@@ -70,6 +77,7 @@ class Options extends Component
 
     public function saveReservationLinkMessages()
     {
+        $this->validate();
         foreach ($this->reservation_link_messages as $message)
         {
             $message->save();
@@ -98,9 +106,9 @@ class Options extends Component
 
     public function saveMatrix()
     {
+        $this->validate();
         foreach ($this->matrix_links as $matrix)
         {
-            $this->validate();
             $matrix->save();
             $this->emit('showAlert', [ __("Les liens Matrix ont bien été changés"), "bg-green-600"] );
         }
@@ -109,7 +117,7 @@ class Options extends Component
     public function testEmail()
     {
         $this->validate([
-               'email.value' => 'required|email',
+               'email.value' => 'required|email|max:255',
             ]);
         Mail::to($this->email->value)->send(new TestMail());
         $this->emit('showAlert', [ __("Le mail a bien été envoyé"), "bg-green-600"] );
@@ -118,16 +126,7 @@ class Options extends Component
 
     public function save($property)
     {
-        if ( $property == 'email' )
-        {
-            $this->validate([
-                $property.'.value' => 'email'
-            ]);
-        } else {
-            $this->validate([
-                $property.'.value' => 'string'
-            ]);
-        }
+        $this->validate();
         $this->$property->name = $property;
         $this->$property->save();
         $this->emit('showAlert', [ __("L'option a bien été changé"), "bg-green-600"] );

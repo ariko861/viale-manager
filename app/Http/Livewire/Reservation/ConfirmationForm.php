@@ -31,19 +31,19 @@ class ConfirmationForm extends Component
     protected $listeners = ['visitorSelectedFromEmail', 'emailNotFound' ];
 
         protected $rules = [
-            'contact_person.name' => 'required|string',
-            'contact_person.surname' => 'required|string',
-            'contact_person.phone' => 'required',
-            'contact_person.email' => 'required|string',
+            'contact_person.name' => 'required|string|max:255',
+            'contact_person.surname' => 'required|string|max:255',
+            'contact_person.phone' => 'required|string|max:255',
+            'contact_person.email' => 'required|email|max:255',
             'contact_person.birthyear' => 'required|integer|between:1900,2100',
-            'price' => '',
+            'price' => 'integer|required',
             'reservation.arrivaldate' => 'required|date',
             'reservation.departuredate' => 'required|date',
             'reservation.remarks' => 'string|nullable',
-            'addedVisitors.*.visitor.name' => 'required|string',
-            'addedVisitors.*.visitor.surname' => 'required|string',
+            'addedVisitors.*.visitor.name' => 'required|string|max:255',
+            'addedVisitors.*.visitor.surname' => 'required|string|max:255',
             'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
-            'addedVisitors.*.visitor.email' => 'email',
+            'addedVisitors.*.visitor.email' => 'email|nullable',
 
         ];
 

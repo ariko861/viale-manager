@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\User;
 
 use Illuminate\Validation\Validator;
 use Livewire\Component;
@@ -99,6 +99,6 @@ class UsersList extends Component
 
     public function render()
     {
-        return view('livewire.users-list');
+        return view('livewire.user.users-list');
     }
 }

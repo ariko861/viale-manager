@@ -129,7 +129,7 @@
                         </div>
                     @endunless
                     @if ($newVisitorInReservation)
-                        <livewire:visitor-search :key="'add-visitor-in-reservation-'.$reservation->id" :visitorKey="$reservation->id" visitorType="otherVisitor" >
+                        <livewire:visitor.visitor-search :key="'add-visitor-in-reservation-'.$reservation->id" :visitorKey="$reservation->id" visitorType="otherVisitor" >
                     @endif
                 </div>
             @endif
@@ -148,9 +148,8 @@
             </div>
         </div>
     @endforeach
-    @if ( $showRoomSelection )
-        <livewire:room-selection-form :visitor="$visitorSelectedForRoom" :reservation="$reservationSelectedForRoom">
-    @endif
+
+    <livewire:room-selection-form >
 
 
     <script defer>

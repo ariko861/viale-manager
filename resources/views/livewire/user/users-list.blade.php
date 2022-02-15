@@ -48,7 +48,7 @@
    </tbody>
    </table>
     @if ( $showForm )
-     <livewire:user-form>
+     <livewire:user.user-form>
    @endif
 
    @if ( $userInvites->count() )

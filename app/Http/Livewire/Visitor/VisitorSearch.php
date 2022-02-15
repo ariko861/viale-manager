@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Visitor;
 
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ class VisitorSearch extends Component
 
     public function render()
     {
-        return view('livewire.visitor-search');
+        return view('livewire.visitor.visitor-search');
 
     }
 

@@ -36,7 +36,7 @@
    </tbody>
    </table>
    @if ( $showRoleForm )
-     <livewire:role-form>
+     <livewire:user.role-form>
    @endif
 
 </div>

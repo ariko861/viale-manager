@@ -42,7 +42,7 @@
         <textarea class="col-span-2" wire:model="reservation_link_messages.{{ $key }}.value"></textarea>
         <button class="btn-submit col-span-1" wire:click="saveReservationLinkMessages">{{__("Sauvegarder le changement")}}</button>
         <button class="btn-warning col-span-1" wire:click="deleteMessage({{$message->id}})">{{__("Supprimer le message")}}</button>
-        @error('reservation_link_messages.{{$key}}.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
+        @error('reservation_link_messages.'.$key.'.value') <span class="col-span-2"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
     </div>
     @endforeach
     <button class="w-full rounded-full p-2 mt-4" wire:click="addNewReservationLinkMessage"> Ajouter un nouveau message à la réservation</button>
@@ -57,7 +57,7 @@
         <textarea class="col-span-2" wire:model="confirmation_messages.{{ $key }}.value"></textarea>
         <button class="btn-submit col-span-1" wire:click="saveMessages">{{__("Sauvegarder le changement")}}</button>
         <button class="btn-warning col-span-1" wire:click="deleteMessage({{$message->id}})">{{__("Supprimer le message")}}</button>
-        @error('confirmation_messages.{{$key}}.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
+        @error('confirmation_messages.'.$key.'.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
     </div>
     @endforeach
     <button class="w-full rounded-full p-2 mt-4" wire:click="addNewMessage"> Ajouter un nouveau message de confimation</button>
@@ -70,11 +70,18 @@
         <ul>
             <li class="{{$li_class}}"><strong>{{ __("Lien") }} :</strong> <a href="{{ $matrix->getLink() }}" target="_blank">{{ $matrix->getLink() }}</a></li>
             <li class="{{$li_class}}"><strong>{{__("Serveur")}} :</strong> <input class="w-full" type="text" wire:model="matrix_links.{{ $key }}.homeserver"></li>
+            @error('matrix_links.'.$key.'.homeserver') <li class="red error">{{ $message }}</li> @enderror
             <li class="{{$li_class}}"><strong>{{__("Room ID")}} :</strong> <input class="w-full" type="text" wire:model="matrix_links.{{ $key }}.roomID"></li>
+            @error('matrix_links.'.$key.'.roomID') <li class="red error">{{ $message }}</li> @enderror
             <li class="{{$li_class}}"><strong>{{__("Utilisateur filtré")}} :</strong> <input class="w-full" type="text" wire:model="matrix_links.{{ $key }}.filteredUser"></li>
+            @error('matrix_links.'.$key.'.filteredUser') <li class="red error">{{ $message }}</li> @enderror
             <li class="{{$li_class}}"><strong>{{__("Gallerie photo")}} :</strong> <input type="checkbox" wire:model="matrix_links.{{ $key }}.gallery"></li>
+            @error('matrix_links.'.$key.'.gallery') <li class="red error">{{ $message }}</li> @enderror
             <li class="{{$li_class}}"><strong>{{__("Afficher les dates")}} :</strong> <input type="checkbox" wire:model="matrix_links.{{ $key }}.displayDate"></li>
+            @error('matrix_links.'.$key.'.displayDate') <li class="red error">{{ $message }}</li> @enderror
             <li class="{{$li_class}}"><strong>{{__("Afficher l'adresse Matrix du salon")}} :</strong> <input type="checkbox" wire:model="matrix_links.{{ $key }}.displayAddress"></li>
+            @error('matrix_links.'.$key.'.displayAddress') <li class="red error">{{ $message }}</li> @enderror
+
         </ul>
         <div class="float-right">
             <button class="btn-submit col-span-1" wire:click="saveMatrix">{{__("Sauvegarder les changements")}}</button>

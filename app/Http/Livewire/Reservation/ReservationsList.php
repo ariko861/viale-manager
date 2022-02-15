@@ -14,9 +14,6 @@ use App\Models\ReservationLink;
 class ReservationsList extends Component
 {
 
-    public $showRoomSelection = false;
-    public $visitorSelectedForRoom;
-    public $reservationSelectedForRoom;
     public $amountDisplayedReservation = 20;
     public $advancedSearch = false;
     public $editing;
@@ -34,7 +31,7 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
-    protected $listeners = ["hideRoomSelection", "deleteAction", "changeAction", "displayReservation", "visitorAdded"];
+    protected $listeners = ["deleteAction", "changeAction", "displayReservation", "visitorAdded", "reservationUpdated"];
 
     protected $rules = [
         'newArrivalDate' => 'required|date',
@@ -44,6 +41,12 @@ class ReservationsList extends Component
         'reservations.*.removeFromStats' => 'boolean',
         'reservations.*.visitors.*.pivot.price' => 'integer|nullable',
     ];
+
+    public function reservationUpdated($res_id)
+    {
+        $reservation = $this->reservations->find($res_id);
+        $reservation->refresh();
+    }
 
     public function displayReservation($res_id)
     {
@@ -155,14 +158,8 @@ class ReservationsList extends Component
 
     public function selectRoom( $visitor, $reservation )
     {
-        $this->showRoomSelection = true;
-        $this->reservationSelectedForRoom = $reservation;
-        $this->visitorSelectedForRoom = $visitor;
-    }
-
-    public function hideRoomSelection()
-    {
-        $this->showRoomSelection = false;
+        $options = [ $visitor, $reservation ];
+        $this->emit('initRoomSelection', $options);
     }
 
     public function deleteReservation($reservation_id)
