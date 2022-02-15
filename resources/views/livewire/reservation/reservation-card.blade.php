@@ -14,7 +14,7 @@
             @endif
         </p>
         @can('statistics-remove')
-            <p><label><strong>{{__("Retirer des statistiques")}} : </strong></label><input type="checkbox" wire:change="updateReservation({{$key}})" wire:model="reservations.{{ $key }}.removeFromStats"></p>
+            <p><label><strong>{{__("Retirer des statistiques")}} : </strong></label><input type="checkbox" wire:change="updateReservation({{$rKey}})" wire:model="reservations.{{ $rKey }}.removeFromStats"></p>
         @endcan
         @can('read-statistics')
             @if ($reservation->confirmed)
@@ -39,7 +39,7 @@
                 @foreach ( $reservation->links as $link)
                     <p>
                         @if ( $editing === $reservation->id )
-                        <svg wire:click="deleteLink({{ $link }}, {{ $key }})" xmlns="http://www.w3.org/2000/svg" class="inline h-6 w-6 mr-2 stroke-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg wire:click="deleteLink({{ $link }}, {{ $rKey }})" xmlns="http://www.w3.org/2000/svg" class="inline h-6 w-6 mr-2 stroke-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         @endif
@@ -50,8 +50,8 @@
         @endcan
 
     @if ( $reservation->visitors && $reservation->visitors->count() )
-    @foreach ( $reservation->visitors->sortByDesc('pivot.contact') as $vkey => $visitor )
-        <livewire:visitor.visitor-card :wire:key="'reservation-'.$reservation->id.'-visitor-'.$visitor->id" :reservation="$reservation" :visitor=$visitor>
+    @foreach ( $reservation->visitors->sortByDesc('pivot.contact') as $key => $visitor )
+        <livewire:visitor.visitor-card :wire:key="'reservation-'.$reservation->id.'-visitor-'.$visitor->id" :reservation="$reservation" :visitor=$visitor :vKey="$key" :editing="$editing">
     @endforeach
     @endif
 
@@ -63,7 +63,7 @@
                 </div>
             @endunless
             @if ($newVisitorInReservation)
-                <livewire:visitor.visitor-search :key="'add-visitor-in-reservation-'.$reservation->id" :visitorKey="$reservation->id" visitorType="otherVisitor" >
+                <livewire:visitor.visitor-search :wire:key="'add-visitor-in-reservation-'.$reservation->id" :visitorKey="$reservation->id" visitorType="otherVisitor" >
             @endif
         </div>
     @endif
