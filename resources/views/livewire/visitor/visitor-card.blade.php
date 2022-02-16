@@ -4,7 +4,12 @@
     @endif
     @if ( $editing )
         <div class="float-right">
+
             <input type="number" min=0 wire:model="visitorInReservation.price" wire:change.debounce.1000ms="updatePivot"/>€ {{__("par nuit")}}
+            <br>
+            <div class="mt-6">
+                <button>{{__("Déplacer dans une nouvelle réservation")}}</button>
+            </div>
         </div>
     @else
         @can ('read-statistics')
