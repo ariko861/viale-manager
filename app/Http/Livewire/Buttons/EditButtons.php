@@ -13,6 +13,7 @@ class EditButtons extends Component
     public $confirmingDeletion;
     public $model;
     public $options;
+    public $messageDelete;
 
     public function mount()
     {

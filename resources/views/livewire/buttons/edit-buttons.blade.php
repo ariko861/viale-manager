@@ -1,7 +1,7 @@
 <div>
     @if($confirmingDeletion == $modelId)
         @can($deleteRights)
-            <button wire:click="$emitUp('deleteAction', {{ $options }} )" class="bg-red-800 text-white hover:bg-red-600 rounded-lg border">{{ __("Confirmer la suppression ?") }}</button>
+            <button wire:click="$emitUp('deleteAction', {{ $options }} )" class="bg-red-800 text-white hover:bg-red-600 rounded-lg border">{{ __("Confirmer la suppression") }} {{ $messageDelete }} ?</button>
             <button wire:click="$set('confirmingDeletion','')">{{ __("Annuler la suppression")}}</button>
         @endcan
     @else

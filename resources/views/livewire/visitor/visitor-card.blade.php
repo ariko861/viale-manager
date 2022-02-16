@@ -3,12 +3,19 @@
         <p class="text-lg"><strong>{{ __("Personne de contact") }} :</strong> </p>
     @endif
     @if ( $editing )
-        <div class="float-right">
+        <div class="float-right text-right">
 
             <input type="number" min=0 wire:model="visitorInReservation.price" wire:change.debounce.1000ms="updatePivot"/>€ {{__("par nuit")}}
             <br>
             <div class="mt-6">
-                <button>{{__("Déplacer dans une nouvelle réservation")}}</button>
+                @unless ($visitorInReservation->contact)
+                    @if ( $waitingForMove )
+                        <p class="error">{{__("Vous êtes sur le point de déplacer ce visiteur dans une nouvelle réservation, êtes vous sur ?")}}</p>
+                        <button wire:click="moveToNewReservation" class="mx-4 my-2 btn-warning">{{__("Déplacer")}}</button><button wire:click="$toggle('waitingForMove')" class="mx-4 my-2">{{__("Annuler")}}</button>
+                    @else
+                        <button wire:click="$toggle('waitingForMove')">{{__("Déplacer dans une nouvelle réservation")}}</button>
+                    @endif
+                @endunless
             </div>
         </div>
     @else
@@ -42,6 +49,6 @@
         </p>
     @endcan
     <div class="p-4 text-right">
-        <livewire:buttons.edit-buttons :wire:key="'visitor-'.$visitor->id.'-in-reservation-'.$reservation->id.'-edit'" model="visitorInReservation" :modelId="$reservation->id.'-'.$visitor->id" editRights="visitor-edit" deleteRights="reservation-edit">
+        <livewire:buttons.edit-buttons :wire:key="'visitor-'.$visitor->id.'-in-reservation-'.$reservation->id.'-edit'" model="visitorInReservation" :modelId="$reservation->id.'-'.$visitor->id" editRights="visitor-edit" deleteRights="reservation-edit" messageDelete="du visiteur de cette réservation">
     </div>
 </div>

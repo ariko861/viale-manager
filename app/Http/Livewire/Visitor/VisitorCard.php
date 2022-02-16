@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Visitor;
 
 use Livewire\Component;
+use App\Models\Reservation;
 
 class VisitorCard extends Component
 {
@@ -10,6 +11,7 @@ class VisitorCard extends Component
     public $visitorInReservation;
     public $vKey;
     public $reservation;
+    public $waitingForMove = false;
     public $editing = false;
 
     protected $rules = [
@@ -32,6 +34,27 @@ class VisitorCard extends Component
                 $this->emit('showAlert', [ __("Le visiteur a bien été enlevé de la réservation"), "bg-green-400"] );
             }
         }
+    }
+
+    public function moveToNewReservation()
+    {
+        if ( $this->visitorInReservation->contact ) $this->emit('showAlert', [ __("Vous ne pouvez pas déplacer un visiteur contact"), "bg-red-400"] );
+        else {
+            $this->waitingForMove = false;
+            $this->editing = false;
+            $reservation = new Reservation();
+            $reservation->arrivaldate = $this->reservation->arrivaldate;
+            $reservation->departuredate = $this->reservation->departuredate;
+            $reservation->nodeparturedate = $this->reservation->nodeparturedate;
+            $reservation->confirmed = $this->reservation->confirmed;
+            $reservation->remarks = $this->reservation->remarks;
+            $reservation->save();
+            $reservation->visitors()->attach($this->visitor->id, ['contact' => true, 'price' => $this->visitorInReservation->price ]);
+            $this->reservation->visitors()->detach($this->visitor->id);
+            $this->emit('showAlert', [ __("Le visiteur a bien été déplacé dans une nouvelle réservation"), "bg-green-400"] );
+            $this->emitUp('displayReservations', [$this->reservation->id, $reservation->id]);
+        }
+
     }
 
     public function updatePivot()

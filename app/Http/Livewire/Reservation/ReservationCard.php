@@ -23,7 +23,7 @@ class ReservationCard extends Component
 
     ];
 
-    protected $listeners = ["deleteAction", "changeAction", "visitorAdded", "displayReservation"];
+    protected $listeners = ["deleteAction", "changeAction", "visitorAdded", "displayReservation", "displayReservations"];
 
     public function changeAction($options)
     {
@@ -48,6 +48,11 @@ class ReservationCard extends Component
        }
     }
 
+    public function displayReservations()
+    {
+        $this->editing = false;
+        $this->reservation->refresh();
+    }
     public function displayReservation($res_id)
     {
         if ( $this->reservation->id === $res_id ) $this->reservation->refresh();

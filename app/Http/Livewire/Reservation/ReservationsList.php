@@ -28,12 +28,19 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
-    protected $listeners = ["displayReservation", "reservationDeleted"];
+    protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted"];
 
     public function displayReservation($res_id)
     {
         $this->reservations = Reservation::where('id', $res_id)->get();
         $this->listTitle = __("Reservation")." ".$res_id;
+        $this->emitSelf('scrollToReservationList');
+    }
+
+    public function displayReservations($res_ids)
+    {
+        $this->reservations = Reservation::whereIn('id', $res_ids)->get();
+        $this->listTitle = __("Reservations")." ".implode(" ", $res_ids);
         $this->emitSelf('scrollToReservationList');
     }
 
