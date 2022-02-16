@@ -68,11 +68,11 @@
                 <h3 class="col-span-full">{{__("Modifier vos dates")}} : </h3>
 
                 <label class="col-span-1">{{ __("Date d'arrivée") }}</label>
-                <input class="col-span-2" wire:model="reservation.arrivaldate" wire:change="setMinDepartureDate" max="{{ $maxarrivaldate }}" min="{{ $minarrivaldate }}" type="date" />
+                <input id="resa-arrivaldate" class="col-span-2 datepick" wire:model="reservation.arrivaldate" wire:change="setMinDepartureDate" max="{{ $maxarrivaldate }}" min="{{ $minarrivaldate }}" type="date" />
                 @error('reservation.arrivaldate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
                 <label class="col-span-1">{{ __("Date de départ") }}</label>
-                <input class="col-span-2" wire:model="reservation.departuredate" max="{{ $maxdeparturedate }}" min="{{ $mindeparturedate }}" type="date" />
+                <input id="resa-departuredate" class="col-span-2 datepick" wire:model="reservation.departuredate" max="{{ $maxdeparturedate }}" min="{{ $mindeparturedate }}" type="date" />
                 @error('reservation.departuredate') <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span> @enderror
 
             @endif

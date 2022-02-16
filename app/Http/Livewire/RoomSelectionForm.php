@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\House;
 use App\Models\VisitorReservation;
+use App\Models\Reservation;
 use App\Models\Room;
 
 class RoomSelectionForm extends Component
@@ -13,6 +14,7 @@ class RoomSelectionForm extends Component
 
     public $visitor;
     public $reservation;
+    public $visitorInReservation;
     public $endDay;
     public $beginDay;
     public $lastDay;
@@ -26,8 +28,6 @@ class RoomSelectionForm extends Component
         $today = Carbon::now()->format('Y-m-d');
         $this->houses = House::all();
         $this->fill([
-//             'beginDay' => $this->reservation["arrivaldate"],
-//             'endDay' => $this->reservation["departuredate"],
             'firstDay' => ($this->beginDay == $today ? __("aujourd'hui") : __("le premier jour")),
             'lastDay' => ($this->endDay == $today ? __("aujourd'hui") : __("le dernier jour")),
         ]);
@@ -36,8 +36,8 @@ class RoomSelectionForm extends Component
 
     public function initRoomSelection($options){
         $this->showRoomSelection = true;
-        $this->visitor = $options[0];
-        $this->reservation = $options[1];
+        $this->reservation = Reservation::find($options[0]);
+        $this->visitorInReservation = VisitorReservation::find($options[1]);
     }
 
     public function getRoomAvailability($room)
@@ -48,24 +48,20 @@ class RoomSelectionForm extends Component
     public function cancelRoomSelection()
     {
         $this->showRoomSelection = false;
-        $this->emit('reservationUpdated', $this->reservation["id"]);
+        $this->emit('visitorUpdated', $this->visitorInReservation->visitor_id);
     }
 
     public function cancelRoom()
     {
-        $resa = $this->visitor["pivot"];
-        $visitorReservation = VisitorReservation::find($resa["id"]);
-        $visitorReservation->room()->dissociate();
-        $visitorReservation->save();
+        $this->visitorInReservation->room()->dissociate();
+        $this->visitorInReservation->save();
         $this->cancelRoomSelection();
     }
     public function selectRoom($room)
     {
         $room = Room::find($room["id"]);
-        $resa = $this->visitor["pivot"];
-        $visitorReservation = VisitorReservation::find($resa["id"]);
-        $visitorReservation->room()->associate($room);
-        $visitorReservation->save();
+        $this->visitorInReservation->room()->associate($room);
+        $this->visitorInReservation->save();
         $this->cancelRoomSelection();
     }
 

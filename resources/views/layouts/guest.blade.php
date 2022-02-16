@@ -14,6 +14,7 @@
          @if (request()->routeIs('matrix'))
             <link rel="stylesheet" href="https://alternumerica.org/MatrixSimpleCMS/matrix-cms.css">
         @endif
+
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         @livewireStyles
 

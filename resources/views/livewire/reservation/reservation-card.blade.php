@@ -1,6 +1,6 @@
 <div @class(['mt-4', 'w-full', 'card', 'border-l-4', 'border-yellow-400' => ! $reservation->confirmed, 'border-green-400' => $reservation->confirmed])>
         <p><strong>{{ __("Date d'arrivée") }} :</strong>
-            @if ( $editing === $reservation->id )
+            @if ( $editing )
                 <input wire:model="reservation.arrivaldate" type="date" wire:change="updateReservation">
                 @error('reservation.arrivaldate')<p class="error-message">{{ $message }}</p>@enderror
             @else
@@ -8,7 +8,7 @@
             @endif
         </p>
         <p><strong>{{ __("Date de départ") }} :</strong>
-            @if ( $editing === $reservation->id )
+            @if ( $editing )
                 <input wire:model="reservation.departuredate" min="{{ $reservation->arrivaldate }}" type="date" wire:change="updateReservation">
                 @error('reservation.departuredate')<p class="error-message">{{ $message }}</p>@enderror
             @else
@@ -24,7 +24,7 @@
                 <p><strong>{{ __("Prix total de la réservation") }} :</strong> <span>{{ $reservation->getTotalPriceEuroAttribute() }}</span></p>
             @endif
         @endcan
-        @if ( $editing === $reservation->id )
+        @if ( $editing )
             <br>
             <p><label><strong>{{__("Ne connait pas sa date de départ")}} : </strong></label><input type="checkbox" wire:model="reservation.nodeparturedate" wire:change="updateReservation"></p>
             <br>
@@ -40,8 +40,8 @@
                 <h4>{{__("Liens de confirmation")}} :</h4>
                 @foreach ( $reservation->links as $link)
                     <p>
-                        @if ( $editing === $reservation->id )
-                        <svg wire:click="deleteLink({{ $link }}, {{ $rKey }})" xmlns="http://www.w3.org/2000/svg" class="inline h-6 w-6 mr-2 stroke-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        @if ( $editing )
+                        <svg wire:click="deleteLink({{ $link->id }})" xmlns="http://www.w3.org/2000/svg" class="inline h-6 w-6 mr-2 stroke-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         @endif
@@ -53,11 +53,11 @@
 
     @if ( $reservation->visitors && $reservation->visitors->count() )
     @foreach ( $reservation->visitors->sortByDesc('pivot.contact') as $key => $visitor )
-        <livewire:visitor.visitor-card :wire:key="'reservation-'.$reservation->id.'-visitor-'.$visitor->id" :reservation="$reservation" :visitor="$visitor" :vKey="$key" :editing="$editing">
+        <livewire:visitor.visitor-card wire:key="{{ 'reservation-'.$reservation->id.'-visitor-'.$visitor->id }}" :reservation="$reservation" :visitorInReservation="$visitor->pivot" :visitor="$visitor" :vKey="$key">
     @endforeach
     @endif
 
-    @if ( $editing === $reservation->id )
+    @if ( $editing )
         <div class="card">
             @unless ( $newVisitorInReservation )
                 <div class="w-full">

@@ -27,7 +27,7 @@
     <livewire:room-selection-form >
 
 
-    <script defer>
+    <script>
         $(document).ready(function(){
             Livewire.on('scrollToReservationList', () => {
                 $([document.documentElement, document.body]).animate({

@@ -28,13 +28,7 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
-    protected $listeners = ["displayReservation", "reservationUpdated", "reservationDeleted"];
-
-    public function reservationUpdated($res_id)
-    {
-        $reservation = $this->reservations->find($res_id);
-        $reservation->refresh();
-    }
+    protected $listeners = ["displayReservation", "reservationDeleted"];
 
     public function displayReservation($res_id)
     {
@@ -46,8 +40,6 @@ class ReservationsList extends Component
     public function getReservationsComing()
     {
         $today = Carbon::now()->format('Y-m-d');
-//         $allReservations = Reservation::whereDate('arrivaldate', '>', $today)->get()->sortBy('arrivaldate')->chunk($amount);
-//         $this->reservations = $allReservations->first();
         $this->reservations = Reservation::where('quickLink', false)->whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation." ".__("Prochaines arrivées");
         $this->emit('scrollToReservationList');
@@ -131,11 +123,8 @@ class ReservationsList extends Component
         });
     }
 
-
-
     public function mount()
     {
-//         $this->reservations = Reservation::all()->sortBy('arrivaldate');
         $today = Carbon::now()->format('Y-m-d');
         $this->today = Carbon::now();
         $this->fill([

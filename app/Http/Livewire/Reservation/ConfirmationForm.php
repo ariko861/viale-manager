@@ -102,8 +102,10 @@ class ConfirmationForm extends Component
         $today = Carbon::now();
         if ( $today->gt( $carbonArrivalDate ) ) {
             $this->minarrivaldate = $today->format('Y-m-d');
+            $this->maxarrivaldate = $this->getMaxDate($today)->format('Y-m-d');
         } else {
             $this->minarrivaldate = $carbonArrivalDate->format('Y-m-d');
+            $this->maxarrivaldate = $this->getMaxDate($this->reservation->arrivaldate)->format('Y-m-d');
         }
 
     }
@@ -247,11 +249,18 @@ class ConfirmationForm extends Component
         $departure = $this->reservation->departuredate;
 
 
-        $this->maxarrivaldate = $this->getMaxDate($arrival)->format('Y-m-d');
         $this->setMinArrivalDate();
 
         $this->maxdeparturedate = $this->getMaxDate($departure)->format('Y-m-d');
         $this->setMinDepartureDate();
+
+    }
+
+    public function booted()
+
+    {
+        //
+        $this->emit('initDatePicker');
 
     }
     public function render()

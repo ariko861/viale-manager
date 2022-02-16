@@ -79,48 +79,45 @@
     </table>
 
     @can('room-choose')
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script>
+        $(document).ready(function() {
 
-  $( function() {
-
-      function letDrag() {
-        setTimeout(function(){
-            $( ".draggable" ).draggable({
-                revert: 'invalid',
-                cursor: "move",
-//                 start: function( event, ui ){
-//                     Livewire.emit('movingVisitor', ui.helper[0].id);
-//                 }
+            function letDrag() {
+                setTimeout(function(){
+                    $( ".draggable" ).draggable({
+                        revert: 'invalid',
+                        cursor: "move",
+                    });
+                }, 500);
+            $(".draggable").click( function(){
+                $(this).children(".hidden-remarks").fadeToggle();
             });
-        }, 500);
-    $(".draggable").click( function(){
-          $(this).children(".hidden-remarks").fadeToggle();
-      });
-      }
+            }
 
 
-      letDrag();
+            letDrag();
 
-    //To check when a date is changed
-    Livewire.on('dateChanged', () => {
-        letDrag();
-    });
+            //To check when a date is changed
+            Livewire.on('dateChanged', () => {
+                letDrag();
+            });
 
-    $( ".dropzone" ).droppable({
-      classes: {
-        "ui-droppable-active": "ui-state-active",
-        "ui-droppable-hover": "ui-state-hover"
-      },
-      drop: function( event, ui ) {
+            $( ".dropzone" ).droppable({
+            classes: {
+                "ui-droppable-active": "ui-state-active",
+                "ui-droppable-hover": "ui-state-hover"
+            },
+            drop: function( event, ui ) {
 
-        Livewire.emit('communityChanged', { house: this.id, resa: ui.draggable[0].id });
-        letDrag();
+                Livewire.emit('communityChanged', { house: this.id, resa: ui.draggable[0].id });
+                letDrag();
 
-      }
-    });
-  } );
-
+            }
+            });
+        });
     </script>
+
     @endcan
 </div>

@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ( isset($visitor["pivot"]["room_id"]) )
+                            @if ( isset($visitorInReservation->room_id) )
                             <tr>
                                 <td class="{{ $tbody_class }} bg-red-100 text-center hover:bg-red-300 cursor-pointer" colspan=3 wire:click="cancelRoom">{{__("Retirer de sa chambre")}}</td>
                             </tr>

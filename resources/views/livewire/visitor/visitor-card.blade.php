@@ -1,15 +1,15 @@
 <div @class(['mt-2', 'w-full', 'card'])>
-    @if ( $visitor && $visitor->pivot && $visitor->pivot->contact )
+    @if ( $visitorInReservation && $visitorInReservation->contact )
         <p class="text-lg"><strong>{{ __("Personne de contact") }} :</strong> </p>
     @endif
-    @if ( $editing === $reservation->id )
+    @if ( $editing )
         <div class="float-right">
-            <input type="number" min=0 wire:model="visitor.pivot.price"/>€ {{__("par nuit")}}
+            <input type="number" min=0 wire:model="visitorInReservation.price" wire:change.debounce.1000ms="updatePivot"/>€ {{__("par nuit")}}
         </div>
     @else
         @can ('read-statistics')
             <div class="float-right">
-                <span>{{number_format($visitor->pivot->price, 2,'€',' ')}} {{__("par nuit")}}
+                <span>{{number_format($visitorInReservation->price, 2,'€',' ')}} {{__("par nuit")}}
             </div>
         @endcan
     @endif
@@ -19,8 +19,8 @@
     <p><strong>{{ __("Chambre") }} :</strong>
         <span>
 
-        @if ( $visitor->pivot->room_id )
-            {{ $visitor->pivot->room->fullName() }}
+        @if ( $visitorInReservation->room_id )
+            {{ $visitorInReservation->room->fullName() }}
         @else
             {{ __("Pas de chambre prévue") }}
         @endif
@@ -29,16 +29,14 @@
     </p>
     @can('room-choose')
         <p>
-        @if ( $visitor->pivot->room_id )
-            <button class="btn-sm" wire:click="selectRoom({{ $visitor }}, {{ $reservation }})">{{ __("Changer la chambre") }}</button>
+        @if ( $visitorInReservation->room_id )
+            <button class="btn-sm" wire:click="selectRoom">{{ __("Changer la chambre") }}</button>
         @else
-            <button class="btn" wire:click="selectRoom({{ $visitor }}, {{ $reservation }})">{{ __("Choisir la chambre") }}</button>
+            <button class="btn" wire:click="selectRoom">{{ __("Choisir la chambre") }}</button>
         @endif
         </p>
     @endcan
-    @if ( $editing === $reservation->id )
     <div class="p-4 text-right">
-        <livewire:buttons.edit-buttons :wire:key="'visitor-'.$visitor->id.'-in-reservation-'.$reservation->id" model="visitorInReservation" :modelId="$reservation->id.'-'.$visitor->id" editRights="visitor-edit" deleteRights="reservation-edit">
+        <livewire:buttons.edit-buttons :wire:key="'visitor-'.$visitor->id.'-in-reservation-'.$reservation->id.'-edit'" model="visitorInReservation" :modelId="$reservation->id.'-'.$visitor->id" editRights="visitor-edit" deleteRights="reservation-edit">
     </div>
-    @endif
 </div>

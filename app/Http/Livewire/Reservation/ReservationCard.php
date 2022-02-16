@@ -23,38 +23,16 @@ class ReservationCard extends Component
 
     ];
 
-    protected $listeners = ["deleteAction", "changeAction", "visitorAdded", "reservationUpdated"];
+    protected $listeners = ["deleteAction", "changeAction", "visitorAdded", "displayReservation"];
 
     public function changeAction($options)
     {
-        if ($options[1] == 'reservation') $this->editReservation($options[0]);
-        else if ($options[1] == 'visitorInReservation');
+        if ($options[1] == 'reservation') $this->editing = ! $this->editing;
     }
 
     public function deleteAction($options)
     {
         if ($options[1] == 'reservation') $this->deleteReservation($options[0]);
-        else if ($options[1] == 'visitorInReservation') $this->removeVisitorFromReservation($options[0]);
-    }
-
-    public function editReservation($reservation_id)
-    {
-        $this->editing = $reservation_id;
-        $this->emit("editingReservation");
-    }
-
-    public function removeVisitorFromReservation($res_and_visitor_id)
-    {
-        $ids = explode('-', $res_and_visitor_id);
-        $reservation = Reservation::find($ids[0]);
-        $visitor = $reservation->visitors()->find($ids[1]);
-        if ( $visitor->pivot->contact ) $this->emit('showAlert', [ __("Vous ne pouvez pas supprimer un visiteur contact, supprimez la réservation"), "bg-red-400"] );
-        else {
-            $reservation->visitors()->detach($ids[1]);
-            $this->reservations->find($ids[0])->refresh();
-            $this->emit('showAlert', [ __("Le visiteur a bien été enlevé de la réservation"), "bg-green-400"] );
-
-        }
     }
 
     public function visitorAdded($options)
@@ -68,28 +46,18 @@ class ReservationCard extends Component
             $this->reservation->refresh();
             $this->newVisitorInReservation = false;
        }
-
     }
 
-    public function deleteLink($link, $key)
+    public function displayReservation($res_id)
     {
-        ReservationLink::destroy($link["id"]);
-        $this->reservations[$key]->refresh();
+        if ( $this->reservation->id === $res_id ) $this->reservation->refresh();
     }
 
-    public function saveEdit()
+    public function deleteLink($link)
     {
-        $this->validate();
-        $this->editing = "";
-        foreach ($this->reservation->visitors as $visitor)
-        {
-            $visitor->pivot->save();
-        }
-        $this->reservation->save();
-        $this->emitUp("reservationUpdated", $this->reservation->id);
-        $this->emit('showAlert', [ __("La réservation a été mise à jour"), "bg-lime-600"] );
+        $this->reservation->links->find($link)->delete();
+        $this->reservation->refresh();
     }
-
 
     public function updateReservation()
     {
