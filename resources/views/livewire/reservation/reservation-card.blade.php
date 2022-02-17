@@ -1,6 +1,9 @@
 <div @class(['mt-4', 'w-full', 'card', 'border-l-4', 'border-yellow-400' => ! $reservation->confirmed, 'border-green-400' => $reservation->confirmed])>
 
-    <div class="p-4 float-right">
+    <div class="p-4 float-right border-4 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-10 w-10 m-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
         <livewire:buttons.edit-buttons :wire:key="$reservation->id" model="reservation" :modelId="$reservation->id" editRights="reservation-edit" deleteRights="reservation-delete" messageDelete="de la réservation">
     </div>
     <p><strong>{{ __("Date d'arrivée") }} :</strong>

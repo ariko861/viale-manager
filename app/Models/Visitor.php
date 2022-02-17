@@ -51,6 +51,11 @@ class Visitor extends Model
         return $this->belongsToMany(Reservation::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id', 'price');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'visitor_tag');
+    }
+
     public static function createQuickVisitor($email) {
         $visitor = new static();
         $visitor->email = $email;
@@ -77,7 +82,7 @@ class Visitor extends Model
     public static function getVisitorsList($onlyConfirmed = true) {
         $visitors = static::where('quickLink', false)->where(function($query) use ($onlyConfirmed) {
                     if ($onlyConfirmed) $query->where('confirmed', true);
-                })->get()->sortBy('name');
+                });
         return $visitors;
     }
 

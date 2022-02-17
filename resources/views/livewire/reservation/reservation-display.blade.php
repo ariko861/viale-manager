@@ -55,8 +55,9 @@
                 <p class="mt-6"><strong>{{__("Remarques faites à la confirmation")}} : </strong>{{$reservation->remarks}}</p>
             @endif
 
-            <p class="mt-8"><button wire:click="superUserInfo">Super User Info</button></p>
-
+            @role('Super Admin')
+                <p class="mt-8"><button wire:click="superUserInfo">Super User Info</button></p>
+            @endrole
 
         </div>
     </div>

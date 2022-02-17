@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire\Visitor;
 
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use App\Models\Visitor;
+use App\Models\Tag;
 
 class VisitorsList extends Component
 {
-
+    public $tags;
+    public $selectedTags;
     public $advancedSearch = false;
     public $visitorSearch;
     public $onlyConfirmed = true;
@@ -16,9 +19,11 @@ class VisitorsList extends Component
     public function mount()
     {
         $this->getAllVisitors();
+        $this->tags = Tag::all();
+        $this->selectedTags = collect([]);
     }
 
-    protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction'];
+    protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction', 'tagChosen'];
 
     public function newVisitorSaved($id)
     {
@@ -31,7 +36,7 @@ class VisitorsList extends Component
     }
 
     public function getAllVisitors(){
-        $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed);
+        $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed)->get()->sortBy('name');
     }
 
     public function getVisitorsByName(){
@@ -78,6 +83,29 @@ class VisitorsList extends Component
         });
 
         $this->emit('showAlert', [ __("L'utilisateur a bien été supprimé"), "bg-red-600"] );
+    }
+
+    public function filterByTag($tag_id) {
+
+        if ($this->selectedTags->contains($tag_id) ) {
+            $this->selectedTags = $this->selectedTags->reject(function($value, $key) use ($tag_id){
+                return $value == $tag_id;
+            });
+        } else $this->selectedTags->push($tag_id);
+
+        if ( $this->selectedTags->isEmpty() ) {
+            $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed)->get()->sortBy('name');
+        } else {
+            $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed)->whereHas('tags', function (Builder $query) {
+                $query->whereIn('id', $this->selectedTags);
+            })->get();
+        }
+    }
+
+    public function isTagSelected($tag_id) {
+        $tag = $this->tags->find($tag_id);
+        if ($this->selectedTags->contains($tag_id)) return true;
+        else return false;
     }
 
 

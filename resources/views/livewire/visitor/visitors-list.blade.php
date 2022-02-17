@@ -3,6 +3,14 @@
     <div class="option-field">
         <h2 class="mt-2 mb-4 text-center">{{__("Recherche de visiteurs")}} :</h2>
         <p class="my-8"><strong>{{__("Rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup.debounce.500ms="getVisitorsByName" wire:model="visitorSearch"></p>
+        @if ($tags)
+        <p>
+            <h4 class="mt-6 mb-4">{{__("Filtrer les visiteurs par étiquette")}} :</h4>
+            @foreach ($tags as $tag)
+                <span class="badge mx-4 cursor-pointer" wire:click="filterByTag('{{$tag->id}}')" style="background-color: {{ $this->isTagSelected($tag->id) ? $tag->color : '#CBD5E1' }}">{{ $tag->name }}</span>
+            @endforeach
+        </p>
+        @endif
         <p class="text-center text-sm mt-4 mb-6"><span wire:click="$toggle('advancedSearch')" class="cursor-pointer">{{__("Recherche avancée")}}<x-buttons.arrow-chevron :up="$advancedSearch" size=4/></span></p>
         @if ($advancedSearch)
         <div>
@@ -24,6 +32,7 @@
             <td class="{{ $thead_class }}">{{ __("Âge") }}</td>
             <td class="{{ $thead_class }}">{{ __("Téléphone") }}</td>
             <td class="{{ $thead_class }}">{{ __("Email") }}</td>
+            <td class="{{ $thead_class }}">{{ __("Étiquettes") }}</td>
             <td class="{{ $thead_class }}">{{ __("Remarques") }}</td>
             @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $thead_class }}">{{ __("Modifications") }}</td>
@@ -38,6 +47,14 @@
                 <td class="{{ $tbody_class }}">{{ $visitor["age"] }}</td>
                 <td class="{{ $tbody_class }}">{{ $visitor["phone"] }}</td>
                 <td class="{{ $tbody_class }}"><a class="text-blue-600" href="mailto:{{ $visitor["email"] }}">{{ $visitor["email"] }}</a></td>
+                <td class="{{ $tbody_class }}">
+                    @if ($visitor->tags->count())
+                        @foreach ($visitor->tags as $tag)
+                            <span class="badge" style="background-color: {{$tag->color}}">{{ $tag->name }}</span>
+                        @endforeach
+                    @endif
+                    <livewire:visitor.tag-field :wire:key="'tags-'.$visitor->id" :visitor_id="$visitor->id">
+                </td>
                 <td class="{{ $tbody_class }}">{{ $visitor["remarks"] }}</td>
                 @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $tbody_class }}">

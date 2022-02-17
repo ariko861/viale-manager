@@ -16,7 +16,9 @@
     h3 {
         @apply text-xl font-semibold;
     }
-    h4,
+    h4 {
+        @apply text-lg font-semibold;
+    }
     h5,
     h6 {
     }

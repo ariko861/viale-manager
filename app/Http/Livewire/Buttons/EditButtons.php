@@ -14,6 +14,7 @@ class EditButtons extends Component
     public $model;
     public $options;
     public $messageDelete;
+    public $deleteCondition = true;
 
     public function mount()
     {
