@@ -1,4 +1,4 @@
-<div @class(['mt-2', 'w-full', 'card'])>
+<div class="my-4 w-full card px-12 md:w-2/3 {{ $visitorInReservation->contact ? 'border-4 border-red-200' : 'border-2' }}">
     @if ( $visitorInReservation && $visitorInReservation->contact )
         <p class="text-lg"><strong>{{ __("Personne de contact") }} :</strong> </p>
     @endif
