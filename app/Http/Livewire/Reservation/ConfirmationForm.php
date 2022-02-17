@@ -233,7 +233,7 @@ class ConfirmationForm extends Component
 
         // Pour afficher les messages en introduction de la page de confirmation
         $this->reservation_link_messages = collect([]);
-        $messages = Option::where('name', 'reservation_link_message')->get();
+        $messages = Option::where('name', 'reservation_link_message')->orderBy('id')->get();
         foreach ($messages as $message )
         {
             $this->reservation_link_messages->push( Str::markdown($message->value) );

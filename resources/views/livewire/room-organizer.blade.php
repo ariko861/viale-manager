@@ -9,12 +9,12 @@
             @foreach ( $resas->sortBy(function($item, $key) { return $item->reservation->arrivaldate; }) as $resa )
                 @if ($resa->reservation)
                 <li id="resa{{ $resa->id }}" class="card p-2 cursor-pointer movable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }} {{ $onMoving === $resa->id ? 'moving' : ''}}" wire:click="movingVisitor({{ $resa->id }})">
-                    <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
+                    <p>{{ $resa->visitor->full_name ?? "" }}, {{ $resa->visitor->age ?? ""}} {{ __("ans")}}</p>
                     <p>{{ $resa->room ?? ''}}</p>
                     <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
                     <div class="{{ $onMoving === $resa->id ? '' : 'hidden' }}">
                         <p>{{ $resa->reservation->remarks }}</p>
-                        <p>{{ $resa->visitor->remarks }}</p>
+                        <p>{{ $resa->visitor->remarks ?? ""}}</p>
                     </div>
                 </li>
                 @endif
@@ -66,11 +66,11 @@
                                 @foreach ( $this->getRoomAvailability($room) as $resa )
                                     <div id="resa{{ $resa->id }}" class="card p-2 {{ $cursor ?? '' }} movable relative border-l-4 {{ $resa->reservation->confirmed ? 'border-green-400' : 'border-yellow-400' }} {{ $resa->reservation->arrivaldate == $endDay ? 'bg-red-100' : ''}} {{ $resa->reservation->departuredate == $beginDay && ! $resa->reservation->nodeparturedate ? 'bg-yellow-100' : ''}} {{ $onMoving === $resa->id ? 'moving' : ''}}" wire:click="movingVisitor({{ $resa->id }}, {{ $room->id }})">
                                         <div class="float-right text-sm italic">{{ $resa->reservation->arrivaldate == $endDay ? __("Arrive")." ".$lastDay : ''}} {{ $resa->reservation->departuredate == $beginDay && ! $resa->reservation->nodeparturedate ? __("Part")." ".$firstDay : ''}}</div>
-                                        <p>{{ $resa->visitor->full_name }}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
+                                        <p>{{ $resa->visitor->full_name ?? ""}}, {{ $resa->visitor->age}} {{ __("ans")}}</p>
                                         <p class="text-xs italic">{{ $resa->reservation->arrival}} {{ __("jusqu'au")}} {{ $resa->reservation->departure }}</p>
                                         <div class="{{ $onMoving === $resa->id ? '' : 'hidden' }}">
                                             <p>{{ $resa->reservation->remarks }}</p>
-                                            <p>{{ $resa->visitor->remarks }}</p>
+                                            <p>{{ $resa->visitor->remarks ?? "" }}</p>
                                         </div>
 
                                     </div>

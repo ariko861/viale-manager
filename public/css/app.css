@@ -1211,17 +1211,21 @@ h4,
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 .mx-16 {
   margin-left: 4rem;
@@ -1230,10 +1234,6 @@ h4,
 .my-32 {
   margin-top: 8rem;
   margin-bottom: 8rem;
-}
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -1324,9 +1324,6 @@ h4,
 }
 .mb-1 {
   margin-bottom: 0.25rem;
-}
-.mt-16 {
-  margin-top: 4rem;
 }
 .block {
   display: block;

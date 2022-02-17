@@ -24,7 +24,7 @@ class NewVisitorForm extends Component
         'newvisitor.surname' => 'required|string|max:255',
         'newvisitor.phone' => 'string|nullable|max:255',
         'newvisitor.email' => 'email|nullable',
-        'newvisitor.birthyear' => 'integer|between:1900,2100',
+        'newvisitor.birthyear' => 'integer|between:1900,2100|nullable',
         'newvisitor.remarks' => 'string|nullable',
     ];
 

@@ -1,4 +1,17 @@
 <div>
+
+    <div class="option-field">
+        <h2 class="mt-2 mb-4 text-center">{{__("Recherche de visiteurs")}} :</h2>
+        <p class="my-8"><strong>{{__("Rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup.debounce.500ms="getVisitorsByName" wire:model="visitorSearch"></p>
+        <p class="text-center text-sm mt-4 mb-6"><span wire:click="$toggle('advancedSearch')" class="cursor-pointer">{{__("Recherche avancée")}}<x-buttons.arrow-chevron :up="$advancedSearch" size=4/></span></p>
+        @if ($advancedSearch)
+        <div>
+            <p class="my-8"><strong>{{__("Afficher uniquement les visiteurs confirmés")}} :</strong> <input type="checkbox" wire:change.debounce.100ms="getAllVisitors" wire:model="onlyConfirmed"></p>
+
+        </div>
+        @endif
+    </div>
+    <h3 class="mt-4 mb-2 text-center">{{$visitors->count()}} {{__("visiteurs dans la liste")}}</h3>
     <table class="mt-8 w-full table-auto border-collapse border border-gray-400">
     @php
         $thead_class="border-2 border-gray-400 bg-gray-100";

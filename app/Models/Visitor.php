@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Support\VisitorCollection;
 
 class Visitor extends Model
 {
@@ -61,12 +62,35 @@ class Visitor extends Model
         return $visitor;
     }
 
+    public static function searchVisitorsByName($searchQuery, $onlyConfirmed = true) {
+        $visitors = static::where('quickLink', false)
+                ->where(function($query) use ($onlyConfirmed) {
+                    if ($onlyConfirmed) $query->where('confirmed', true);
+                })->where(function($query) use ($searchQuery) {
+                    $query->where('name', 'ilike', '%'.$searchQuery.'%')
+                        ->orWhere('surname', 'ilike', '%'.$searchQuery.'%')
+                        ->orWhere('email', 'ilike', '%'.$searchQuery.'%');
+                })->get()->sortBy('name');
+        return $visitors;
+    }
 
+    public static function getVisitorsList($onlyConfirmed = true) {
+        $visitors = static::where('quickLink', false)->where(function($query) use ($onlyConfirmed) {
+                    if ($onlyConfirmed) $query->where('confirmed', true);
+                })->get()->sortBy('name');
+        return $visitors;
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new VisitorCollection($models);
+    }
 
     protected $casts = [
         'name' => 'string',
     ];
 
     protected $appends = ['full_name', 'age'];
+
 
 }

@@ -31,7 +31,7 @@ class SuccessConfirm extends Component
     public function mount()
     {
         $this->confirmation_messages = collect([]);
-        $confirmation_messages = Option::where('name', 'confirmation_message')->get();
+        $confirmation_messages = Option::where('name', 'confirmation_message')->orderBy('id')->get();
         foreach ($confirmation_messages as $message )
         {
             $this->confirmation_messages->push( Str::markdown($message->value) );

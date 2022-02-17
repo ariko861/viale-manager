@@ -8,10 +8,14 @@ use App\Models\Visitor;
 class VisitorsList extends Component
 {
 
-//
+    public $advancedSearch = false;
+    public $visitorSearch;
+    public $onlyConfirmed = true;
+    public $visitors;
+
     public function mount()
     {
-        $this->visitors = Visitor::where('confirmed', true)->get()->sortBy('name');
+        $this->getAllVisitors();
     }
 
     protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction'];
@@ -24,6 +28,14 @@ class VisitorsList extends Component
             $this->visitors->push($visitor);
             $this->visitors = $this->visitors->sortBy('name');
         }
+    }
+
+    public function getAllVisitors(){
+        $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed);
+    }
+
+    public function getVisitorsByName(){
+        $this->visitors = Visitor::searchVisitorsByName($this->visitorSearch, $this->onlyConfirmed);
     }
 
     public function visitorModified($id)
@@ -54,7 +66,12 @@ class VisitorsList extends Component
 
     public function deleteVisitor($visitor_id)
     {
-        Visitor::destroy($visitor_id);
+        $visitor = Visitor::find($visitor_id);
+        if ($visitor->reservations->count()) {
+            $visitor->confirmed = false;
+            $visitor->save();
+        }
+        else $visitor->delete();
 
         $this->visitors = $this->visitors->filter(function($item) use ($visitor_id) {
             return $item->id != $visitor_id;

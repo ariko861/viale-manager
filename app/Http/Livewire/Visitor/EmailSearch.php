@@ -58,7 +58,7 @@ class EmailSearch extends Component
     {
         $this->validate();
         $email = $this->email;
-        $this->visitors = Visitor::where('email', $email)->get();
+        $this->visitors = Visitor::where('email', $email)->where('confirmed', true)->get();
         if ( $this->visitors->count() ) {
             $this->showVisitorList = true;
         } else {

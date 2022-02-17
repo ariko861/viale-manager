@@ -40,8 +40,8 @@ class Options extends Component
         $this->email = Option::firstOrNew(['name' => 'email']);
         $this->phone = Option::firstOrNew(['name' => 'phone']);
         $this->address = Option::firstOrNew(['name' => 'address']);
-        $this->confirmation_messages = Option::where('name', 'confirmation_message')->get();
-        $this->reservation_link_messages = Option::where('name', 'reservation_link_message')->get();
+        $this->confirmation_messages = Option::where('name', 'confirmation_message')->orderBy('id')->get();
+        $this->reservation_link_messages = Option::where('name', 'reservation_link_message')->orderBy('id')->get();
         $this->matrix_links = MatrixLink::all();
     }
 
