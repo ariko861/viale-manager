@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Visitor;
 
 use Livewire\Component;
 use App\Models\Tag;
+use App\Models\Visitor;
+
 
 class TagField extends Component
 {
@@ -13,6 +15,7 @@ class TagField extends Component
     public $colors;
     public $visitor_id;
     public $showTagForm = false;
+    public $visitor_tags;
 
     public function searchTag() {
         $this->tags = Tag::where('name', 'ilike', $this->tagSearchQuery.'%')->get();
@@ -21,16 +24,28 @@ class TagField extends Component
         $this->colors = collect(['#F87171', '#FB923C', '#FACC15', '#A3E635', '#60A5FA', '#C084FC']);
     }
 
+    public function refreshVisitorTags() {
+        $this->visitor_tags = Visitor::find($this->visitor_id)->tags;
+    }
+
     public function stopTagSearch() {
         $this->tags = null;
         $this->tagSearchQuery = "";
+        $this->showTagForm = false;
     }
 
     public function setTag($tag_id) {
         $tag = Tag::find($tag_id);
         $tag->visitors()->attach($this->visitor_id);
         $this->stopTagSearch();
-        $this->emitUp('visitorModified', $this->visitor_id);
+        $this->refreshVisitorTags();
+    }
+
+    public function removeTag($tag_id) {
+        $tag = Tag::find($tag_id);
+        $tag->visitors()->detach($this->visitor_id);
+        $this->stopTagSearch();
+        $this->refreshVisitorTags();
     }
 
     public function createTag($color = "#000000"){
@@ -40,7 +55,7 @@ class TagField extends Component
         $tag->normalize();
         $tag->save();
         $tag->visitors()->attach($this->visitor_id);
-        $this->emitUp('visitorModified', $this->visitor_id);
+        $this->refreshVisitorTags();
         $this->stopTagSearch();
     }
 

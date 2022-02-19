@@ -93,27 +93,29 @@ class RoomOrganizer extends Component
     public function movingVisitor($resa_id, $room_id = null)
     {
 //         $resa_id = substr($resa_id, 4);
-        if ($room_id) $this->movingFromRoom = $room_id;
-        if ($this->onMoving === $resa_id) {
-            $this->onMoving = null;
-            $this->restoreDays();
-            return;
-        }
-        if (! $this->onMoving) $this->saveDays(); // Ne conserver les jours sélectionnés que si un visiteur n'a pas été sélectionné avant
+        if( auth()->user()->can('room-choose') ) {
+            if ($room_id) $this->movingFromRoom = $room_id;
+            if ($this->onMoving === $resa_id) {
+                $this->onMoving = null;
+                $this->restoreDays();
+                return;
+            }
+            if (! $this->onMoving) $this->saveDays(); // Ne conserver les jours sélectionnés que si un visiteur n'a pas été sélectionné avant
 
-        $this->onMoving = $resa_id;
+            $this->onMoving = $resa_id;
 
-        $visitorReservation = VisitorReservation::find($resa_id);
-        $this->beginDay = $visitorReservation->reservation->arrivaldate;
-        if ($visitorReservation->reservation->nodeparturedate)
-        {
-            $this->endDay = Carbon::now()->addYear()->format('Y-m-d');
+            $visitorReservation = VisitorReservation::find($resa_id);
+            $this->beginDay = $visitorReservation->reservation->arrivaldate;
+            if ($visitorReservation->reservation->nodeparturedate)
+            {
+                $this->endDay = Carbon::now()->addYear()->format('Y-m-d');
 
-        } else {
-            $this->endDay = $visitorReservation->reservation->departuredate;
-        }
-        $this->dateChanged();
-        $refresh;
+            } else {
+                $this->endDay = $visitorReservation->reservation->departuredate;
+            }
+            $this->dateChanged();
+            $refresh;
+    }
 
     }
 

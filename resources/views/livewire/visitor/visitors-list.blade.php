@@ -34,6 +34,7 @@
             <td class="{{ $thead_class }}">{{ __("Email") }}</td>
             <td class="{{ $thead_class }}">{{ __("Étiquettes") }}</td>
             <td class="{{ $thead_class }}">{{ __("Remarques") }}</td>
+            <td class="{{ $thead_class }}">{{ __("Réservations faites") }}</td>
             @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $thead_class }}">{{ __("Modifications") }}</td>
             @endcanany
@@ -48,14 +49,11 @@
                 <td class="{{ $tbody_class }}">{{ $visitor["phone"] }}</td>
                 <td class="{{ $tbody_class }}"><a class="text-blue-600" href="mailto:{{ $visitor["email"] }}">{{ $visitor["email"] }}</a></td>
                 <td class="{{ $tbody_class }}">
-                    @if ($visitor->tags->count())
-                        @foreach ($visitor->tags as $tag)
-                            <span class="badge" style="background-color: {{$tag->color}}">{{ $tag->name }}</span>
-                        @endforeach
-                    @endif
-                    <livewire:visitor.tag-field :wire:key="'tags-'.$visitor->id" :visitor_id="$visitor->id">
+
+                    <livewire:visitor.tag-field :wire:key="'tags-'.$visitor->id" :visitor_id="$visitor->id" :visitor_tags="$visitor->tags">
                 </td>
                 <td class="{{ $tbody_class }}">{{ $visitor["remarks"] }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->reservations->count() ?? 0 }}</td>
                 @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $tbody_class }}">
                 <livewire:buttons.edit-buttons :wire:key="$visitor->id" model="visitor" :modelId="$visitor->id" editRights="visitor-edit" deleteRights="visitor-delete">

@@ -97,7 +97,7 @@
 
             @if ( $link->max_added_visitors )
                 <br>
-                <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné ? Vous pouvez ajouter d'autres visiteurs à la réservation")}} :</h3>
+                <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné·e ? Vous pouvez ajouter d'autres visiteurs à la réservation")}} :</h3>
                 @unless ( $forbidAddingVisitors )
                     <div class="col-span-full">
                         <button class="btn bg-blue-400 w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>

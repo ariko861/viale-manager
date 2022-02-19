@@ -1,6 +1,6 @@
 <div class="my-12 w-full card border-l-4 border-b-4 {{ $reservation->confirmed ? 'border-green-400' : 'border-yellow-400'}}">
-    <div class="p-4 float-right border-4 text-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-10 w-10 m-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="p-1 float-right border-4 text-center sm:p-2 md:p-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-6 w-6 m-2 md:h-10 md:w-10 md:m-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
         <livewire:buttons.edit-buttons :wire:key="$reservation->id" model="reservation" :modelId="$reservation->id" editRights="reservation-edit" deleteRights="reservation-delete" messageDelete="de la réservation">
