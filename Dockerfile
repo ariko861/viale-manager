@@ -8,7 +8,11 @@ RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
 WORKDIR /app
 COPY . /app
 
+COPY --chown=www-data:www-data . /app
+
+USER www-data
+
 RUN composer install
 
-#EXPOSE 8000
-#CMD php artisan serve --host=0.0.0.0 --port=8000
+EXPOSE 9000
+CMD ["php-fpm"]
