@@ -10,7 +10,8 @@ COPY . /app
 
 RUN chown -R www-data:www-data \
         /app/storage \
-        /app/bootstrap/cache
+        /app/bootstrap/cache \
+        /app/public
 
 RUN composer install
 
