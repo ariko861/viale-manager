@@ -10,7 +10,7 @@
         @foreach ($visitor_tags as $tag)
             <span class="badge" style="background-color: {{$tag->color}}">{{ $tag->name }}
             @if ($showTagForm)
-                <span class="cursor-pointer ml-2" wire:click="removeTag({{$tag->id}})">
+                <span class="cursor-pointer ml-2" wire:click="removeTag({{$tag}})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -26,7 +26,7 @@
         @if ($tags && $tags->count())
             <li></li>
             @foreach ($tags as $tag)
-                <li class="p-2 border-2 cursor-pointer" wire:click="setTag('{{$tag->id}}')"><span class="font-bold">{{__("Ajouter l'étiquette")}}</span> <span  class="badge" style="{{ $tag->color ? 'background-color : '.$tag->color : '' }}">{{ $tag->name }}</span> <span class="font-bold">{{__("au visiteur")}}</span></li>
+                <li class="p-2 border-2 cursor-pointer" wire:click="setTag({{$tag}})"><span class="font-bold">{{__("Ajouter l'étiquette")}}</span> <span  class="badge" style="{{ $tag->color ? 'background-color : '.$tag->color : '' }}">{{ $tag->name }}</span> <span class="font-bold">{{__("au visiteur")}}</span></li>
             @endforeach
         @endif
         @if ($tagSearchQuery)

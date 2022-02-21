@@ -19,11 +19,13 @@ class ConfirmationLink extends Mailable
      * @return void
      */
     public $link;
+    public $personalMessage = "";
 
-    public function __construct(ReservationLink $link)
+    public function __construct(ReservationLink $link, $personalMessage = "")
     {
         //
         $this->link = $link;
+        $this->personalMessage = $personalMessage;
     }
 
     /**
@@ -34,7 +36,6 @@ class ConfirmationLink extends Mailable
     public function build()
     {
         $reply_to = Option::firstOrNew(['name' => 'email'])->value;
-
         return $this->replyTo($reply_to, env("APP_NAME"))
                     ->subject(__("Confirmation de votre réservation à")." ".env("APP_NAME"))
                     ->view('emails.confirmation-link');

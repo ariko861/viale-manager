@@ -16,10 +16,13 @@
                 @unless ($linkCreated)
                     <button class="btn-submit" wire:click="send(false)">{{__("Générer un lien de confirmation")}}</button>
                     @if ($reservation->contact_person && $reservation->contact_person->email)
-                        <br><p>{{__("Ou")}}</p>
-                        <button class="btn-submit btn-sm" wire:click="send(true)">{{__("Envoyer un email de confirmation à")}} {{ $reservation->contact_person->email ?? "" }}</button>
-                        <br>
-                        <p wire:loading>{{__("Email en cours d'envoi")}}</p>
+                        <div class="border-4 m-4 p-4">
+                            <p>{{__("Ou")}}</p>
+                            <button class="btn-submit btn-sm" wire:click="send(true)">{{__("Envoyer un email de confirmation à")}} {{ $reservation->contact_person->email ?? "" }}</button>
+                            <br>
+                            <p>{{__("Avec le message suivant")}} :</p>
+                            <textarea wire:model="emailBody"></textarea>
+                        </div>
                     @endif
 
                 @endunless

@@ -43,16 +43,16 @@
     <tbody>
         @foreach ( $visitors as $visitor )
             <tr>
-                <td class="{{ $tbody_class }}">{{ $visitor["name"] }}</td>
-                <td class="{{ $tbody_class }}">{{ $visitor["surname"] }}</td>
-                <td class="{{ $tbody_class }}">{{ $visitor["age"] }}</td>
-                <td class="{{ $tbody_class }}">{{ $visitor["phone"] }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->name }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->surname }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->age }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->phone }}</td>
                 <td class="{{ $tbody_class }}"><a class="text-blue-600" href="mailto:{{ $visitor["email"] }}">{{ $visitor["email"] }}</a></td>
                 <td class="{{ $tbody_class }}">
 
                     <livewire:visitor.tag-field :wire:key="'tags-'.$visitor->id" :visitor_id="$visitor->id" :visitor_tags="$visitor->tags">
                 </td>
-                <td class="{{ $tbody_class }}">{{ $visitor["remarks"] }}</td>
+                <td class="{{ $tbody_class }}">{{ $visitor->remarks }}</td>
                 <td class="{{ $tbody_class }}">{{ $visitor->reservations->count() ?? 0 }}</td>
                 @canany(['visitor-edit', 'visitor-delete'])
                 <td class="{{ $tbody_class }}">

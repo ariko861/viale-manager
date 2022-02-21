@@ -57,7 +57,7 @@ class NewVisitorForm extends Component
         {
             $this->emit('visitorModified', $this->newvisitor->id );
         } else {
-            $this->emit('newVisitorSaved', $this->newvisitor->id );
+            $this->emit('newVisitorSaved', $this->newvisitor );
         }
         $this->emit('showAlert', [ __("L'utilisateur a bien été enregistré"), "bg-green-500" ] );
         $this->cancelVisitorForm();

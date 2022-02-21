@@ -25,11 +25,23 @@
             </div>
         @endforeach
         @unless ($showPrice)
-            <button class="mt-4" wire:click="$toggle('showPrice')">{{__("Afficher la participation totale pour le séjour")}}</button>
+            @unless ($isEmail)
+                <button class="mt-4" wire:click="$toggle('showPrice')">{{__("Afficher la participation totale pour le séjour")}}</button>
+            @endunless
         @endunless
         @if ($showPrice)
             <p class="mt-4"><strong>{{__("Participation total pour le séjour")}} : </strong>{{$reservation->total_price_euro}}</p>
         @endif
+
+        @unless ($isEmail)
+            @unless ($emailSent)
+                <button class="my-4" wire:click="sendRecapReservation">{{__("Recevoir le récapitulatif de la réservation par email")}}</button>
+            @endunless
+            @if ($emailSent)
+                <p class="my-4">{{__("Email envoyé !")}}</p>
+            @endif
+        @endunless
+
         @if ( $confirmation_messages )
         <div class="bg-red-100 w-full p-6 border-4 border-red-600 mt-4">
             <h2>{{__("N'oubliez pas")}} :</h2>

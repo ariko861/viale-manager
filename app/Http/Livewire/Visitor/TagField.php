@@ -34,15 +34,14 @@ class TagField extends Component
         $this->showTagForm = false;
     }
 
-    public function setTag($tag_id) {
-        $tag = Tag::find($tag_id);
+    public function setTag(Tag $tag) {
+//         $tag = Tag::find($tag_id);
         $tag->visitors()->attach($this->visitor_id);
         $this->stopTagSearch();
         $this->refreshVisitorTags();
     }
 
-    public function removeTag($tag_id) {
-        $tag = Tag::find($tag_id);
+    public function removeTag(Tag $tag) {
         $tag->visitors()->detach($this->visitor_id);
         $this->stopTagSearch();
         $this->refreshVisitorTags();

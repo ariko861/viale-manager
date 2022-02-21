@@ -25,11 +25,11 @@ class VisitorsList extends Component
 
     protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction', 'tagChosen'];
 
-    public function newVisitorSaved($id)
+    public function newVisitorSaved(Visitor $visitor)
     {
-        if ($id)
+        if ($visitor)
         {
-            $visitor = Visitor::find($id);
+//             $visitor = Visitor::find($id);
             $this->visitors->push($visitor);
             $this->visitors = $this->visitors->sortBy('name');
         }

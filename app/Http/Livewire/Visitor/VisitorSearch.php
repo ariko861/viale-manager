@@ -24,9 +24,8 @@ class VisitorSearch extends Component
 
     }
 
-    public function newVisitorSaved($id){
+    public function newVisitorSaved($visitor){
         if ($this->visitorSet == false && $this->displayAddVisitorButton){
-            $visitor = Visitor::find($id);
             $this->setContactPerson($visitor);
         }
     }

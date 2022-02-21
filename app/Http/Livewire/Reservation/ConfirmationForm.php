@@ -38,7 +38,7 @@ class ConfirmationForm extends Component
             'contact_person.birthyear' => 'required|integer|between:1900,2100',
             'price' => 'integer|required',
             'reservation.arrivaldate' => 'required|date',
-            'reservation.departuredate' => 'required|date',
+            'reservation.departuredate' => 'required|date|after_or_equal:reservation.arrivaldate',
             'reservation.remarks' => 'string|nullable',
             'addedVisitors.*.visitor.name' => 'required|string|max:255',
             'addedVisitors.*.visitor.surname' => 'required|string|max:255',

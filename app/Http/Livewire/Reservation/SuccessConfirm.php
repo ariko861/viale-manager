@@ -6,12 +6,16 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Models\Reservation;
 use App\Models\Option;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RecapitulatifConfirmationReservation;
 use App\Jobs\SendReservationConfirmed;
 
 class SuccessConfirm extends Component
 {
     public $reservation;
     public $showPrice = false;
+    public $emailSent = false;
+    public $isEmail = false;
 
     protected $listeners = ['showRecapReservation'];
 
@@ -26,6 +30,14 @@ class SuccessConfirm extends Component
         dispatch(new SendReservationConfirmed($details));
 //         Mail::to($to)->queue(new ReservationConfirmed($this->reservation));
 
+    }
+
+    public function sendRecapReservation()
+    {
+        if ($this->reservation->contact_person && $this->reservation->contact_person->email) {
+            Mail::to($this->reservation->contact_person->email)->send(new RecapitulatifConfirmationReservation($this->reservation, $this->showPrice));
+            $this->emailSent = true;
+        }
     }
 
     public function mount()
