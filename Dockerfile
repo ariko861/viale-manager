@@ -8,9 +8,9 @@ RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
 WORKDIR /app
 COPY . /app
 
-COPY --chown=www-data:www-data . /app
-
-USER www-data
+RUN chown -R www-data:www-data \
+        /app/storage \
+        /app/bootstrap/cache
 
 RUN composer install
 
