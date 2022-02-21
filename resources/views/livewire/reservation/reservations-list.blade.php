@@ -6,6 +6,7 @@
         <p class="my-8">{{__("Afficher les")}} <button wire:click="getReservationsHere">{{__("Personnes présentes")}}</button></p>
         <p class="my-8">{{__("Afficher les")}} <input type="number" step=1 wire:model="amountDisplayedReservation"> {{__("prochaines arrivées")}} : <button wire:click="getReservationsComing">{{__("Chercher")}}</button></p>
         <p class="my-8"><strong>{{__("Ou rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup="getReservationsByVisitorName" wire:model="visitorSearch"></p>
+        <p class="my-8">{{__("Afficher les")}} <button wire:click="getLastConfirmations">{{__("dernières confirmations")}}</button></p>
         <p class="text-center text-sm mt-4 mb-6"><span wire:click="$toggle('advancedSearch')" class="cursor-pointer">{{__("Recherche avancée")}}<x-buttons.arrow-chevron :up="$advancedSearch" size=4/></span></p>
         @if ($advancedSearch)
         <div>

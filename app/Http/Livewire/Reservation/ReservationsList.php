@@ -52,6 +52,13 @@ class ReservationsList extends Component
         $this->emit('scrollToReservationList');
     }
 
+    public function getLastConfirmations()
+    {
+        $this->reservations = Reservation::where('quickLink', false)->where('confirmed', true)->where('confirmed_at', '<>', null)->orderBy('confirmed_at', 'desc')->take($this->amountDisplayedReservation)->get();
+        $this->listTitle = $this->amountDisplayedReservation." ".__("dernières confirmations");
+        $this->emit('scrollToReservationList');
+    }
+
     public function getReservationsWhereArrivalInBetween(){
         $this->reservations = Reservation::where('quickLink', false)->whereDate('arrivaldate', '>=', $this->beginDate)->whereDate('arrivaldate', '<=', $this->endDate)->get();
         $beginDate = new Carbon($this->beginDate);

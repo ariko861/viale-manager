@@ -209,6 +209,7 @@ class ConfirmationForm extends Component
         }
         $this->reservation->confirmed = true;
         $this->reservation->quickLink = false;
+        $this->reservation->confirmed_at = Carbon::now();
 
         $this->reservation->save();
         $this->emit('showRecapReservation', $this->reservation->id);
