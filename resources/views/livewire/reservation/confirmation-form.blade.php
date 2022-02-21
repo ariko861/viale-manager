@@ -98,11 +98,7 @@
             @if ( $link->max_added_visitors )
                 <br>
                 <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné·e ? Vous pouvez ajouter d'autres visiteurs à la réservation")}} :</h3>
-                @unless ( $forbidAddingVisitors )
-                    <div class="col-span-full">
-                        <button class="btn bg-blue-400 w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>
-                    </div>
-                @endunless
+
         <!--    Pour chaque visiteur ajouté à la réservation -->
                 @if ( $addedVisitors )
                 @foreach ( $addedVisitors as $key => $addedVisitor )
@@ -175,6 +171,11 @@
                     </div>
                 @endforeach
                 @endif
+                @unless ( $forbidAddingVisitors )
+                    <div class="col-span-full">
+                        <button class="btn bg-blue-400 w-full" wire:click.prevent="addVisitor">{{ __("Ajouter un autre visiteur") }}</button>
+                    </div>
+                @endunless
             @endif
             <label class="col-span-1 mt-6">{{ __("Nous faire part d'une remarque") }}</label>
             <textarea class="col-span-2 mt-6" wire:model="reservation.remarks"></textarea>
