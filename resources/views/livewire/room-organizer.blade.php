@@ -2,7 +2,9 @@
     @can('room-choose')
     <div class="col-span-1" id="newComersContainer">
         <ul id="newComersList" class="col-span-1">
-            <h2 class="text-lg font-bold mb-4">{{__("Futurs arrivants non placés")}}</h2>
+            <h2 class="text-lg font-bold mb-4">{{ $comingListTitle }}</h2>
+            <button class="btn-sm my-4" wire:click="getPeopleBetweenDates">{{__("Afficher uniquement les visiteurs présents pendant les dates séléctionnées")}}</button>
+            <button class="btn-sm mb-6" wire:click="getNewComers">{{__("Afficher tous les futurs arrivants")}}</button>
             <li class="card p-2 h-16 border-l-4 relative {{ $onMoving && ! $resas->find($onMoving)? 'movable-receiver' : 'hidden' }}" wire:click="takeOutOfRoom">
                 <p>{{__("Retirer de la chambre")}}</p>
             </li>

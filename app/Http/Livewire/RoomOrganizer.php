@@ -24,6 +24,8 @@ class RoomOrganizer extends Component
     public $firstDay;
     public $onMoving;
     public $movingFromRoom;
+    public $comingListTitle;
+
     protected $listeners = ["roomChanged", "movingVisitor", "restoreDays"];
 
     public function backToToday()
@@ -65,7 +67,13 @@ class RoomOrganizer extends Component
                     ->orWhere('nodeparturedate', true );
                 });
         })->get();
+        $this->comingListTitle = __("Futurs arrivants non placés");
+    }
 
+    public function getPeopleBetweenDates()
+    {
+        $this->resas = VisitorReservation::getVisitorsInResasBetweenDates($this->beginDay, $this->endDay);
+        $this->comingListTitle = __("Personnes arrivant entre le :begin et le :end", ['begin' => $this->beginDay, 'end' => $this->endDay]);
     }
 
     public function getHouses()
@@ -79,8 +87,6 @@ class RoomOrganizer extends Component
         $this->backToToday();
         $this->getNewComers();
         $this->today = Carbon::now()->format('Y-m-d');
-
-
     }
 
     public function getRoomAvailability($room)

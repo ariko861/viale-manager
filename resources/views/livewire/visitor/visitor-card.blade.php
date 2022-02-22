@@ -33,7 +33,7 @@
 
     <p><strong>{{ __("Nom") }} :</strong> <span>{{ $visitor->full_name }}, {{ $visitor->age}} {{ __("ans") }}</span></p>
     <p><strong>{{ __("Email") }} :</strong> <span><a class="text-blue-600" href="mailto:{{ $visitor->email }}">{{ $visitor->email }}</a></span></p>
-    <p><strong>{{ __("Numéro de téléphone") }} :</strong> <span>{{ $visitor->phone }}</span></p>
+    <p><strong>{{ __("Numéro de téléphone") }} :</strong> <span><a href="tel:{{ $visitor->phone }}">{{ $visitor->phone }}</a></span></p>
     <p><strong>{{ __("Chambre") }} :</strong>
         <span>
 

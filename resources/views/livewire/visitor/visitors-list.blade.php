@@ -46,7 +46,7 @@
                 <td class="{{ $tbody_class }}">{{ $visitor->name }}</td>
                 <td class="{{ $tbody_class }}">{{ $visitor->surname }}</td>
                 <td class="{{ $tbody_class }}">{{ $visitor->age }}</td>
-                <td class="{{ $tbody_class }}">{{ $visitor->phone }}</td>
+                <td class="{{ $tbody_class }}"><a href="tel:{{ $visitor->phone }}">{{ $visitor->phone }}</a></td>
                 <td class="{{ $tbody_class }}"><a class="text-blue-600" href="mailto:{{ $visitor["email"] }}">{{ $visitor["email"] }}</a></td>
                 <td class="{{ $tbody_class }}">
 
