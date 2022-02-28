@@ -86,70 +86,24 @@
         </table>
     </div>
 
-    @can('room-choose')
-    <script>
+<!--    <script>
 
-    $(document).ready(function(){
-        const list = $("#newComersList");
-        const container = $("#newComersContainer");
-        const fromTopInit = list.offset().top;
-        $(window).scroll(function() {
-            var fromTop = $(window).scrollTop();
-            console.log(fromTop);
-            if ( fromTop >= fromTopInit ) {
-                list.css({ 'position': 'fixed', 'top': 0 });
-                list.width(container.width());
-            } else {
-                list.css('position', 'initial');
-            }
-        });
-    });
-    </script>
+//     $(document).ready(function(){
+//         const list = $("#newComersList");
+//         const container = $("#newComersContainer");
+//         const fromTopInit = list.offset().top;
+//         $(window).scroll(function() {
+//             var fromTop = $(window).scrollTop();
+//             console.log(fromTop);
+//             if ( fromTop >= fromTopInit ) {
+//                 list.css({ 'position': 'fixed', 'top': 0 });
+//                 list.width(container.width());
+//             } else {
+//                 list.css('position', 'initial');
+//             }
+//         });
+//     });
+//     </script>
+-->
 
-<!--  $( function() {
-
-      function letDrag() {
-        setTimeout(function(){
-            $( ".draggable" ).draggable({
-                revert: function(is_valid){
-                    if (!is_valid) {
-                        Livewire.emit('restoreDays');
-                        return true;
-                    }
-                },
-                cursor: "move",
-                start: function( event, ui ){
-                    Livewire.emit('movingVisitor', ui.helper[0].id);
-                }
-            });
-        }, 500);
-        $(".draggable").click( function(){
-          $(this).children(".hidden-remarks").fadeToggle();
-      });
-      }
-
-
-      letDrag();
-
-    //To check when a date is changed
-    Livewire.on('dateChanged', () => {
-        letDrag();
-    });
-
-    $( ".dropzone" ).droppable({
-      classes: {
-        "ui-droppable-active": "ui-state-active",
-        "ui-droppable-hover": "ui-state-hover"
-      },
-      drop: function( event, ui ) {
-
-        Livewire.emit('roomChanged', { room: this.id, resa: ui.draggable[0].id });
-        letDrag();
-
-      }
-    });
-  } );
-
-    </script>-->
-    @endcan
 </div>
