@@ -108,6 +108,19 @@ class VisitorsList extends Component
         else return false;
     }
 
+    public function getEmailList() {
+        $mailList = "";
+        foreach ( $this->visitors as $visitor ) {
+            if ($visitor->email) $mailList = $mailList.$visitor->email.", ";
+        }
+        $info = [
+            'title' => __("Liste des emails des visiteurs séléctionnés"),
+            'text' => $mailList,
+        ];
+        $this->emit('displayInformation', $info);
+
+    }
+
 
     public function render()
     {

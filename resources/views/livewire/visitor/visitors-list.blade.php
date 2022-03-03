@@ -63,4 +63,6 @@
         @endforeach
    </tbody>
    </table>
+
+   <button class="mt-6" wire:click="getEmailList">{{__("Obtenir la liste des emails")}}</button>
 </div>

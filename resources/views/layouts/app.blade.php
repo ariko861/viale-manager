@@ -40,6 +40,7 @@
                 {{ $slot }}
             </main>
             <livewire:offline-indicator >
+            <livewire:information-display >
 
         </div>
 
