@@ -14,11 +14,14 @@
         @endif
     </p>
     <p><strong>{{ __("Date de départ") }} :</strong>
-        @if ( $editing )
-            <input wire:model="reservation.departuredate" min="{{ $reservation->arrivaldate }}" type="date" wire:change="updateReservation">
+        @if ( $editing || $setDepartureDate )
+            <input wire:model="reservation.departuredate" min="{{ $reservation->arrivaldate }}" type="date" wire:change="updateReservation('departure')">
             @error('reservation.departuredate')<p class="error-message">{{ $message }}</p>@enderror
         @else
             <span>{{ $reservation->departure }}</span>
+            @if ( $reservation->nodeparturedate )
+                <button class="btn-sm" wire:click="$set('setDepartureDate', true)">{{__("Choisir une date de départ")}}</button>
+            @endif
         @endif
     </p>
     <p><strong>{{ __("Nombre de nuits") }} :</strong> <span>{{ $reservation->nights }}</span></p>

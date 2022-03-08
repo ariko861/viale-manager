@@ -13,6 +13,7 @@ class ReservationCard extends Component
     public $rKey;
     public $editing;
     public $newVisitorInReservation = false;
+    public $setDepartureDate = false;
 
     protected $rules = [
         'reservation.departuredate' => 'date|after_or_equal:reservation.arrivaldate|required_unless:reservation.nodeparturedate,true',
@@ -64,11 +65,13 @@ class ReservationCard extends Component
         $this->reservation->refresh();
     }
 
-    public function updateReservation()
+    public function updateReservation($option = null)
     {
         $this->validate();
+        if ($option && $option === 'departure') $this->reservation->nodeparturedate = false;
         $this->reservation->save();
         $this->emitUp("reservationUpdated", $this->reservation->id);
+        $this->setDepartureDate = false;
         $this->emit('showAlert', [ __("La réservation a été mise à jour"), "bg-lime-600"] );
     }
 
