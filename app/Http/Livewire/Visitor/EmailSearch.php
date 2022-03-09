@@ -29,10 +29,24 @@ class EmailSearch extends Component
 
     public function selectVisitor($visitor_id = 'none')
     {
-        if ($this->selectedVisitor == $visitor_id) {
+        $this->selectedVisitor = $visitor_id;
+    }
+
+    public function submit()
+    {
+        $this->validate();
+        $email = $this->email;
+        $this->visitors = Visitor::where('email', $email)->where('confirmed', true)->get();
+        $this->showVisitorList = true;
+    }
+
+    public function submitMail()
+    {
+        if ($this->selectedVisitor) {
             $this->showVisitorList = false;
             $this->visitors = collect([]);
-            if ($visitor_id == 'none') {
+
+            if ($this->selectedVisitor == 'none') {
                 $options = [
                     'email' => $this->email,
                     'visitorKey' => $this->visitorKey,
@@ -41,35 +55,20 @@ class EmailSearch extends Component
             }
             else {
                 $options = [
-                    'visitor_id' => $visitor_id,
+                    'visitor_id' => $this->selectedVisitor,
                     'visitorKey' => $this->visitorKey,
                 ];
                 $this->emitUp('visitorSelectedFromEmail', $options);
             }
-
             $this->selectedVisitor = false;
             $this->email = "";
-        } else {
-            $this->selectedVisitor = $visitor_id;
+
         }
     }
 
-    public function submit()
-    {
-        $this->validate();
-        $email = $this->email;
-        $this->visitors = Visitor::where('email', $email)->where('confirmed', true)->get();
-        if ( $this->visitors->count() ) {
-            $this->showVisitorList = true;
-        } else {
-            $options = [
-                'email' => $this->email,
-                'visitorKey' => $this->visitorKey,
-            ];
-            $this->emitUp('emailNotFound', $options);
-            $this->email = "";
-
-        }
+    public function cancelSearch() {
+        $this->showVisitorList = false;
+        $this->selectedVisitor = null;
     }
 
     public function render()

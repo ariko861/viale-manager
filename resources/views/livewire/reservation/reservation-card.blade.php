@@ -5,6 +5,7 @@
         </svg>
         <livewire:buttons.edit-buttons :wire:key="$reservation->id" model="reservation" :modelId="$reservation->id" editRights="reservation-edit" deleteRights="reservation-delete" messageDelete="de la réservation">
     </div>
+    <p class="italic">{{ $reservation->visitors->count() }} {{ $reservation->visitors->count() > 1 ? __("personnes") : __("personne")}}</p>
     <p><strong>{{ __("Date d'arrivée") }} :</strong>
         @if ( $editing )
             <input wire:model="reservation.arrivaldate" type="date" wire:change="updateReservation">
