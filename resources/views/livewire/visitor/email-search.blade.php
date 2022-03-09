@@ -25,13 +25,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($visitors as $visitor)
-                    <tr  wire:click.prevent="selectVisitor({{$visitor->id}})" class="{{$selectedVisitor == $visitor->id ? 'cursor-pointer bg-blue-400 hover:bg-blue-600' : 'hover:bg-blue-300'}}">
-                        <td class="{{ $tbody_class }} text-center">{{ $visitor->full_name }}</td>
-                        <td class="{{ $tbody_class }} text-center">{{ $visitor->age }}</td>
-                        <td class="{{ $tbody_class }} text-center">{{ $visitor->phone }}</td>
-                    </tr>
-                    @endforeach
+                    if ( $visitors->count() )
+                        @foreach($visitors as $visitor)
+                        <tr  wire:click.prevent="selectVisitor({{$visitor->id}})" class="{{$selectedVisitor == $visitor->id ? 'cursor-pointer bg-blue-400 hover:bg-blue-600' : 'hover:bg-blue-300'}}">
+                            <td class="{{ $tbody_class }} text-center">{{ $visitor->full_name }}</td>
+                            <td class="{{ $tbody_class }} text-center">{{ $visitor->age }}</td>
+                            <td class="{{ $tbody_class }} text-center">{{ $visitor->phone }}</td>
+                        </tr>
+                        @endforeach
+                    endif
                     <tr class="{{ $selectedVisitor == 'none' ? 'bg-red-500 hover:bg-red-700' : 'bg-red-100 hover:bg-red-400' }}" wire:click="selectVisitor">
                         <td colspan=3 class="{{ $tbody_class }} text-center cursor-pointer">{{ $user == 'visitor' ? __("Vous n'êtes pas dans cette liste") : __("Le visiteur recherché n'est pas dans cette liste") }}</td>
                     </tr>
