@@ -28,13 +28,20 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
-    protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted"];
+    protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted", "displayToday"];
 
     public function displayReservation($res_id)
     {
         $this->reservations = Reservation::where('id', $res_id)->get();
         $this->listTitle = __("Reservation")." ".$res_id;
         $this->emitSelf('scrollToReservationList');
+    }
+
+    public function displayToday($arrivalordeparture = "arrivals") {
+        $this->beginDate = Carbon::now()->format('Y-m-d');
+        $this->endDate = Carbon::now()->format('Y-m-d');
+        if ( $arrivalordeparture == "arrivals") $this->getReservationsWhereArrivalInBetween();
+        if ( $arrivalordeparture == "departures") $this->getReservationsWhereDepartureInBetween();
     }
 
     public function displayReservations($res_ids)

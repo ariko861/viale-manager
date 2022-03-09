@@ -104,8 +104,8 @@ class ReservationsCalendar extends LivewireCalendar
             $allVisitors = $model->visitor_list;
             return [
                 'id' => "a{$model->id}",
-                'title' => __("Arrivée").' '.$allVisitors,
-                'description' => "",
+                'title' => __("Arrivée").' '.$model->person_number,
+                'description' => $allVisitors,
                 'date' => $model->arrivaldate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-red-100",
             ];
@@ -115,8 +115,8 @@ class ReservationsCalendar extends LivewireCalendar
             $allVisitors = $model->visitor_list;
             return [
                 'id' => "d{$model->id}",
-                'title' => __("Départ").' '.$allVisitors,
-                'description' => "",
+                'title' => __("Départ").' '.$model->person_number,
+                'description' => $allVisitors,
                 'date' => $model->departuredate,
                 'classes' => ($model->confirmed ? 'border-green-400' : 'border-yellow-400')." bg-yellow-100",
             ];

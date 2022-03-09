@@ -59,7 +59,11 @@ class Reservation extends Model
                 return $visitor;
             }
         }
+    }
 
+    public function getPersonNumberAttribute()
+    {
+        return $this->visitors->count() > 1 ? $this->visitors->count()." ".__("personnes") : $this->visitors->count()." ".__("personne");
     }
 
     public function getVisitorListAttribute()

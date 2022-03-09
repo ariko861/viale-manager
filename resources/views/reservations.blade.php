@@ -3,6 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Réservations') }}
         </h2>
+            <livewire:arrivals-and-departures-today >
     </x-slot>
 
     <div class="py-12">
