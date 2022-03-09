@@ -16,7 +16,7 @@ class ArrivalsAndDeparturesToday extends Component
 
         $today = Carbon::now();
         $this->arrivals = Reservation::where('confirmed', true)->whereDate('arrivaldate', $today)->get();
-        $this->departures = Reservation::where('confirmed', true)->whereDate('departuredate', $today)->get();
+        $this->departures = Reservation::where('confirmed', true)->where('nodeparturedate', false)->whereDate('departuredate', $today)->get();
     }
     public function render()
     {
