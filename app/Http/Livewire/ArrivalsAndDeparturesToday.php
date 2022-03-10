@@ -11,12 +11,14 @@ class ArrivalsAndDeparturesToday extends Component
 
     public $arrivals;
     public $departures;
+    public $presences;
 
     public function mount() {
 
         $today = Carbon::now();
         $this->arrivals = Reservation::where('confirmed', true)->whereDate('arrivaldate', $today)->get();
         $this->departures = Reservation::where('confirmed', true)->where('nodeparturedate', false)->whereDate('departuredate', $today)->get();
+        $this->presences = Reservation::getPresencesBetweenDates($today, $today, true);
     }
     public function render()
     {

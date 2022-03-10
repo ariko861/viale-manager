@@ -1,6 +1,6 @@
 <div>
     @if ($link)
-    <h1 class="my-4">{{ __("Merci de confirmer votre réservation à ")}}{{env('APP_NAME')}}</h1>
+    <h1 class="my-4">{{ __("Merci de confirmer votre réservation à")}} {{env('APP_NAME')}}</h1>
     <br>
     @if ( $reservation_link_messages )
     <div class="w-full p-4 border-4 mt-2 mb-6">
@@ -97,7 +97,7 @@
 
             @if ( $link->max_added_visitors )
                 <br>
-                <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné·e ? Vous pouvez ajouter d'autres visiteurs à la réservation")}} :</h3>
+                <h3 class="col-span-full mt-6 mb-4">{{__("Vous êtes accompagné·e ? Veuillez remplir les informations de votre/vos invité·e·s")}} :</h3>
 
         <!--    Pour chaque visiteur ajouté à la réservation -->
                 @if ( $addedVisitors )

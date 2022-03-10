@@ -5,6 +5,9 @@
         <span class="mx-4"><nobr>{{__("Pas d'arrivée aujourd'hui")}}</nobr></span>
     @endif
 
+    @if ( $presences->count() )
+        <button class="mx-4" wire:click="$emit('displayToday', 'presences')">{{ $presences->getTotalAmountOfVisitors() }} {{__("personnes présentes aujourd'hui")}}</button>
+    @endif
     @if ( $departures->count() )
         <button class="mx-4" wire:click="$emit('displayToday', 'departures')">{{ $departures->getTotalAmountOfVisitors() }} {{__("départs aujourd'hui")}}</button>
     @else

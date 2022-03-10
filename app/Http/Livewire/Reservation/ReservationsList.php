@@ -42,6 +42,7 @@ class ReservationsList extends Component
         $this->endDate = Carbon::now()->format('Y-m-d');
         if ( $arrivalordeparture == "arrivals") $this->getReservationsWhereArrivalInBetween();
         if ( $arrivalordeparture == "departures") $this->getReservationsWhereDepartureInBetween();
+        if ( $arrivalordeparture == "presences") $this->getReservationsHere();
     }
 
     public function displayReservations($res_ids)
@@ -86,18 +87,7 @@ class ReservationsList extends Component
 
     public function getReservationsPresenceBetweenDates($dateBegin, $dateEnd, $confirmed = true){
 
-        $this->reservations = Reservation::where('quickLink', false)->where(function($query) use ($confirmed){
-                    if ($confirmed) $query->where('confirmed', true);
-                })->where(function($query) use ($dateBegin, $dateEnd) {
-                $query->where(function($query) use ($dateBegin, $dateEnd) {
-                    $query->whereDate('arrivaldate', '<=', $dateEnd)
-                            ->whereDate('departuredate', '>=', $dateBegin);
-                    })
-                    ->orWhere(function($query) use ($dateBegin, $dateEnd) {
-                        $query->whereDate('arrivaldate', '<=', $dateEnd)
-                        ->where('nodeparturedate', true );
-                    });
-                })->get();
+        $this->reservations = Reservation::getPresencesBetweenDates($dateBegin, $dateEnd, $confirmed);
     }
 
     public function getReservationsHere() {

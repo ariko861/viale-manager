@@ -32,7 +32,7 @@
 
         <!-- Bouton pour ajouter des visiteurs -->
         <div class="col-span-full">
-            <button class="btn w-full" wire:click.prevent="addNewOtherVisitor">{{ __("Ajouter un autre visiteur") }}</button>
+            <button class="btn w-full" wire:click.prevent="addNewOtherVisitor">{{ __("Ajouter un autre visiteur à la réservation") }}</button>
         </div>
 <!--    Pour chaque visiteur ajouté à la réservation -->
         @foreach ( $otherVisitorsArray as $key => $otherVisitor )

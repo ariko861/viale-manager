@@ -36,7 +36,7 @@ class Reservation extends Model
     public function getArrivalAttribute()
     {
         $date = new Carbon($this->arrivaldate);
-        return $date->format('d F Y');
+        return $date->translatedFormat('d F Y');
     }
 
     public function getDepartureAttribute()
@@ -47,7 +47,7 @@ class Reservation extends Model
         }
         else {
             $date = new Carbon($this->departuredate);
-            return $date->format('d F Y');
+            return $date->translatedFormat('d F Y');
         }
     }
 
@@ -174,6 +174,22 @@ class Reservation extends Model
         $reservation->save();
         $reservation->visitors()->attach($visitor_id, ['contact' => true ]);
         return $reservation;
+    }
+
+    public static function getPresencesBetweenDates($dateBegin, $dateEnd, $confirmed = true){
+
+        return static::where('quickLink', false)->where(function($query) use ($confirmed){
+                    if ($confirmed) $query->where('confirmed', true);
+                })->where(function($query) use ($dateBegin, $dateEnd) {
+                $query->where(function($query) use ($dateBegin, $dateEnd) {
+                    $query->whereDate('arrivaldate', '<=', $dateEnd)
+                            ->whereDate('departuredate', '>=', $dateBegin);
+                    })
+                    ->orWhere(function($query) use ($dateBegin, $dateEnd) {
+                        $query->whereDate('arrivaldate', '<=', $dateEnd)
+                        ->where('nodeparturedate', true );
+                    });
+                })->get();
     }
 
     protected static function booted()

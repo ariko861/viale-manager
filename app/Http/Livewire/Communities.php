@@ -49,8 +49,8 @@ class Communities extends Component
 
     public function prevWeek()
     {
-        $this->beginDate = Carbon::parse($this->beginDate)->subWeek()->format('Y-m-d');
-        $this->endDate = Carbon::parse($this->endDate)->subWeek()->format('Y-m-d');
+        $this->beginDate = Carbon::parse($this->beginDate)->subWeek()->translatedFormat('Y-m-d');
+        $this->endDate = Carbon::parse($this->endDate)->subWeek()->translatedFormat('Y-m-d');
         $this->getResas();
     }
     public function nextWeek()
@@ -99,10 +99,10 @@ class Communities extends Component
     {
         $this->getCommunities();
         $today = Carbon::now();
-        $this->beginDate = $today->startOfWeek()->format('Y-m-d');
-        $this->beginDay = $today->startOfWeek()->format('l');
-        $this->endDate = $today->endOfWeek()->format('Y-m-d');
-        $this->endDay = $today->endOfWeek()->format('l');
+        $this->beginDate = $today->startOfWeek()->translatedFormat('Y-m-d');
+        $this->beginDay = $today->startOfWeek()->translatedFormat('l');
+        $this->endDate = $today->endOfWeek()->translatedFormat('Y-m-d');
+        $this->endDay = $today->endOfWeek()->translatedFormat('l');
 
         $this->getResas();
     }

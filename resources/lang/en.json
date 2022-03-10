@@ -1,0 +1,28 @@
+{
+    "Ajouter une nouvelle réservation" : "Add a new reservation",
+    "Pas d'arrivée aujourd'hui" : "No arrival today",
+    "Confirmation de réservation" : "Confirmation of reservation",
+    "Merci de confirmer votre réservation à" : "Please confirm your reservation at",
+    "Veuillez saisir une adresse email pour voir si vous nous retrouvons dans nos précédentes inscriptions" : "Please provide an email address to see if we can find you in our previous registrations",
+    "Personne de contact" : "Contact person",
+    "Nom" : "Family name",
+    "Nom de famille" : "Family name",
+    "Prénom" : "First name",
+    "Numéro de téléphone" : "Phone number",
+    "Année de naissance" : "Birthyear",
+    "Votre participation aux frais" : "Your financial participation",
+    "Modifier vos dates" : "Change your dates",
+    "Date d'arrivée" : "Arrival date",
+    "Date de départ" : "Departure date",
+    "Vous êtes accompagné·e ? Veuillez remplir les informations de votre/vos invité·e·s" : "You come with a guest ? Please provide his/her informations",
+    "Autres visiteurs" : "Other visitors",
+    "Ajouter un autre visiteur" : "Add another visitor",
+    "Confirmer la réservation" : "Confirm the reservation",
+    "Nous faire part d'une remarque" : "Leave us some remarks",
+    "Participation aux frais" : "Financial participation",
+    "Cette personne est déjà venue ? Retrouvez là par son adresse email" : "Has this person already come ? Find her/him by email address",
+    "Cet email existe bien dans notre historique, nous avons rempli les informations pour vous" : "This email exists in our history, we have filled the fields for you",
+    "Cet email n'existe pas dans notre historique, vous pouvez remplir les informations à la main" : "This email doesn't exist in our history, you have to fill the fields manually",
+    "personnes présentes aujourd'hui" : "persons present today"
+
+}

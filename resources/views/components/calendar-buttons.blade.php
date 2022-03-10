@@ -5,5 +5,5 @@
 
     <button class="btn" wire:click="goToNextMonth">{{ __("Mois suivant") }}</button>
 
-    <div class="col-span-full"><h2 class="text-center">{{$startsAt->format('F')}}</h2></div>
+    <div class="col-span-full"><h2 class="text-center">{{$startsAt->translatedFormat('F')}}</h2></div>
 </div>
