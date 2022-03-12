@@ -12,7 +12,7 @@
         </div>
         <div class="col-span-1">
             <ul>
-                <h2 class="text-lg font-bold mb-1">{{__("Futurs arrivants non placés")}}</h2>
+                <h2 class="text-lg font-bold mb-1">{{__("Personnes non placées")}}</h2>
                 <p class="mb-4">{{ $resas->count() }} {{__("Personnes prévues pour cette période")}}</p>
                 @foreach ( $resas as $resa )
                     @if ($resa->reservation)
