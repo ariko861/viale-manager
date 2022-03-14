@@ -36,7 +36,7 @@ class Reservation extends Model
     public function getArrivalAttribute()
     {
         $date = new Carbon($this->arrivaldate);
-        return $date->translatedFormat('d F Y');
+        return $date->translatedFormat('l d F Y');
     }
 
     public function getDepartureAttribute()
@@ -47,7 +47,7 @@ class Reservation extends Model
         }
         else {
             $date = new Carbon($this->departuredate);
-            return $date->translatedFormat('d F Y');
+            return $date->translatedFormat('l d F Y');
         }
     }
 
@@ -75,6 +75,25 @@ class Reservation extends Model
                 $visitors = $visitors.$visitor->full_name;
             } else {
                 $visitors = $visitors.", ".$visitor->full_name;
+            }
+        }
+        return $visitors;
+    }
+
+    public function getVisitorAndRoomsListAttribute()
+    {
+        $visitors = "";
+        foreach ($this->visitors as $visitor) {
+            if ($visitor->pivot->room_id) {
+                $display = $visitor->full_name.'->'.$visitor->pivot->room->fullName();
+            } else {
+                $display = $visitor->full_name;
+            }
+            if ($visitors == "")
+            {
+                $visitors = $visitors.$display;
+            } else {
+                $visitors = $visitors.", ".$display;
             }
         }
         return $visitors;

@@ -26,6 +26,8 @@
     @endforeach
 
     <livewire:room-selection-form >
+    <livewire:reservation.split-reservation >
+    <livewire:reservation.reservation-recap />
 
 
     <script>

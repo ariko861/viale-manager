@@ -25,6 +25,9 @@
             @endif
         @endif
     </p>
+    @if ($editing)
+        <p class="my-2"><button wire:click="$emit('engageSplitReservation', {{$reservation->id}})">{{__("Programmer une absence")}}</button><p>
+    @endif
     <p><strong>{{ __("Nombre de nuits") }} :</strong> <span>{{ $reservation->nights }}</span></p>
     @can('statistics-remove')
         <p><label><strong>{{__("Retirer des statistiques")}} : </strong></label><input type="checkbox" wire:change="updateReservation" wire:model="reservation.removeFromStats"></p>
@@ -39,10 +42,13 @@
         <p><label><strong>{{__("Ne connait pas sa date de départ")}} : </strong></label><input type="checkbox" wire:model="reservation.nodeparturedate" wire:change="updateReservation"></p>
         <br>
         <p><label><strong>{{__("Réservation confirmée")}} : </strong></label><input type="checkbox" wire:model="reservation.confirmed" wire:change="updateReservation"></p>
-        <p class="my-4"><button class="btn-warning" wire:click="$set('editing', '')">{{__("Arrêter les changements")}}</button></p>
     @endif
     @if ($reservation->remarks)
         <p><strong>{{ __("Remarques") }} :</strong> <span>{{ $reservation->remarks }}</span></p>
+    @endif
+    @if ($editing)
+        <p><label><strong>{{ __("Remarques") }} :</strong></label> <textarea wire:model="reservation.remarks"></textarea></p>
+        <p class="my-4"><button class="btn-warning" wire:click="$set('editing', '')">{{__("Arrêter les changements")}}</button></p>
     @endif
 
     @canany(['reservation-create', 'reservation-edit'])

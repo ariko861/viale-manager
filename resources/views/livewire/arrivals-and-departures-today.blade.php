@@ -27,5 +27,6 @@
     @else
         <span class="mx-4"><nobr>{{ __("Pas de départ ce jour") }}</nobr></span>
     @endif
+    <p class="my-6"><button class="px-4" wire:click="$emit('showReservationRecap')">{{__("Afficher un récapitulatif des réservations")}}</button></p>
 
 </div>

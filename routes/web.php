@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ConfirmationController;
+use App\Http\Controllers\RecapController;
 use App\Models\UserInvite;
 use App\Models\Option;
 use App\Models\MatrixLink;
@@ -47,6 +48,8 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::middleware('can:reservation-list')->get('/reservations/{id?}', function ($reservation_id = null) {
         return view('reservations', ['reservation_id' => $reservation_id]);
     })->name('reservations');
+
+    Route::middleware('can:reservation-list')->get('/recapitulatif/reservations/{beginDate}/{endDate}', [RecapController::class, 'printReservationRecap'])->name('recapitulatif');
 
     Route::middleware('can:visitor-list')->get('/visitors', function () {
         return view('visitors');
