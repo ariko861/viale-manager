@@ -17,7 +17,7 @@ class RecapController extends Controller
             $dayRecap = [
                 'date' => $day->translatedFormat('l d F Y'),
                 'arrivals' => Reservation::where('confirmed', true)->whereDate('arrivaldate', $day)->get(),
-                'departures' => Reservation::where('confirmed', true)->whereDate('departuredate', $day)->get(),
+                'departures' => Reservation::where('confirmed', true)->where('nodeparturedate', false)->whereDate('departuredate', $day)->get(),
             ];
             $recap->push($dayRecap);
         }
