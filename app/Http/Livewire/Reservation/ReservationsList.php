@@ -107,6 +107,7 @@ class ReservationsList extends Component
     public function getReservationsHere() {
 
         $this->getReservationsPresenceBetweenDates($this->today, $this->today, true);
+        $this->reservations = $this->reservations->sortBy('contact_person.surname');
         $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("personnes présentes en ce moment");
         $this->emit('scrollToReservationList');
     }
