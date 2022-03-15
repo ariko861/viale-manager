@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Support\VisitorCollection;
+use Illuminate\Database\Eloquent\Builder;
 
 class Visitor extends Model
 {
@@ -76,6 +77,20 @@ class Visitor extends Model
                         ->orWhere('surname', 'ilike', '%'.$searchQuery.'%')
                         ->orWhere('email', 'ilike', '%'.$searchQuery.'%');
                 })->get()->sortBy('name');
+        return $visitors;
+    }
+
+    public static function searchByPresenceDate($dateBegin, $dateEnd) {
+        $visitors = static::whereHas('reservations', function (Builder $query) use ($dateBegin, $dateEnd){
+            $query->where(function($query) use ($dateBegin, $dateEnd) {
+                    $query->whereDate('arrivaldate', '<=', $dateEnd)
+                            ->whereDate('departuredate', '>=', $dateBegin);
+                    })
+                    ->orWhere(function($query) use ($dateBegin, $dateEnd) {
+                        $query->whereDate('arrivaldate', '<=', $dateEnd)
+                        ->where('nodeparturedate', true );
+                    });
+        })->get();
         return $visitors;
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use App\Models\Visitor;
 use App\Models\Tag;
+use Carbon\Carbon;
 
 class VisitorsList extends Component
 {
@@ -15,15 +16,32 @@ class VisitorsList extends Component
     public $visitorSearch;
     public $onlyConfirmed = true;
     public $visitors;
+    public $presenceDateBegin;
+    public $presenceDateEnd;
 
     public function mount()
     {
-        $this->getAllVisitors();
+        $this->visitors = collect([]);
         $this->tags = Tag::all();
         $this->selectedTags = collect([]);
+        $today = Carbon::now()->format('Y-m-d');
+        $this->presenceDateBegin = $today;
+        $this->presenceDateEnd = $today;
+
     }
 
     protected $listeners = ['newVisitorSaved', 'visitorModified', 'deleteAction', 'changeAction', 'tagChosen'];
+
+    protected $rules = [
+        'presenceDateBegin' => 'required|date',
+        'presenceDateEnd' => 'required|date|after_or_equal:presenceDateBegin',
+
+    ];
+
+    public function searchPresences() {
+        $this->validate();
+        $this->visitors = Visitor::searchByPresenceDate($this->presenceDateBegin, $this->presenceDateEnd);
+    }
 
     public function newVisitorSaved($visitor_id)
     {
@@ -94,7 +112,7 @@ class VisitorsList extends Component
         } else $this->selectedTags->push($tag_id);
 
         if ( $this->selectedTags->isEmpty() ) {
-            $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed)->get()->sortBy('name');
+            $this->visitors = collect([]);
         } else {
             $this->visitors = Visitor::getVisitorsList($this->onlyConfirmed)->whereHas('tags', function (Builder $query) {
                 $query->whereIn('id', $this->selectedTags);

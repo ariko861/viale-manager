@@ -2,7 +2,9 @@
 
     <div class="option-field">
         <h2 class="mt-2 mb-4 text-center">{{__("Recherche de visiteurs")}} :</h2>
+        <p class="my-8"><strong>{{__("Afficher tous les visiteurs")}} :</strong> <button wire:click="getAllVisitors">{{__("Tous les visiteurs")}}</button></p>
         <p class="my-8"><strong>{{__("Rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup.debounce.500ms="getVisitorsByName" wire:model="visitorSearch"></p>
+        <p class="my-8"><strong>{{__("Rechercher par dates de présence")}} :</strong> {{__("Du")}} <input type="date" wire:model="presenceDateBegin"> {{__("au")}} <input type="date" wire:model="presenceDateEnd" min="{{ $presenceDateBegin }}"> <button wire:click="searchPresences">{{__("Rechercher")}}</button></p>
         @if ($tags)
         <p>
             <h4 class="mt-6 mb-4">{{__("Filtrer les visiteurs par étiquette")}} :</h4>
@@ -10,6 +12,7 @@
                 <span class="badge mx-4 cursor-pointer" wire:click="filterByTag('{{$tag->id}}')" style="background-color: {{ $this->isTagSelected($tag->id) ? $tag->color : '#CBD5E1' }}">{{ $tag->name }}</span>
             @endforeach
         </p>
+
         @endif
         <p class="text-center text-sm mt-4 mb-6"><span wire:click="$toggle('advancedSearch')" class="cursor-pointer">{{__("Recherche avancée")}}<x-buttons.arrow-chevron :up="$advancedSearch" size=4/></span></p>
         @if ($advancedSearch)
@@ -19,7 +22,7 @@
         </div>
         @endif
     </div>
-    <h3 class="mt-4 mb-2 text-center">{{$visitors->count()}} {{__("visiteurs dans la liste")}}</h3>
+    <h3 class="mt-4 mb-2 text-center">{{ $visitors->count() ?? 0 }} {{__("visiteurs dans la liste")}}</h3>
     <table class="mt-8 w-full table-auto border-collapse border border-gray-400">
     @php
         $thead_class="border-2 border-gray-400 bg-gray-100";
