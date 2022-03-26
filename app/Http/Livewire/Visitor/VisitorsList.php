@@ -18,6 +18,8 @@ class VisitorsList extends Component
     public $visitors;
     public $presenceDateBegin;
     public $presenceDateEnd;
+    public $ageBegin = 18;
+    public $ageEnd = 40;
 
     public function mount()
     {
@@ -35,12 +37,19 @@ class VisitorsList extends Component
     protected $rules = [
         'presenceDateBegin' => 'required|date',
         'presenceDateEnd' => 'required|date|after_or_equal:presenceDateBegin',
-
+        'ageBegin' => 'integer|required',
+        'ageEnd' => 'integer|required|gte:ageBegin',
     ];
 
     public function searchPresences() {
         $this->validate();
         $this->visitors = Visitor::searchByPresenceDate($this->presenceDateBegin, $this->presenceDateEnd);
+    }
+
+    public function searchAge() {
+        $this->validate();
+        $this->visitors = Visitor::searchByAge($this->ageBegin, $this->ageEnd);
+
     }
 
     public function newVisitorSaved($visitor_id)
@@ -119,6 +128,7 @@ class VisitorsList extends Component
             })->get();
         }
     }
+
 
     public function isTagSelected($tag_id) {
         $tag = $this->tags->find($tag_id);

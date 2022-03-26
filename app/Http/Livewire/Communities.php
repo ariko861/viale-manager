@@ -101,8 +101,8 @@ class Communities extends Component
         $today = Carbon::now();
         $this->beginDate = $today->startOfWeek()->translatedFormat('Y-m-d');
         $this->beginDay = $today->startOfWeek()->translatedFormat('l');
-        $this->endDate = $today->endOfWeek()->translatedFormat('Y-m-d');
-        $this->endDay = $today->endOfWeek()->translatedFormat('l');
+        $this->endDate = $today->endOfWeek()->subDay()->translatedFormat('Y-m-d');
+        $this->endDay = $today->endOfWeek()->subDay()->translatedFormat('l');
 
         $this->getResas();
     }

@@ -211,6 +211,22 @@ class Reservation extends Model
                 })->get();
     }
 
+    public static function getPresencesExcludeDates($dateBegin, $dateEnd, $confirmed = true){
+
+        return static::where('quickLink', false)->where(function($query) use ($confirmed){
+                    if ($confirmed) $query->where('confirmed', true);
+                })->where(function($query) use ($dateBegin, $dateEnd) {
+                $query->where(function($query) use ($dateBegin, $dateEnd) {
+                    $query->whereDate('arrivaldate', '<', $dateEnd)
+                            ->whereDate('departuredate', '>', $dateBegin);
+                    })
+                    ->orWhere(function($query) use ($dateBegin, $dateEnd) {
+                        $query->whereDate('arrivaldate', '<', $dateEnd)
+                        ->where('nodeparturedate', true );
+                    });
+                })->get();
+    }
+
     protected static function booted()
     {
         static::updating(function ($reservation) {

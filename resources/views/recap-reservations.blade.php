@@ -10,10 +10,22 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             {{ $dayRecap["date"] }}
+                            <span class="italic text-sm">
+                                {{ $dayRecap["presences"]->count() }} {{__("personnes présentes")}}
+                                @if ($dayRecap["departures"]->count())
+                                    {{__("et")}} {{ $dayRecap["departures"]->count() }} {{__("départs")}}
+                                @endif
+                                @if ($dayRecap["arrivals"]->count())
+                                    {{__("et")}} {{ $dayRecap["arrivals"]->count() }} {{__("arrivées")}}
+                                @endif
+
+                            </span>
+
                         </h3>
+
                         @if ( $dayRecap["departures"]->count() )
                         <div class="p-4 border-2">
-                            <h4 class="underline">{{__("Départs")}} :</h4>
+                            <h4 class="underline">{{ $dayRecap["departures"]->count() }} {{ __("Départs")}} :</h4>
                             @foreach ($dayRecap["departures"] as $departure)
                                 @foreach ($departure->visitors as $visitor)
                                 <p>
@@ -29,7 +41,7 @@
                         @endif
                         @if ( $dayRecap["arrivals"]->count() )
                         <div class="p-4 border-2">
-                            <h4 class="underline">{{__("Arrivées")}} :</h4>
+                            <h4 class="underline">{{ $dayRecap["arrivals"]->count() }} {{__("Arrivées")}} :</h4>
                             @foreach ($dayRecap["arrivals"] as $arrival)
                                 @foreach ($arrival->visitors as $visitor)
                                 <p>

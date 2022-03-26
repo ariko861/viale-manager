@@ -94,6 +94,12 @@ class Visitor extends Model
         return $visitors;
     }
 
+    public static function searchByAge($ageBegin, $ageEnd) {
+        $current_year = Carbon::now()->year;
+        $visitors = static::where('confirmed', true)->where('birthyear', '>=', $current_year - $ageEnd)->where('birthyear', '<=', $current_year - $ageBegin)->get();
+        return $visitors;
+    }
+
     public static function getVisitorsList($onlyConfirmed = true) {
         $visitors = static::where('quickLink', false)->where(function($query) use ($onlyConfirmed) {
                     if ($onlyConfirmed) $query->where('confirmed', true);

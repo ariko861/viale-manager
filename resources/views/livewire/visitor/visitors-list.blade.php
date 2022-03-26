@@ -5,6 +5,8 @@
         <p class="my-8"><strong>{{__("Afficher tous les visiteurs")}} :</strong> <button wire:click="getAllVisitors">{{__("Tous les visiteurs")}}</button></p>
         <p class="my-8"><strong>{{__("Rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup.debounce.500ms="getVisitorsByName" wire:model="visitorSearch"></p>
         <p class="my-8"><strong>{{__("Rechercher par dates de présence")}} :</strong> {{__("Du")}} <input type="date" wire:model="presenceDateBegin"> {{__("au")}} <input type="date" wire:model="presenceDateEnd" min="{{ $presenceDateBegin }}"> <button wire:click="searchPresences">{{__("Rechercher")}}</button></p>
+
+        <p class="my-8"><strong>{{__("Rechercher par âge")}} :</strong> {{__("De")}} <input type="number" wire:model="ageBegin"> {{__("à")}} <input type="number" wire:model="ageEnd" min="{{ $ageBegin }}"> <button wire:click="searchAge">{{__("Rechercher")}}</button></p>
         @if ($tags)
         <p>
             <h4 class="mt-6 mb-4">{{__("Filtrer les visiteurs par étiquette")}} :</h4>
