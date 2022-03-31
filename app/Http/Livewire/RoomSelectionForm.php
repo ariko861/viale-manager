@@ -28,8 +28,8 @@ class RoomSelectionForm extends Component
         $today = Carbon::now()->format('Y-m-d');
         $this->houses = House::all();
         $this->fill([
-            'firstDay' => ($this->beginDay == $today ? __("aujourd'hui") : __("le premier jour")),
-            'lastDay' => ($this->endDay == $today ? __("aujourd'hui") : __("le dernier jour")),
+            'firstDay' => __("le premier jour"),
+            'lastDay' => __("le dernier jour"),
         ]);
 
     }
@@ -38,6 +38,9 @@ class RoomSelectionForm extends Component
         $this->showRoomSelection = true;
         $this->reservation = Reservation::find($options[0]);
         $this->visitorInReservation = VisitorReservation::find($options[1]);
+        $this->beginDay = $this->reservation->arrivaldate;
+        $this->endDay = $this->reservation->departuredate;
+
     }
 
     public function getRoomAvailability($room)

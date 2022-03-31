@@ -11,12 +11,12 @@
                             </svg>
                             {{ $dayRecap["date"] }}
                             <span class="italic text-sm">
-                                {{ $dayRecap["presences"]->count() }} {{__("personnes présentes")}}
+                                {{ $dayRecap["presences"]->getTotalAmountOfVisitors() }} {{__("personnes restant sur place")}}
                                 @if ($dayRecap["departures"]->count())
-                                    {{__("et")}} {{ $dayRecap["departures"]->count() }} {{__("départs")}}
+                                    {{__("et")}} {{ $dayRecap["departures"]->getTotalAmountOfVisitors() }} {{__("départs")}}
                                 @endif
                                 @if ($dayRecap["arrivals"]->count())
-                                    {{__("et")}} {{ $dayRecap["arrivals"]->count() }} {{__("arrivées")}}
+                                    {{__("et")}} {{ $dayRecap["arrivals"]->getTotalAmountOfVisitors() }} {{__("arrivées")}}
                                 @endif
 
                             </span>
@@ -25,7 +25,7 @@
 
                         @if ( $dayRecap["departures"]->count() )
                         <div class="p-4 border-2">
-                            <h4 class="underline">{{ $dayRecap["departures"]->count() }} {{ __("Départs")}} :</h4>
+                            <h4 class="underline">{{ $dayRecap["departures"]->getTotalAmountOfVisitors() }} {{ __("Départs")}} :</h4>
                             @foreach ($dayRecap["departures"] as $departure)
                                 @foreach ($departure->visitors as $visitor)
                                 <p>
@@ -41,7 +41,7 @@
                         @endif
                         @if ( $dayRecap["arrivals"]->count() )
                         <div class="p-4 border-2">
-                            <h4 class="underline">{{ $dayRecap["arrivals"]->count() }} {{__("Arrivées")}} :</h4>
+                            <h4 class="underline">{{ $dayRecap["arrivals"]->getTotalAmountOfVisitors() }} {{__("Arrivées")}} :</h4>
                             @foreach ($dayRecap["arrivals"] as $arrival)
                                 @foreach ($arrival->visitors as $visitor)
                                 <p>
