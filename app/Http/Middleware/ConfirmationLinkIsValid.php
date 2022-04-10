@@ -33,7 +33,7 @@ class ConfirmationLinkIsValid
                 $link = ReservationLink::where('link_token', $link_token)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 return redirect(route('welcome'))
-                    ->with('error', 'Wrong link token! Please check your URL.');
+                    ->with('error', __('Ce lien est invalide ou a déjà été utilisé, veuillez nous contacter'));
             }
 
             /**
@@ -41,7 +41,7 @@ class ConfirmationLinkIsValid
              * If yes -> redirect to login with error.
              */
             if (!is_null($link->confirmed_at)) {
-                return redirect(route('login'))->with('error', 'The link has already been used.');
+                return redirect(route('welcome'))->with('error', __('Ce lien a déjà été utilisé, veuillez nous contacter.') );
             }
         }
 

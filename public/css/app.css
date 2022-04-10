@@ -1022,6 +1022,14 @@ h5,
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+.alert {
+  padding: 1rem;
+  text-align: center;
+}
+.alert-error {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
+}
 .hidden-remarks {
       display: none;
   }

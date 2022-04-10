@@ -24,7 +24,7 @@ class ArrivalsAndDeparturesToday extends Component
     public function changeDay($date) {
         $this->arrivals = Reservation::where('confirmed', true)->whereDate('arrivaldate', $date)->get();
         $this->departures = Reservation::where('confirmed', true)->where('nodeparturedate', false)->whereDate('departuredate', $date)->get();
-        $this->presences = Reservation::getPresencesBetweenDates($date, $date, true);
+        $this->presences = Reservation::getPresencesExcludeDates($date, $date, true);
         $this->formattedDisplayDate = $date->format('Y-m-d');
         $this->today = true;
     }

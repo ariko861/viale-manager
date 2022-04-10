@@ -46,6 +46,12 @@
   .option-field {
       @apply p-6 bg-gray-100 text-sm;
   }
+  .alert {
+      @apply p-4 text-center;
+  }
+  .alert-error {
+      @apply bg-red-200;
+  }
   .hidden-remarks {
       display: none;
   }

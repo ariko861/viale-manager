@@ -49,8 +49,8 @@ class ReservationsList extends Component
             $this->getReservationsWhereDepartureInBetween();
         }
         if ( $options["type"] == "presences") {
-            $this->getReservationsPresenceBetweenDates($options["date"], $options["date"], $confirmed = true);
-            $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("personnes présentes ce jour");
+            $this->getReservationsPresenceExcludeDates($options["date"], $options["date"], $confirmed = true);
+            $this->listTitle = $this->reservations->getTotalAmountOfVisitors()." ".__("personnes restant sur place");
             $this->emit('scrollToReservationList');
         }
     }
@@ -103,6 +103,13 @@ class ReservationsList extends Component
 
         $this->reservations = Reservation::getPresencesBetweenDates($dateBegin, $dateEnd, $confirmed);
     }
+
+    public function getReservationsPresenceExcludeDates($dateBegin, $dateEnd, $confirmed = true){
+
+        $this->reservations = Reservation::getPresencesExcludeDates($dateBegin, $dateEnd, $confirmed);
+    }
+
+
 
     public function getReservationsHere() {
 

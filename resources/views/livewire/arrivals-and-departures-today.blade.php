@@ -20,7 +20,7 @@
     @endif
 
     @if ( $presences->count() )
-        <button class="mx-4" wire:click="displayDayEvents('presences')">{{ $presences->getTotalAmountOfVisitors() }} {{__("personnes présentes ce jour")}}</button>
+        <button class="mx-4" wire:click="displayDayEvents('presences')">{{ $presences->getTotalAmountOfVisitors() }} {{__("personnes restant sur place")}}</button>
     @endif
     @if ( $departures->count() )
         <button class="mx-4" wire:click="displayDayEvents('departures')">{{ $departures->getTotalAmountOfVisitors() }} {{__("départs ce jour")}}</button>
