@@ -54,26 +54,41 @@
             @endif
         @endcan
     </div>
-    @if ($reservation->hasCarPlaces || $reservation->lookForCarPlaces)
+    @if ($editing || $reservation->hasCarPlaces || $reservation->lookForCarPlaces)
         <div class="card border-4 w-1/2">
             <h4>{{ __('Transport') }}</h4>
-            @if ($reservation->hasCarPlaces)
-                <h6>{{ __('A :n places de voiture disponibles', ['n' => $reservation->numberCarPlaces]) }}</h6>
-            @endif
-            @if ($reservation->lookForCarPlaces)
-                <h6>{{ __('Recherche :n places de voiture', ['n' => $reservation->numberCarPlaces]) }}</h6>
-            @endif
-            @if ($reservation->shareEmail)
-                <p>{{ __('Accepte de partager son email') }}</p>
-            @endif
-            @if ($reservation->sharePhone)
-                <p>{{ __('Accepte de partager son numéro de téléphone') }}</p>
-            @endif
-            @if ($reservation->lookForCarPlaces)
-                <p class="my-8">{{__("Afficher les gens arrivant à ")}} <input type="number" style="width: 78px" step=1 min=0 wire:model="daysGapForPlaces"> {{__("jours près")}} : <button wire:click="lookForCars()">{{__("Chercher")}}</button></p>
-        
-            @endif
+            @if ($editing)
+                <p><label><strong>{{ __('Recherche des places de voiture') }} : </strong></label><input type="checkbox"
+                        wire:change="updateReservation" wire:model="reservation.lookForCarPlaces"></p>
+                <p><label><strong>{{ __('Propose des places de voiture') }} : </strong></label><input type="checkbox"
+                        wire:change="updateReservation" wire:model="reservation.hasCarPlaces"></p>
+                <p><label><strong>{{ __('Nombre de places') }} : </strong></label><input type="number"
+                        wire:change="updateReservation" wire:model="reservation.numberCarPlaces" min=0></p>
+                <p><label><strong>{{ __('Accepte de partager son email') }} : </strong></label><input type="checkbox"
+                        wire:change="updateReservation" wire:model="reservation.shareEmail"></p>
+                <p><label><strong>{{ __('Accepte de partager son téléphone') }} : </strong></label><input
+                        type="checkbox" wire:change="updateReservation" wire:model="reservation.sharePhone"></p>
+            @else
+                @if ($reservation->hasCarPlaces)
+                    <h6>{{ __('A :n places de voiture disponibles', ['n' => $reservation->numberCarPlaces]) }}</h6>
+                @endif
+                @if ($reservation->lookForCarPlaces)
+                    <h6>{{ __('Recherche :n places de voiture', ['n' => $reservation->numberCarPlaces]) }}</h6>
+                @endif
+                @if ($reservation->shareEmail)
+                    <p>{{ __('Accepte de partager son email') }}</p>
+                @endif
+                @if ($reservation->sharePhone)
+                    <p>{{ __('Accepte de partager son numéro de téléphone') }}</p>
+                @endif
+                @if ($reservation->lookForCarPlaces)
+                    <p class="my-8">{{ __('Afficher les gens arrivant à ') }} <input type="number"
+                            style="width: 78px" step=1 min=0 wire:model="daysGapForPlaces"> {{ __('jours près') }} :
+                        <button wire:click="lookForCars()">{{ __('Chercher') }}</button>
+                    </p>
+                @endif
 
+            @endif
         </div>
     @endif
 

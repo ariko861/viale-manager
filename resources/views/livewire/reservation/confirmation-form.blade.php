@@ -228,12 +228,12 @@
                         @endunless
                     @endif
 
-                    <h3 class="col-span-full">{{ __('Vous cherchez/proposer un transport ?') }} :</h3>
+                    <h3 class="col-span-full">{{ __('Vous cherchez/proposez un transport ?') }} :</h3>
 
-                    <label class="col-span-1">{{ __('Vous cherchez un transport') }}</label>
+                    <label class="col-span-1">{{ __('Vous cherchez une·des place·s de voiture') }}</label>
                     <input type="checkbox" class="col-span-2" wire:model="reservation.lookForCarPlaces"  wire:click="$set('reservation.hasCarPlaces', false)">
 
-                    <label class="col-span-1">{{ __('Vous proposez un transport') }}</label>
+                    <label class="col-span-1">{{ __('Vous proposez une·des places de voiture') }}</label>
                     <input type="checkbox" class="col-span-2" wire:model="reservation.hasCarPlaces" wire:click="$set('reservation.lookForCarPlaces', false)">
 
                     @if ($reservation->hasCarPlaces || $reservation->lookForCarPlaces)

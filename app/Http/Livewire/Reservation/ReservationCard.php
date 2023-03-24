@@ -22,6 +22,12 @@ class ReservationCard extends Component
         'reservation.nodeparturedate' => 'boolean',
         'reservation.confirmed' => 'boolean',
         'reservation.removeFromStats' => 'boolean',
+        'reservation.lookForCarPlaces' => 'boolean',
+        'reservation.hasCarPlaces' => 'boolean',
+        'reservation.sharePhone' => 'boolean',
+        'reservation.shareEmail' => 'boolean',
+        'reservation.numberCarPlaces' => 'integer|min:0'
+        
 
     ];
 
