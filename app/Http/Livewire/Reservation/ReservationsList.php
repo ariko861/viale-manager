@@ -30,7 +30,7 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
-    protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted", "displayDayVisitors"];
+    protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted", "displayDayVisitors", "lookForCars"];
 
     public function displayReservation($res_id)
     {
@@ -46,6 +46,15 @@ class ReservationsList extends Component
                 return $res->hasCarPlaces;
             });
         }
+    }
+
+    public function lookForCars($options){
+        $dateBegin = new Carbon($options[0]);
+        $dateEnd = new Carbon($options[0]);
+        $this->beginDate = $dateBegin->subDays($options[1]);
+        $this->endDate = $dateEnd->addDays($options[1]);
+        $this->displayOnlyWithPlaces = true;
+        $this->getReservationsWhereArrivalInBetween();
     }
 
     public function displayDayVisitors($options)
@@ -76,14 +85,17 @@ class ReservationsList extends Component
 
     public function getReservationsComing()
     {
+        $this->displayOnlyWithPlaces = false;
         $today = Carbon::now()->format('Y-m-d');
         $this->reservations = Reservation::where('quickLink', false)->whereDate('arrivaldate', '>=', $today)->orderBy('arrivaldate')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation . " " . __("Prochaines arrivées");
         $this->emit('scrollToReservationList');
+
     }
 
     public function getLastConfirmations()
     {
+        $this->displayOnlyWithPlaces = false;
         $this->reservations = Reservation::where('quickLink', false)->where('confirmed', true)->where('confirmed_at', '<>', null)->orderBy('confirmed_at', 'desc')->take($this->amountDisplayedReservation)->get();
         $this->listTitle = $this->amountDisplayedReservation . " " . __("dernières confirmations");
         $this->emit('scrollToReservationList');
@@ -132,7 +144,7 @@ class ReservationsList extends Component
 
     public function getReservationsHere()
     {
-
+        $this->displayOnlyWithPlaces = false;
         $this->getReservationsPresenceBetweenDates($this->today, $this->today, true);
         $this->reservations = $this->reservations->sortBy('contact_person.surname');
         $this->listTitle = $this->reservations->getTotalAmountOfVisitors() . " " . __("personnes présentes en ce moment");

@@ -14,6 +14,7 @@ class ReservationCard extends Component
     public $editing;
     public $newVisitorInReservation = false;
     public $setDepartureDate = false;
+    public $daysGapForPlaces = 5;
 
     protected $rules = [
         'reservation.departuredate' => 'date|after_or_equal:reservation.arrivaldate|required_unless:reservation.nodeparturedate,true',
@@ -29,6 +30,11 @@ class ReservationCard extends Component
     public function changeAction($options)
     {
         if ($options[1] == 'reservation') $this->editing = ! $this->editing;
+    }
+
+    public function lookForCars()
+    {
+        $this->emitUp('lookForCars', [ $this->reservation->arrivaldate, $this->daysGapForPlaces]);
     }
 
     public function deleteAction($options)

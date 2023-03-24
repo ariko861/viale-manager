@@ -69,6 +69,10 @@
             @if ($reservation->sharePhone)
                 <p>{{ __('Accepte de partager son numéro de téléphone') }}</p>
             @endif
+            @if ($reservation->lookForCarPlaces)
+                <p class="my-8">{{__("Afficher les gens arrivant à ")}} <input type="number" style="width: 78px" step=1 min=0 wire:model="daysGapForPlaces"> {{__("jours près")}} : <button wire:click="lookForCars()">{{__("Chercher")}}</button></p>
+        
+            @endif
 
         </div>
     @endif
