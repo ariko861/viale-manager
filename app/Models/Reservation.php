@@ -172,6 +172,11 @@ class Reservation extends Model
         return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->withPivot('contact', 'room_id', 'id', 'price');
     }
 
+    public function contactVisitor()
+    {
+        return $this->belongsToMany(Visitor::class, 'visitor_reservation')->using(VisitorReservation::class)->wherePivot('contact', true);
+    }
+
     public function links()
     {
         return $this->hasMany(ReservationLink::class);

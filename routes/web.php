@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ConfirmationController;
 use App\Http\Controllers\RecapController;
+use App\Http\Controllers\LookingForPlace;
 use App\Models\UserInvite;
 use App\Models\Option;
 use App\Models\MatrixLink;
@@ -23,6 +24,8 @@ Route::get('/', function () {
     $options = Option::all();
     return view('welcome', ['options' => $options]);
 })->name('welcome');
+
+Route::post('/', [LookingForPlace::class, 'lookForPlace'])->name('transport');
 
 Route::get('/matrix/{link?}', function($link = null) {
     if ( $link )
@@ -44,6 +47,8 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    
 
     Route::middleware('can:reservation-list')->get('/reservations/{id?}', function ($reservation_id = null) {
         return view('reservations', ['reservation_id' => $reservation_id]);
