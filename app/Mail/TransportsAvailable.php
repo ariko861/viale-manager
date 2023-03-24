@@ -56,9 +56,9 @@ class TransportsAvailable extends Mailable
         }
 
         $listReservations = $reservationsWithPlaces->unique();
-        
+
         return $this->replyTo($reply_to, env("APP_NAME"))
             ->subject(__("véhicules pour")." ".env("APP_NAME"))
-            ->view('emails.transports-disponibles', ['reservations' => $listReservations]);
+            ->view('emails.transports-disponibles', ['listReservations' => $listReservations]);
     }
 }
