@@ -3,6 +3,7 @@
     <br>
     <div class="option-field">
         <h2 class="mt-2 mb-4 text-center">{{__("Recherche de réservations")}} :</h2>
+        <p class="my-8 float-right">{{__("N'afficher que les réservations qui ont des places de voiture disponible")}} <input type="checkbox" wire:model="displayOnlyWithPlaces" wire:click="filterReservations()"></p>
         <p class="my-8">{{__("Afficher les")}} <button wire:click="getReservationsHere">{{__("Personnes présentes")}}</button></p>
         <p class="my-8">{{__("Afficher les")}} <input type="number" step=1 wire:model="amountDisplayedReservation"> {{__("prochaines arrivées")}} : <button wire:click="getReservationsComing">{{__("Chercher")}}</button></p>
         <p class="my-8"><strong>{{__("Ou rechercher par nom d'un visiteur")}} :</strong> <input type="text" wire:keyup="getReservationsByVisitorName" wire:model="visitorSearch"></p>

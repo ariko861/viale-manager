@@ -44,6 +44,12 @@ class ConfirmationForm extends Component
             'addedVisitors.*.visitor.surname' => 'required|string|max:255',
             'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
             'addedVisitors.*.visitor.email' => 'email|nullable',
+            'reservation.hasCarPlaces' => 'boolean',
+            'reservation.lookForCarPlaces' => 'boolean',
+            'reservation.shareEmail' => 'boolean',
+            'reservation.sharePhone' => 'boolean',
+            'reservation.numberCarPlaces' => 'integer|min:0',
+            
 
         ];
 
@@ -155,7 +161,7 @@ class ConfirmationForm extends Component
             Visitor::destroy($visitor_id_to_destroy);
             $this->showEmailForm = false;
             $this->checkEmptyFields();
-            $refresh;
+            // $refresh;
         } else {
             $this->addedVisitors = $this->addedVisitors->replaceRecursive([
                 $options["visitorKey"] => [ 'visitor' => $visitor, 'showEmailForm' => 'found' ]

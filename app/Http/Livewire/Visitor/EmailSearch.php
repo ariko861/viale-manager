@@ -38,6 +38,9 @@ class EmailSearch extends Component
         $email = $this->email;
         $this->visitors = Visitor::where('email', $email)->where('confirmed', true)->get();
         $this->showVisitorList = true;
+        if ($this->visitors && $this->visitors->count() == 0){
+            $this->selectVisitor();
+        }
     }
 
     public function submitMail()
