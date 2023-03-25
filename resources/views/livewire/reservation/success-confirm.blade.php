@@ -8,6 +8,13 @@
         <p><strong>{{__("Votre date de départ")}} : </strong>{{$reservation->departure}}</p>
         <p><strong>{{__("Vos remarques")}} : </strong>{{$reservation->remarks}}</p>
 
+        @if ($reservation->links && $reservation->links->count() > 0)
+            @foreach ( $reservation->links as $link )
+            <p>{{__("Vous pouvez encore utiliser ce lien de réservation :n fois pour modifier votre réservation", ['n' => $link->times_left ])}}</p>
+            <a href="{{$link->getLink()}}">{{$link->getLink()}}</a>
+            @endforeach
+        @endif
+
         <h2 class="mt-4 mb-2">{{__("Personnes présentes")}} :</h2>
 
         @foreach ( $reservation->visitors as $visitor )
@@ -24,6 +31,8 @@
 
             </div>
         @endforeach
+        
+
         @unless ($showPrice)
             @unless ($isEmail)
                 <button class="mt-4" wire:click="$toggle('showPrice')">{{__("Afficher la participation totale pour le séjour")}}</button>

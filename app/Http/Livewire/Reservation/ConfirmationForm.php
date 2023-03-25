@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Reservation;
 
+use App\Jobs\SendReservationConfirmed;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -28,30 +29,30 @@ class ConfirmationForm extends Component
     public $current_year;
     public $showEmailForm = false;
 
-    protected $listeners = ['visitorSelectedFromEmail', 'emailNotFound' ];
+    protected $listeners = ['visitorSelectedFromEmail', 'emailNotFound'];
 
-        protected $rules = [
-            'contact_person.name' => 'required|string|max:255',
-            'contact_person.surname' => 'required|string|max:255',
-            'contact_person.phone' => 'required|string|max:255',
-            'contact_person.email' => 'required|email|max:255',
-            'contact_person.birthyear' => 'required|integer|between:1900,2100',
-            'price' => 'integer|required',
-            'reservation.arrivaldate' => 'required|date',
-            'reservation.departuredate' => 'required|date|after_or_equal:reservation.arrivaldate',
-            'reservation.remarks' => 'string|nullable',
-            'addedVisitors.*.visitor.name' => 'required|string|max:255',
-            'addedVisitors.*.visitor.surname' => 'required|string|max:255',
-            'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
-            'addedVisitors.*.visitor.email' => 'email|nullable',
-            'reservation.hasCarPlaces' => 'boolean',
-            'reservation.lookForCarPlaces' => 'boolean',
-            'reservation.shareEmail' => 'boolean',
-            'reservation.sharePhone' => 'boolean',
-            'reservation.numberCarPlaces' => 'integer|min:0',
-            
+    protected $rules = [
+        'contact_person.name' => 'required|string|max:255',
+        'contact_person.surname' => 'required|string|max:255',
+        'contact_person.phone' => 'required|string|max:255',
+        'contact_person.email' => 'required|email|max:255',
+        'contact_person.birthyear' => 'required|integer|between:1900,2100',
+        'price' => 'integer|required',
+        'reservation.arrivaldate' => 'required|date',
+        'reservation.departuredate' => 'required|date|after_or_equal:reservation.arrivaldate',
+        'reservation.remarks' => 'string|nullable',
+        'addedVisitors.*.visitor.name' => 'required|string|max:255',
+        'addedVisitors.*.visitor.surname' => 'required|string|max:255',
+        'addedVisitors.*.visitor.birthyear' => 'required|integer|between:1900,2100',
+        'addedVisitors.*.visitor.email' => 'email|nullable',
+        'reservation.hasCarPlaces' => 'boolean',
+        'reservation.lookForCarPlaces' => 'boolean',
+        'reservation.shareEmail' => 'boolean',
+        'reservation.sharePhone' => 'boolean',
+        'reservation.numberCarPlaces' => 'integer|min:0',
 
-        ];
+
+    ];
 
 
     public function getMaxDate($date)
@@ -70,27 +71,25 @@ class ConfirmationForm extends Component
     {
 
         $this->unknown = collect([]);
-        if ( $this->contact_person->name == 'x-inconnu' ){ //check if name hasn't been filled yet
+        if ($this->contact_person->name == 'x-inconnu') { //check if name hasn't been filled yet
             $this->unknown->push('name');
             $this->contact_person->name = "";
         }
-        if ( $this->contact_person->surname == 'x-inconnu' ){ //check if surname hasn't been filled yet
+        if ($this->contact_person->surname == 'x-inconnu') { //check if surname hasn't been filled yet
             $this->unknown->push('surname');
             $this->contact_person->surname = "";
         }
-        if ( $this->contact_person->email == '' ){ //check if email hasn't been filled yet
+        if ($this->contact_person->email == '') { //check if email hasn't been filled yet
             $this->unknown->push('email');
         }
     }
 
     public function addVisitor($visitor = null)
     {
-        if ($this->addedVisitors->count() < $this->link->max_added_visitors)
-        {
+        if ($this->addedVisitors->count() < $this->link->max_added_visitors) {
             if ($visitor === null) $visitor = new Visitor();
             $this->addedVisitors->push(['visitor' => $visitor, 'price' => $this->price, 'showEmailForm' => true]);
-            if ($this->addedVisitors->count() == $this->link->max_added_visitors)
-            {
+            if ($this->addedVisitors->count() == $this->link->max_added_visitors) {
                 $this->forbidAddingVisitors = true;
             }
         }
@@ -106,24 +105,25 @@ class ConfirmationForm extends Component
     {
         $carbonArrivalDate = $this->getMinDate($this->reservation->arrivaldate);
         $today = Carbon::now();
-        if ( $today->gt( $carbonArrivalDate ) ) {
+        if ($today->gt($carbonArrivalDate)) {
             $this->minarrivaldate = $today->format('Y-m-d');
             $this->maxarrivaldate = $this->getMaxDate($today)->format('Y-m-d');
         } else {
             $this->minarrivaldate = $carbonArrivalDate->format('Y-m-d');
             $this->maxarrivaldate = $this->getMaxDate($this->reservation->arrivaldate)->format('Y-m-d');
         }
-
     }
     public function setMinDepartureDate()
     {
         $departure = $this->reservation->departuredate;
         $carbonArrivalDate = new Carbon($this->reservation->arrivaldate);
 
-        if ( $carbonArrivalDate->gt($this->getMinDate($departure) ) )
-        {
+        // Avancer la date de départ jusqu'à la date d'arrivée si celle ci est inférieure
+        if ($this->reservation->departuredate < $this->reservation->arrivaldate) { 
+            $this->reservation->departuredate = $this->reservation->arrivaldate;
+        }
+        if ($carbonArrivalDate->gt($this->getMinDate($departure))) {
             $this->mindeparturedate = $carbonArrivalDate->format('Y-m-d');
-
         } else {
             $this->mindeparturedate = $this->getMinDate($departure)->format('Y-m-d');
         }
@@ -131,7 +131,7 @@ class ConfirmationForm extends Component
 
     public function emailNotFound($options)
     {
-        if ( $options["visitorKey"] === "contact" ){
+        if ($options["visitorKey"] === "contact") {
             $this->contact_person->name = $this->contact_person->getOriginal('name');
             $this->contact_person->surname = $this->contact_person->getOriginal('surname');
             $this->contact_person->email = $options["email"];
@@ -140,16 +140,15 @@ class ConfirmationForm extends Component
             $this->showEmailForm = false;
         } else {
             $this->addedVisitors = $this->addedVisitors->replaceRecursive([
-                $options["visitorKey"] => [ 'showEmailForm' => 'notfound', 'visitor' => [ 'email' => $options["email"] ] ]
+                $options["visitorKey"] => ['showEmailForm' => 'notfound', 'visitor' => ['email' => $options["email"]]]
 
             ]);
-
         }
     }
 
     public function visitorSelectedFromEmail($options)
     {
-        $visitor = Visitor::find( $options["visitor_id"] );
+        $visitor = Visitor::find($options["visitor_id"]);
 
         if ($options["visitorKey"] === 'contact') {
             $visitor_id_to_destroy = $this->contact_person->id;
@@ -164,10 +163,9 @@ class ConfirmationForm extends Component
             // $refresh;
         } else {
             $this->addedVisitors = $this->addedVisitors->replaceRecursive([
-                $options["visitorKey"] => [ 'visitor' => $visitor, 'showEmailForm' => 'found' ]
+                $options["visitorKey"] => ['visitor' => $visitor, 'showEmailForm' => 'found']
             ]);
         }
-
     }
 
     public function save()
@@ -184,16 +182,14 @@ class ConfirmationForm extends Component
         $this->contact_person->save();
 
         // Update prices for pre-register other visitors
-        foreach ($this->otherVisitorsArray as $otherVisitor)
-        {
+        foreach ($this->otherVisitorsArray as $otherVisitor) {
             $this->reservation->visitors()->updateExistingPivot($otherVisitor["id"], [
                 'price' => $otherVisitor["price"],
             ]);
         }
 
         // save added visitors
-        foreach ($this->addedVisitors as $addedVisitor)
-        {
+        foreach ($this->addedVisitors as $addedVisitor) {
             if ($addedVisitor["showEmailForm"] === "found" && $addedVisitor["visitor"]["id"]) {
                 $visitor = Visitor::find($addedVisitor["visitor"]["id"]);
                 $visitor->birthyear = $addedVisitor["visitor"]["birthyear"];
@@ -203,25 +199,41 @@ class ConfirmationForm extends Component
                     'name' => $addedVisitor["visitor"]["name"],
                     'surname' => $addedVisitor["visitor"]["surname"],
                     'birthyear' => $addedVisitor["visitor"]["birthyear"],
-                    'email' => ( $addedVisitor["visitor"]["email"] ?? ''),
-                    'confirmed' => ( isset($addedVisitor["visitor"]["email"]) ? true : false),
+                    'email' => ($addedVisitor["visitor"]["email"] ?? ''),
+                    'confirmed' => (isset($addedVisitor["visitor"]["email"]) ? true : false),
                 ]);
             }
 
             $visitor->normalize();
             $visitor->save();
 
-            $this->reservation->visitors()->attach($visitor, [ 'price' => $addedVisitor["price"], 'contact' => false ]);
+            $this->reservation->visitors()->attach($visitor, ['price' => $addedVisitor["price"], 'contact' => false]);
         }
         $this->reservation->confirmed = true;
         $this->reservation->quickLink = false;
         $this->reservation->confirmed_at = Carbon::now();
 
         $this->reservation->save();
+
+        
+        $this->sendRecapReservation();
         $this->emit('showRecapReservation', $this->reservation->id);
 
-        $this->link->delete();
+        $this->link->useLinkOnce();
         $this->link = false;
+    }
+
+    public function sendRecapReservation()
+    {
+        $to = Option::firstOrNew(['name' => 'email'])->value;
+        $details = [
+            'email' => $to,
+            'reservation' => $this->reservation,
+            'link' => $this->link,
+        ];
+        dispatch(new SendReservationConfirmed($details)); 
+//         Mail::to($to)->queue(new ReservationConfirmed($this->reservation));
+
     }
 
 
@@ -241,17 +253,18 @@ class ConfirmationForm extends Component
         // Pour afficher les messages en introduction de la page de confirmation
         $this->reservation_link_messages = collect([]);
         $messages = Option::where('name', 'reservation_link_message')->orderBy('id')->get();
-        foreach ($messages as $message )
-        {
-            $this->reservation_link_messages->push( Str::markdown($message->value) );
+        foreach ($messages as $message) {
+            $this->reservation_link_messages->push(Str::markdown($message->value));
         }
 
         // Pour afficher le champ de recherche par email si la réservation a été créée avec un lien super rapide
-        if ( $this->reservation->quickLink && $this->unknown->contains('email') ) {
+        if ($this->reservation->quickLink && $this->unknown->contains('email')) {
             $this->showEmailForm = true;
         }
 
-        $this->otherVisitorsArray = $this->reservation->getNonContactVisitors()->each(function($item, $key) { $item["price"] = $this->price; });
+        $this->otherVisitorsArray = $this->reservation->getNonContactVisitors()->each(function ($item, $key) {
+            $item["price"] = $this->price;
+        });
         $arrival = $this->reservation->arrivaldate;
         $departure = $this->reservation->departuredate;
 
@@ -260,7 +273,6 @@ class ConfirmationForm extends Component
 
         $this->maxdeparturedate = $this->getMaxDate($departure)->format('Y-m-d');
         $this->setMinDepartureDate();
-
     }
 
     public function booted()
@@ -268,7 +280,6 @@ class ConfirmationForm extends Component
     {
         //
         $this->emit('initDatePicker');
-
     }
     public function render()
     {

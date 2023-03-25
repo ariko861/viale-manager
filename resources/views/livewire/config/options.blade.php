@@ -26,6 +26,14 @@
         <button class="btn-submit" wire:click="save('address')">{{__("Sauvegarder le changement")}}</button>
         @error('address.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
     </div>
+    {{-- Pour régler le nombre de fois qu'un utilisateur peut utiliser son lien de réservation --}}
+    <div class="w-full px-8 grid grid-cols-4 gap-4 my-2">
+        <label class="col-span-1">{{ __("Nombre maximum de fois qu'un visiteur peut utiliser un lien de réservation") }}</label>
+        <input class="col-span-2" type="number" wire:model="reservationLinksMaxUse.value" min=1 max=0/>
+        <button class="btn-submit" wire:click="save('reservationLinksMaxUse')">{{__("Sauvegarder le changement")}}</button>
+        @error('reservationLinksMaxUse.value') <span class="col-span-1"></span><span class="red col-span-3 error">{{ $message }}</span> @enderror
+    </div>
+    
 
     @if ($email->value)
         <div class="w-full px-8 my-6">

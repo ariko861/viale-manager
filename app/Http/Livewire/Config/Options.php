@@ -13,6 +13,7 @@ class Options extends Component
 
     public $email;
     public $newMatrixLink;
+    public $reservationLinksMaxUse;
 
     protected $rules = [
         'email.value' => 'required|email|max:255',
@@ -26,6 +27,7 @@ class Options extends Component
         'matrix_links.*.gallery' => 'boolean',
         'matrix_links.*.displayDate' => 'boolean',
         'matrix_links.*.displayAddress' => 'boolean',
+        'reservationLinksMaxUse.value' => 'required|integer|min:1|max:10',
 
     ];
 
@@ -43,6 +45,9 @@ class Options extends Component
         $this->confirmation_messages = Option::where('name', 'confirmation_message')->orderBy('id')->get();
         $this->reservation_link_messages = Option::where('name', 'reservation_link_message')->orderBy('id')->get();
         $this->matrix_links = MatrixLink::all();
+        
+        $this->reservationLinksMaxUse = Option::firstOrNew(['name' => 'reservationLinksMaxUse']);
+        
     }
 
     public function addNewMessage()

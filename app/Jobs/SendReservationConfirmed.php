@@ -40,7 +40,9 @@ class SendReservationConfirmed implements ShouldQueue
     public function handle()
     {
         //
-        $email = new ReservationConfirmed($this->details['reservation']);
+        $link = $this->details["link"];    
+        $modif = ($link->times_used > 0);
+        $email = new ReservationConfirmed($this->details['reservation'], $modif);
         Mail::to($this->details["email"])->send($email);
     }
 

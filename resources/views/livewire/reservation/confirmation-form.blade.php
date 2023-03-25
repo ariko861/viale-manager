@@ -1,6 +1,11 @@
 <div>
     @if ($link)
+        @if ($link->times_used > 0)
+            <h1>{{ __('Modification de votre réservation à') }} {{ env('APP_NAME') }}</h1>
+        @else    
         <h1 class="my-4">{{ __('Merci de confirmer votre réservation à') }} {{ env('APP_NAME') }}</h1>
+        @endif
+        
         <br>
         @if ($reservation_link_messages)
             <div class="w-full p-4 border-4 mt-2 mb-6">

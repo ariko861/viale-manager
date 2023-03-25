@@ -22,12 +22,12 @@ class SuccessConfirm extends Component
     public function showRecapReservation($res_id)
     {
         $this->reservation = Reservation::find($res_id);
-        $to = Option::firstOrNew(['name' => 'email'])->value;
-        $details = [
-            'email' => $to,
-            'reservation' => $this->reservation,
-        ];
-        dispatch(new SendReservationConfirmed($details));
+        // $to = Option::firstOrNew(['name' => 'email'])->value;
+        // $details = [
+        //     'email' => $to,
+        //     'reservation' => $this->reservation,
+        // ];
+        // dispatch(new SendReservationConfirmed($details));
 //         Mail::to($to)->queue(new ReservationConfirmed($this->reservation));
 
     }
