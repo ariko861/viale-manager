@@ -225,10 +225,11 @@ class ConfirmationForm extends Component
 
     public function sendRecapReservation()
     {
+        $resa = $this->reservation->fresh();
         $to = Option::firstOrNew(['name' => 'email'])->value;
         $details = [
             'email' => $to,
-            'reservation' => $this->reservation,
+            'reservation' => $resa,
             'link' => $this->link,
         ];
         dispatch(new SendReservationConfirmed($details)); 
