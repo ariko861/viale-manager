@@ -26,6 +26,7 @@ class ReservationCard extends Component
         'reservation.hasCarPlaces' => 'boolean',
         'reservation.sharePhone' => 'boolean',
         'reservation.shareEmail' => 'boolean',
+        'reservation.coming_from' => 'string|max:100',
         'reservation.numberCarPlaces' => 'integer|min:0'
         
 

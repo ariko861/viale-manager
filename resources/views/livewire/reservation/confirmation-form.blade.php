@@ -244,6 +244,9 @@
                     @if ($reservation->hasCarPlaces || $reservation->lookForCarPlaces)
                         <label class="col-span-1">{{ __('Combien de places proposez vous/cherchez vous ?') }}</label>
                         <input type="number" class="col-span-2" min=0 max=10 wire:model="reservation.numberCarPlaces">
+
+                        <label class="col-span-1">{{ __('Au départ de ?') }}</label>
+                        <input type="text" class="col-span-2" min=0 max=10 wire:model="reservation.coming_from">
                         
                         <div class="col-span-3"><p>{{ __('Vous acceptez de transmettre vos coordonnées aux personnes ayant un réservation à la Viale à des dates proches') }} :</p>
                         </div>

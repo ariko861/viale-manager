@@ -49,6 +49,7 @@ class ConfirmationForm extends Component
         'reservation.lookForCarPlaces' => 'boolean',
         'reservation.shareEmail' => 'boolean',
         'reservation.sharePhone' => 'boolean',
+        'reservation.coming_from' => 'string|max:100',
         'reservation.numberCarPlaces' => 'integer|min:0',
 
 

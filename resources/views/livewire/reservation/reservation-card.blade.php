@@ -64,6 +64,8 @@
                         wire:change="updateReservation" wire:model="reservation.hasCarPlaces"></p>
                 <p><label><strong>{{ __('Nombre de places') }} : </strong></label><input type="number"
                         wire:change="updateReservation" wire:model="reservation.numberCarPlaces" min=0></p>
+                <p><label><strong>{{ __('En provenance de') }} : </strong></label><input type="text"
+                        wire:change="updateReservation" wire:model="reservation.coming_from" min=0></p>
                 <p><label><strong>{{ __('Accepte de partager son email') }} : </strong></label><input type="checkbox"
                         wire:change="updateReservation" wire:model="reservation.shareEmail"></p>
                 <p><label><strong>{{ __('Accepte de partager son téléphone') }} : </strong></label><input
@@ -75,6 +77,11 @@
                 @if ($reservation->lookForCarPlaces)
                     <h6>{{ __('Recherche :n places de voiture', ['n' => $reservation->numberCarPlaces]) }}</h6>
                 @endif
+                
+                @if ($reservation->coming_from)
+                    <h6>{{ __('En provenance de :p', ['p' => $reservation->coming_from]) }}</h6>
+                @endif
+                
                 @if ($reservation->shareEmail)
                     <p>{{ __('Accepte de partager son email') }}</p>
                 @endif

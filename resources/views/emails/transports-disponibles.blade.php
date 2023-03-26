@@ -15,6 +15,10 @@
             {{__("Début de son séjour :")}} {{ $reservation->arrival }}
             <br />
             {{__("Propose :n place", [ 'n' => $reservation->numberCarPlaces ])}}
+            <br />
+            @if ($reservation->coming_from)
+                {{__("En provenance de :p", [ 'p' => $reservation->coming_from ])}}
+            @endif
 
         </li>
     @endforeach
