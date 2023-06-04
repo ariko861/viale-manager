@@ -7,11 +7,15 @@
         <p><strong>{{__("Ou rechercher par nom des visiteurs")}} :</strong> <input type="text" wire:keyup="getReservationsByVisitorName" wire:model="visitorSearch"></p>
     </div>
 
-    <div class="w-full grid grid-cols-2 gap-4 px-8">
+    <div class="w-full grid grid-cols-3 gap-4 px-8">
         <div class="col-span-full">{{ $listTitle }}</div>
         <div class="text-center">
             <span><strong>{{__("Total des nuitées")}} : </strong>{{ $totalNights }}<span>
         </div>
+        <div class="text-center">
+            <span><strong>{{__("Nombre de réservations")}} : </strong>{{ $reservations->count() }}<span>
+        </div>
+        
         <div class="text-center">
             <span><strong>{{__("Total des participations")}} : </strong>{{ $totalIncome }}<span>
         </div>

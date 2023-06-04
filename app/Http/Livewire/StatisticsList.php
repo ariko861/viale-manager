@@ -16,6 +16,7 @@ class StatisticsList extends Component
     public $endDate;
     public $totalIncome = 0;
     public $totalNights = 0;
+    // public $totalReservations = 0;
     public $listTitle;
     public $visitorSearch;
 
