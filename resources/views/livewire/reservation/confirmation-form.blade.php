@@ -2,10 +2,10 @@
     @if ($link)
         @if ($link->times_used > 0)
             <h1>{{ __('Modification de votre réservation à') }} {{ env('APP_NAME') }}</h1>
-        @else    
+        @else
         <h1 class="my-4">{{ __('Merci de confirmer votre réservation à') }} {{ env('APP_NAME') }}</h1>
         @endif
-        
+
         <br>
         @if ($reservation_link_messages)
             <div class="w-full p-4 border-4 mt-2 mb-6">
@@ -237,28 +237,49 @@
 
                     <label class="col-span-1">{{ __('Vous cherchez une·des place·s de voiture') }}</label>
                     <input type="checkbox" class="col-span-2" wire:model="reservation.lookForCarPlaces"  wire:click="$set('reservation.hasCarPlaces', false)">
+                    @error('reservation.lookForCarPlaces')
+                        <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                    @enderror
 
                     <label class="col-span-1">{{ __('Vous proposez une·des places de voiture') }}</label>
                     <input type="checkbox" class="col-span-2" wire:model="reservation.hasCarPlaces" wire:click="$set('reservation.lookForCarPlaces', false)">
+                    @error('reservation.hasCarPlaces')
+                        <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                    @enderror
 
                     @if ($reservation->hasCarPlaces || $reservation->lookForCarPlaces)
                         <label class="col-span-1">{{ __('Combien de places proposez vous/cherchez vous ?') }}</label>
                         <input type="number" class="col-span-2" min=0 max=10 wire:model="reservation.numberCarPlaces">
+                        @error('reservation.numberCarPlaces')
+                            <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                        @enderror
 
                         <label class="col-span-1">{{ __('Au départ de ?') }}</label>
                         <input type="text" class="col-span-2" min=0 max=10 wire:model="reservation.coming_from">
-                        
+                        @error('reservation.coming_from')
+                            <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                        @enderror
+
                         <div class="col-span-3"><p>{{ __('Vous acceptez de transmettre vos coordonnées aux personnes ayant un réservation à la Viale à des dates proches') }} :</p>
                         </div>
                             <label class="col-span-1">{{ __('Votre email') }}</label>
                         <input type="checkbox" class="col-span-2" wire:model="reservation.shareEmail">
+                        @error('reservation.shareEmail')
+                        <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                        @enderror
 
                         <label class="col-span-1">{{ __('Votre téléphone') }}</label>
                         <input type="checkbox" class="col-span-2" wire:model="reservation.sharePhone">
+                        @error('reservation.sharePhone')
+                        <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                        @enderror
                     @endif
 
                     <label class="col-span-1 mt-6">{{ __("Nous faire part d'une remarque") }}</label>
                     <textarea class="col-span-2 mt-6" wire:model="reservation.remarks"></textarea>
+                    @error('reservation.remarks')
+                        <span class="col-span-1"></span><span class="text-red-600 col-span-2">{{ $message }}</span>
+                    @enderror
 
                     <div class="col-span-full text-center">
                         <button wire:click="save">{{ __('Confirmer la réservation') }}</button>
