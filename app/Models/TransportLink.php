@@ -30,7 +30,7 @@ class TransportLink extends Model
         $dateBegin = $date->copy()->subDays($this->interval);
         $dateEnd= $date->copy()->addDays($this->interval);
         $interval = "entre le {$dateBegin->isoFormat('dddd Do MMMM YYYY')} et le {$dateEnd->isoFormat('dddd Do MMMM YYYY')}";
-        return $this->type === "offer_places" ? "Personnes proposant des places de voitures {$interval}" : "";
+        return $this->type === "offer_places" ? "Personnes proposant des places de voitures {$interval}" : "Personnes recherchant des places de voitures {$interval}";
     }
 
     public function getReservations() {

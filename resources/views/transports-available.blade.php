@@ -6,7 +6,7 @@
             </div>
 
             <div class="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose">
-                <p>{{ $reservations->count() }} personnes proposent des places de voiture autour du {{ $date->isoFormat('dddd Do MMMM YYYY') }} </p>
+                <p>{{ $reservations->count() }} personnes {{ $link->type == 'offer_places' ? 'proposent' : 'recherchent' }} des places de voiture autour du {{ $link->date_carbon->isoFormat('dddd Do MMMM YYYY') }} </p>
 
                 @foreach($reservations as $reservation)
                     <div class="card">

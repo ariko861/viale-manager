@@ -15,7 +15,7 @@ class TransportController extends Controller
         $link_token = $request->get('link_token');
         $link = TransportLink::where('link_token', $link_token)->firstOrFail();
 
-        return view('transports-available', ['reservations' => $link->getReservations(), 'date' => $link->date_carbon]);
+        return view('transports-available', ['reservations' => $link->getReservations(), 'link' => $link]);
 
     }
 }

@@ -43,6 +43,13 @@
                         <label class="col-span-1">{{ __("Intervale de jours") }}</label>
                         <input class="col-span-2" type="number" min="0" wire:model="newlink.interval">
                         @error('newvisitor.interval') <span class="col-span-1"></span><span class="red col-span-2 error">{{ $message }}</span> @enderror
+                        <label class="col-span-1">{{ __("Type de recherche") }}</label>
+                        <select class="col-span-2" wire:model="newlink.type">
+                            <option value="offer_places">Personnes proposant des places de voiture</option>
+                            <option value="lookfor_places">Personnes recherchant des places de voiture</option>
+                        </select>
+                        @error('newvisitor.interval') <span class="col-span-1"></span><span class="red col-span-2 error">{{ $message }}</span> @enderror
+
 
                         <div class="col-span-full text-center">
                             <button class="rounded-full p-2 border-4" type="submit">{{ __('Valider') }}</button>
