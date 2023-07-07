@@ -20,8 +20,12 @@ class Transports extends Component
 
     public function mount()
     {
-        $this->transportsLinks = TransportLink::all();
+        $this->getTransportLinks();
+    }
 
+    public function getTransportLinks()
+    {
+        $this->transportsLinks = TransportLink::all()->sortByDesc('updated_at');
     }
 
     public function newLinkForm()
@@ -39,14 +43,14 @@ class Transports extends Component
 //        $this->newlink->type = 'offer_places';
         $this->newlink->save();
         $this->showLinkForm = false;
-        $this->transportsLinks = TransportLink::all();
+        $this->getTransportLinks();
     }
 
     public function delete($id)
     {
         $link = $this->transportsLinks->find($id);
         $link->delete();
-        $this->transportsLinks = TransportLink::all();
+        $this->getTransportLinks();
     }
 
     public function render()
