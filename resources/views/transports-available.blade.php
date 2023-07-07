@@ -12,7 +12,7 @@
                     <div class="card">
                         <h3>{{ $reservation->contact_person->full_name }}</h3>
                         <span>Débute son séjour à la Viale le <b>{{$reservation->arrival}}</b></span>
-                        <br><span>{{__("Propose :n place de voiture", [ 'n' => $reservation->numberCarPlaces ])}}</span>
+                        <br><span>{{ $link->type == 'offer_places' ? 'Propose' : 'Recherche' }} {{__(":n place de voiture", [ 'n' => $reservation->numberCarPlaces ])}}</span>
                         @if ($reservation->coming_from)
                             <br><span>{{__("En provenance de :p", [ 'p' => $reservation->coming_from ])}}</span>
                         @endif

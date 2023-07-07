@@ -42,7 +42,7 @@ class TransportLink extends Model
             ->when($this->type == 'offer_places', function(Builder $query){
                 $query->where('hasCarPlaces', true);
             }, function (Builder $query){
-                $query->where('lookForPlaces', true);
+                $query->where('lookForCarPlaces', true);
             })
             ->whereDate('arrivaldate', '>=', $dateBegin)
             ->whereDate('arrivaldate', '<=', $dateEnd)
