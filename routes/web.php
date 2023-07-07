@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ConfirmationController;
@@ -42,17 +43,23 @@ Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::c
 
 Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationController::class, 'showConfirmationForm'])->name('confirmation');
 
+Route::middleware('transportLinkIsValid')->get('/transports-disponibles', [ TransportController::class, 'showTransports'])->name('transports-disponibles');
+
 Route::middleware(['auth:web', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    
+
 
     Route::middleware('can:reservation-list')->get('/reservations/{id?}', function ($reservation_id = null) {
         return view('reservations', ['reservation_id' => $reservation_id]);
     })->name('reservations');
+
+    Route::middleware('can:reservation-list')->get('/transports', function () {
+        return view('transports');
+    })->name('transports');
 
     Route::middleware('can:reservation-list')->get('/recapitulatif/reservations/{beginDate}/{endDate}', [RecapController::class, 'printReservationRecap'])->name('recapitulatif');
 

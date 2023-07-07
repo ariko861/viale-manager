@@ -20,6 +20,11 @@
                         {{ __('Réservations') }}
                     </x-jet-nav-link>
                     @endcan
+                    @can('reservation-list')
+                        <x-jet-nav-link href="{{ route('transports') }}" :active="request()->routeIs('transports')">
+                            {{ __('Transports') }}
+                        </x-jet-nav-link>
+                    @endcan
                     @can('visitor-list')
                     <x-jet-nav-link href="{{ route('visitors') }}" :active="request()->routeIs('visitors')">
                         {{ __('Visiteurs') }}

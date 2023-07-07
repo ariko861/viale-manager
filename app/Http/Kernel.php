@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'hasUserInvitation' => \App\Http\Middleware\HasUserInvitation::class,
         'confirmationLinkIsValid' => \App\Http\Middleware\ConfirmationLinkIsValid::class,
+        'transportLinkIsValid' => \App\Http\Middleware\TransportLinkIsValid::class,
 
     ];
 }
