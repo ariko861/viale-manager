@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ReservationLink;
+use App\Models\TransportLink;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,7 +49,10 @@ class clearLinks extends Command
                 ->orWhere('departuredate', '<', $now->subYear());
         })->delete();
 
+        $limit = $now->copy()->subDays(30);
+        TransportLink::where('date', '<', $limit)->delete();
+
         $this->info($outdatedLinks." liens supprimés");
-         
+
     }
 }
