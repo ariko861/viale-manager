@@ -100,7 +100,7 @@
             letDrag();
 
             //To check when a date is changed
-            Livewire.on('dateChanged', () => {
+            window.Livewire.on('dateChanged', () => {
                 letDrag();
             });
 

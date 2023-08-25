@@ -33,7 +33,7 @@
 
     <script>
         $(document).ready(function(){
-            Livewire.on('scrollToReservationList', () => {
+            window.Livewire.on('scrollToReservationList', () => {
                 $([document.documentElement, document.body]).animate({
                     scrollTop: $("#reservationsTitle").offset().top
                 }, 500);

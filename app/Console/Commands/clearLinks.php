@@ -49,8 +49,8 @@ class clearLinks extends Command
                 ->orWhere('departuredate', '<', $now->subYear());
         })->delete();
 
-        $limit = $now->copy()->subDays(30);
-        TransportLink::where('date', '<', $limit)->delete();
+        $limit = Carbon::now()->subDays(30);
+        TransportLink::whereDate('date', '<', $limit)->delete();
 
         $this->info($outdatedLinks." liens supprimés");
 

@@ -53,7 +53,7 @@
             <span></span>
         </div>
         <script>
-        Livewire.on('showAlert', message => {
+        window.Livewire.on('showAlert', message => {
 
             var alertPopup = document.getElementById("alert-popup");
             alertPopup.getElementsByTagName('span')[0].innerHTML = message[0];
