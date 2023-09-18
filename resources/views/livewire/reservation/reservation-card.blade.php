@@ -7,7 +7,7 @@
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
         <livewire:buttons.edit-buttons :wire:key="$reservation->id" model="reservation" :modelId="$reservation->id"
-            editRights="reservation-edit" deleteRights="reservation-delete" messageDelete="de la réservation">
+            editRights="reservation-edit" deleteRights="reservation-delete" messageDelete="de la réservation"/>
     </div>
     <p class="italic mb-4">{{ $reservation->person_number }}</p>
     <div class="card w-1/2 border-4 border-blue">
@@ -60,16 +60,34 @@
             @if ($editing)
                 <p><label><strong>{{ __('Recherche des places de voiture') }} : </strong></label><input type="checkbox"
                         wire:change="updateReservation" wire:model="reservation.lookForCarPlaces"></p>
+                @error('reservation.lookForCarPlaces')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
                 <p><label><strong>{{ __('Propose des places de voiture') }} : </strong></label><input type="checkbox"
                         wire:change="updateReservation" wire:model="reservation.hasCarPlaces"></p>
+                @error('reservation.hasCarPlaces')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
                 <p><label><strong>{{ __('Nombre de places') }} : </strong></label><input type="number"
                         wire:change="updateReservation" wire:model="reservation.numberCarPlaces" min=0></p>
+                @error('reservation.numberCarPlaces')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
                 <p><label><strong>{{ __('En provenance de') }} : </strong></label><input type="text"
                         wire:change="updateReservation" wire:model="reservation.coming_from" min=0></p>
+                @error('reservation.coming_from')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
                 <p><label><strong>{{ __('Accepte de partager son email') }} : </strong></label><input type="checkbox"
                         wire:change="updateReservation" wire:model="reservation.shareEmail"></p>
+                @error('reservation.shareEmail')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
                 <p><label><strong>{{ __('Accepte de partager son téléphone') }} : </strong></label><input
                         type="checkbox" wire:change="updateReservation" wire:model="reservation.sharePhone"></p>
+                @error('reservation.sharePhone')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
             @else
                 @if ($reservation->hasCarPlaces)
                     <h6>{{ __('A :n places de voiture disponibles', ['n' => $reservation->numberCarPlaces]) }}</h6>
@@ -77,11 +95,11 @@
                 @if ($reservation->lookForCarPlaces)
                     <h6>{{ __('Recherche :n places de voiture', ['n' => $reservation->numberCarPlaces]) }}</h6>
                 @endif
-                
+
                 @if ($reservation->coming_from)
                     <h6>{{ __('En provenance de :p', ['p' => $reservation->coming_from]) }}</h6>
                 @endif
-                
+
                 @if ($reservation->shareEmail)
                     <p>{{ __('Accepte de partager son email') }}</p>
                 @endif
@@ -112,10 +130,16 @@
     @endif
     @if ($editing)
         <p><label><strong>{{ __('Remarques') }} :</strong></label>
-            <textarea wire:model="reservation.remarks"></textarea>
+            <textarea wire:model="reservation.remarks" wire:change="updateReservation"></textarea>
+        @error('reservation.remarks')
+        <p class="error-message">{{ $message }}</p>
+        @enderror
         </p>
-        <p class="my-4"><button class="btn-warning"
-                wire:click="$set('editing', '')">{{ __('Arrêter les changements') }}</button></p>
+        <p class="my-4">
+            <button class="btn-warning"
+                wire:click="$set('editing', '')">{{ __('Arrêter les changements') }}</button>
+            <button class="btn-primary" wire:click="updateReservation">{{__("Sauvegarder les changements")}}</button>
+        </p>
     @endif
 
     @canany(['reservation-create', 'reservation-edit'])

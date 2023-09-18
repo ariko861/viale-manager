@@ -21,14 +21,15 @@ class ReservationCard extends Component
         'reservation.arrivaldate' => 'date|required',
         'reservation.nodeparturedate' => 'boolean',
         'reservation.confirmed' => 'boolean',
+        'reservation.remarks' => 'string|nullable',
         'reservation.removeFromStats' => 'boolean',
         'reservation.lookForCarPlaces' => 'boolean',
         'reservation.hasCarPlaces' => 'boolean',
         'reservation.sharePhone' => 'boolean',
         'reservation.shareEmail' => 'boolean',
-        'reservation.coming_from' => 'string|max:100',
+        'reservation.coming_from' => 'string|max:100|nullable',
         'reservation.numberCarPlaces' => 'integer|min:0'
-        
+
 
     ];
 
