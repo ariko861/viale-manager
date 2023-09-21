@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VisitorReservation;
@@ -253,6 +254,10 @@ class Reservation extends Model
             VisitorReservation::where('reservation_id', $reservation->id)->delete();
 
         });
+    }
+
+    public function scopeConfirmed(Builder $query): void {
+        $query->where('confirmed', true);
     }
 
 
