@@ -175,7 +175,7 @@ class ReservationsList extends Component
                 $query->where('name', 'ilike', '%' . $this->visitorSearch . '%')
                     ->orWhere('surname', 'ilike', '%' . $this->visitorSearch . '%')
                     ->orWhere('email', 'ilike', '%' . $this->visitorSearch . '%');
-            })->orderBy('arrivaldate')->get();
+            })->orderBy('arrivaldate', 'desc')->get();
         } else {
             $this->reservations = collect([]);
         }
