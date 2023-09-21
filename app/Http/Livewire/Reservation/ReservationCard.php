@@ -17,7 +17,7 @@ class ReservationCard extends Component
     public $daysGapForPlaces = 5;
 
     protected $rules = [
-        'reservation.departuredate' => 'date|after_or_equal:reservation.arrivaldate|required_unless:reservation.nodeparturedate,true',
+        'reservation.departuredate' => 'date|after_or_equal:reservation.arrivaldate|required_unless:reservation.nodeparturedate,true|nullable',
         'reservation.arrivaldate' => 'date|required',
         'reservation.nodeparturedate' => 'boolean',
         'reservation.confirmed' => 'boolean',
