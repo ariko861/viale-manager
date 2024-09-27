@@ -219,9 +219,7 @@ class Reservation extends Model
 
     public static function getPresencesExcludeDates($dateBegin, $dateEnd, $confirmed = true){
 
-        return static::where('quickLink', false)->where(function($query) use ($confirmed){
-                    if ($confirmed) $query->where('confirmed', true);
-                })->where(function($query) use ($dateBegin, $dateEnd) {
+        return static::where('quickLink', false)->where(function($query) use ($dateBegin, $dateEnd) {
                 $query->where(function($query) use ($dateBegin, $dateEnd) {
                     $query->whereDate('arrivaldate', '<', $dateEnd)
                             ->whereDate('departuredate', '>', $dateBegin);

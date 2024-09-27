@@ -30,6 +30,8 @@ class ReservationsList extends Component
     public $listTitle;
     public $numberOfReservationsDisplayed = 20;
 
+    public $onlyConfirmed = false;
+
     protected $listeners = ["displayReservation", "displayReservations", "reservationDeleted", "displayDayVisitors", "lookForCars"];
 
     public function displayReservation($res_id)
@@ -70,7 +72,7 @@ class ReservationsList extends Component
             $this->getReservationsWhereDepartureInBetween();
         }
         if ($options["type"] == "presences") {
-            $this->getReservationsPresenceExcludeDates($options["date"], $options["date"], $confirmed = true);
+            $this->getReservationsPresenceExcludeDates($options["date"], $options["date"], $this->onlyConfirmed);
             $this->listTitle = $this->reservations->getTotalAmountOfVisitors() . " " . __("personnes restant sur place");
             $this->emit('scrollToReservationList');
         }
@@ -118,7 +120,7 @@ class ReservationsList extends Component
     {
         $this->reservations = Reservation::where('quickLink', false)->whereDate('departuredate', '>=', $this->beginDateForDeparture)->whereDate('departuredate', '<=', $this->endDateForDeparture)->get();
         $this->filterReservations();
-        
+
         $beginDate = new Carbon($this->beginDateForDeparture);
         $endDate = new Carbon($this->endDateForDeparture);
 
