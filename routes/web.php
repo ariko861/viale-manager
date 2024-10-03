@@ -43,6 +43,8 @@ Route::middleware('hasUserInvitation')->get('/register', [ RegisterController::c
 
 Route::middleware('confirmationLinkIsValid')->get('/confirmation', [ ConfirmationController::class, 'showConfirmationForm'])->name('confirmation');
 
+Route::get('/confirmation/{link_token}', [ ConfirmationController::class, 'newShowConfirmationForm'])->name('new-confirmation');
+
 Route::middleware('transportLinkIsValid')->get('/transports-disponibles', [ TransportController::class, 'showTransports'])->name('transports-disponibles');
 
 Route::middleware(['auth:web', 'verified'])->group(function () {

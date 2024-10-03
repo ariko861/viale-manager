@@ -16,4 +16,13 @@ class ConfirmationController extends Controller
 
         return view('confirmation', ['reservation' => $reservation, 'link' => $link]);
     }
+
+    public function newShowConfirmationForm(string $link_token)
+    {
+        $link = ReservationLink::where('link_token', $link_token)->firstOrFail();
+        $reservation = $link->reservation;
+
+        return view('confirmation', ['reservation' => $reservation, 'link' => $link]);
+    }
+
 }

@@ -19,7 +19,7 @@ class ReservationLink extends Model
     }
 
     public function getLink() {
-        return urldecode(route('confirmation') . '?link_token=' . $this->link_token);
+        return urldecode(route('new-confirmation', $this->link_token));
     }
 
     public function reservation() {
@@ -33,11 +33,11 @@ class ReservationLink extends Model
     }
 
     public function useLinkOnce(){
-        
+
         $this->times_used += 1;
-        
+
         $maxUse = $this->getMaxUseForLink();
-        
+
         if ($this->times_used >= $maxUse){
             $this->delete();
             return "Vous ne pouvez plus utiliser ce lien de confirmation";
@@ -48,7 +48,7 @@ class ReservationLink extends Model
     }
 
     public function getMaxUseForLink(){
-        $optionsMaxUsed = Option::where('name', 'reservationLinksMaxUse')->first(); 
+        $optionsMaxUsed = Option::where('name', 'reservationLinksMaxUse')->first();
         if ($optionsMaxUsed) {
             return (int) $optionsMaxUsed->value;
         } else {
